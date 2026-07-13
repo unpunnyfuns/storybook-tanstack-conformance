@@ -1,0 +1,819 @@
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js
+new file mode 100644
+index 0000000..bd7d5f3
+--- /dev/null
++++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js
+@@ -0,0 +1,300 @@
++import {
++  NavigationModeContext,
++  normalizeFileRoutePath
++} from "./chunk-KXAO6IKI.js";
++import {
++  __export
++} from "./chunk-4BE7D4DS.js";
++
++// src/preview.tsx
++var preview_exports = {};
++__export(preview_exports, {
++  applyDecorators: () => applyDecorators,
++  loaders: () => loaders,
++  optimizeDeps: () => optimizeDeps,
++  parameters: () => parameters
++});
++import { applyDecorators as reactApplyDecorators } from "@storybook/react/entry-preview-docs";
++
++// src/routing/decorator.tsx
++import React from "react";
++import {
++  createMemoryHistory,
++  createRootRoute,
++  createRoute as createRoute2,
++  createRouter,
++  RouterProvider,
++  interpolatePath as interpolatePath2,
++  defaultStringifySearch
++} from "@tanstack/react-router";
++
++// src/routing/duplicate-tree.ts
++import {
++  createRoute,
++  RootRoute,
++  createRootRouteWithContext,
++  interpolatePath,
++  joinPaths
++} from "@tanstack/react-router";
++var MAX_PARENT_WALK = 50;
++function findRootRoute(route) {
++  let current = route;
++  for (let i = 0; i < MAX_PARENT_WALK && current; i += 1) {
++    if (current instanceof RootRoute)
++      return current;
++    let getParent = current.options?.getParentRoute;
++    current = typeof getParent == "function" ? getParent() : void 0;
++  }
++}
++function getOverrideFor(overrides, routeId) {
++  return overrides ? overrides[routeId] ?? {} : {};
++}
++function initSourceTree(route, counter) {
++  route.init({ originalIndex: counter.i }), counter.i += 1;
++  let children = route.children;
++  if (children?.length)
++    for (let child of children)
++      initSourceTree(child, counter);
++}
++function cloneChild(oldRoute, parent, overrides, byId) {
++  let options = oldRoute.options ?? {}, { id: originalId, getParentRoute: _g, ...rest } = options, override = getOverrideFor(overrides, oldRoute.id), merged = { ...rest, ...override }, cloned = createRoute({
++    ...!merged.path && originalId != null ? { id: originalId } : {},
++    ...merged,
++    getParentRoute: () => parent
++  });
++  byId.set(oldRoute.id, cloned);
++  let children = oldRoute.children;
++  if (children?.length) {
++    let clonedChildren = children.map(
++      (child) => cloneChild(child, cloned, overrides, byId)
++    );
++    cloned.addChildren(clonedChildren);
++  }
++  return cloned;
++}
++function duplicateRouteTree(rootRoute, { overrides } = {}) {
++  initSourceTree(rootRoute, { i: 0 });
++  let byId = /* @__PURE__ */ new Map(), rootOptions = rootRoute.options ?? {}, rootOverride = getOverrideFor(overrides, "__root__"), { id: _rootId, getParentRoute: _rootGetParent, ...restRoot } = rootOptions, newRoot = createRootRouteWithContext()({
++    ...restRoot,
++    ...rootOverride
++  });
++  byId.set("__root__", newRoot);
++  let children = rootRoute.children;
++  if (children?.length) {
++    let clonedChildren = children.map(
++      (child) => cloneChild(child, newRoot, overrides, byId)
++    );
++    newRoot.addChildren(clonedChildren);
++  }
++  return { root: newRoot, byId };
++}
++function mountPathFor(route) {
++  let segments = [], current = route;
++  for (let i = 0; i < MAX_PARENT_WALK && current; i += 1) {
++    let routePath = current.options?.path;
++    routePath && routePath !== "/" && segments.unshift(routePath);
++    let getParent = current.options?.getParentRoute;
++    current = typeof getParent == "function" ? getParent() : void 0;
++  }
++  return joinPaths(["/", ...segments]);
++}
++function originalRouteId(tree, route) {
++  for (let [id, cloned] of tree.byId)
++    if (cloned === route)
++      return id;
++}
++function resolveStoryLeaf(tree, {
++  path,
++  boundRouteId,
++  params
++}) {
++  let { root, byId } = tree;
++  if (path) {
++    let bound = boundRouteId ? byId.get(boundRouteId) : void 0;
++    if (bound) {
++      let boundCandidate = mountPathFor(bound), boundInterpolated = params ? interpolatePath({ path: boundCandidate, params }).interpolatedPath : boundCandidate;
++      if (boundCandidate === path || boundInterpolated === path)
++        return bound;
++    }
++    let bestMatch, bestMatchLength = -1;
++    for (let route of byId.values()) {
++      if (route === root)
++        continue;
++      let candidate = mountPathFor(route), interpolated = params ? interpolatePath({ path: candidate, params }).interpolatedPath : candidate;
++      (candidate === path || interpolated === path) && candidate.length > bestMatchLength && (bestMatch = route, bestMatchLength = candidate.length);
++    }
++    if (bestMatch)
++      return bestMatch;
++  }
++  if (boundRouteId) {
++    let bound = byId.get(boundRouteId);
++    if (bound)
++      return bound;
++  }
++  let firstChild = root.children?.[0];
++  return firstChild || root;
++}
++
++// src/routing/utils.ts
++import { Route, RootRoute as RootRoute2 } from "@tanstack/react-router";
++function isRoute(value) {
++  return value instanceof Route || value instanceof RootRoute2;
++}
++
++// src/routing/decorator.tsx
++var StoryContext = React.createContext({ Story: () => null }), StoryFromContext = () => {
++  let { Story } = React.useContext(StoryContext);
++  return React.createElement(Story, null);
++}, tanstackRouteDecorator = (Story, context) => React.createElement(TanStackRouterStory, { Story, context });
++function TanStackRouterStory({ Story, context }) {
++  let routerContext = context.parameters.tanstack?.router?.useRouterContext?.({
++    storyContext: context
++  }), router = React.useMemo(
++    () => createStoryRouter({ Story: StoryFromContext, context, routerContext }),
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++    [context.id]
++  ), providerContext = React.useMemo(
++    () => ({
++      ...context.parameters.tanstack?.router?.context,
++      ...routerContext
++    }),
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++    [context.id, routerContext]
++  ), navigationMode = context.parameters.tanstack?.router?.navigation ?? "spy";
++  return React.createElement(StoryContext.Provider, { value: { Story } }, React.createElement(NavigationModeContext.Provider, { value: navigationMode }, React.createElement(RouterProvider, { router, context: providerContext })));
++}
++function createStoryRouter({
++  Story,
++  context,
++  routerContext
++}) {
++  let routerParameters = context.parameters.tanstack?.router ?? {}, { tree, leaf } = resolveTree(Story, context), routeTree = tree.root, inferredPath = routerParameters?.path || leaf.fullPath || (leaf.id ? normalizeFileRoutePath(leaf.id) : void 0) || mountPathFor(leaf), resolvedPath = interpolatePath2({
++    path: inferredPath,
++    params: routerParameters?.params ?? {}
++  }).interpolatedPath, search = routerParameters?.query ? defaultStringifySearch(routerParameters.query) : "";
++  search && (resolvedPath += search);
++  let history = createMemoryHistory({
++    initialEntries: [resolvedPath]
++  });
++  return history.replace(resolvedPath), createRouter({
++    routeTree,
++    history,
++    defaultNotFoundComponent(props) {
++      return React.createElement("div", null, "Route not found: ", props.routeId);
++    },
++    defaultErrorComponent({ error }) {
++      return React.createElement("div", null, "Story did something wrong : ", String(error));
++    },
++    context: routerContext
++  });
++}
++function ensureMatchableLeaf(tree, leaf) {
++  if (!(leaf !== tree.root && !leaf.options?.path && leaf.options?.id != null))
++    return leaf;
++  let existingIndexChild = (leaf.children ?? []).find(
++    (child) => child.options?.path === "/"
++  );
++  if (existingIndexChild)
++    return existingIndexChild;
++  let syntheticLeaf = createRoute2({
++    path: "/",
++    component: () => null,
++    getParentRoute: () => leaf
++  });
++  return leaf.addChildren([
++    ...leaf.children ?? [],
++    syntheticLeaf
++  ]), syntheticLeaf;
++}
++function injectStoryComponent(leaf, Story, overrides, leafId) {
++  let userOverride = overrides?.[leafId];
++  userOverride && "component" in userOverride && userOverride.component !== void 0 || leaf.update({ component: () => React.createElement(Story, null) });
++}
++function resolveTree(Story, context) {
++  let metaRoute = context.route, routerParameters = context.parameters.tanstack?.router ?? {}, routerParameterRoute = routerParameters.route, routeOverrides = routerParameters.routeOverrides, resolvedRoute = isRoute(routerParameterRoute) ? routerParameterRoute : isRoute(metaRoute) ? metaRoute : void 0, rootRoute = resolvedRoute ? findRootRoute(resolvedRoute) : void 0;
++  if (rootRoute) {
++    let tree = duplicateRouteTree(rootRoute, { overrides: routeOverrides }), leaf = resolveStoryLeaf(tree, {
++      path: routerParameters.path,
++      boundRouteId: resolvedRoute && resolvedRoute !== rootRoute ? resolvedRoute.id : void 0,
++      params: routerParameters.params
++    });
++    injectStoryComponent(leaf, Story, routeOverrides, originalRouteId(tree, leaf) ?? leaf.id);
++    let renderLeaf = ensureMatchableLeaf(tree, leaf);
++    return { tree, leaf: renderLeaf };
++  }
++  if (isRoute(routerParameterRoute)) {
++    let syntheticRoot2 = createRootRoute(
++      routeOverrides?.__root__ ?? {}
++    );
++    routerParameterRoute.update({ getParentRoute: () => syntheticRoot2 }), syntheticRoot2.addChildren([routerParameterRoute]);
++    let tree = duplicateRouteTree(syntheticRoot2, { overrides: routeOverrides }), leaf = tree.byId.get(routerParameterRoute.id) ?? tree.root;
++    injectStoryComponent(leaf, Story, routeOverrides, routerParameterRoute.id);
++    let renderLeaf = ensureMatchableLeaf(tree, leaf);
++    return { tree, leaf: renderLeaf };
++  }
++  let plainOptions = routerParameterRoute ?? {}, {
++    path: plainRoutePath,
++    id: plainRouteId,
++    ...plainRouteRest
++  } = plainOptions, syntheticRouteId = plainRoutePath ? void 0 : plainRouteId ?? "storybook-story", syntheticRoot = createRootRoute(
++    routeOverrides?.__root__ ?? {}
++  ), syntheticChild = createRoute2({
++    component: () => React.createElement(Story, null),
++    id: syntheticRouteId,
++    path: plainRoutePath,
++    ...plainRouteRest,
++    getParentRoute: () => syntheticRoot
++  });
++  return syntheticRoot.addChildren([syntheticChild]), injectStoryComponent(
++    syntheticChild,
++    Story,
++    routeOverrides,
++    syntheticRouteId ?? plainRoutePath ?? syntheticChild.id
++  ), {
++    tree: { root: syntheticRoot, byId: /* @__PURE__ */ new Map([[syntheticChild.id, syntheticChild]]) },
++    leaf: syntheticChild
++  };
++}
++
++// src/routing/loader.ts
++import { RootRoute as RootRoute3 } from "@tanstack/react-router";
++function getComponentFromRoute(route) {
++  if (route.options?.component)
++    return route.options.component;
++  if (route instanceof RootRoute3)
++    return route.children?.[0]?.options?.component;
++}
++var routeComponentLoader = (context) => {
++  let routerParameters = context.parameters.tanstack?.router ?? {}, parameterRoute = isRoute(routerParameters.route) ? routerParameters.route : void 0;
++  if (parameterRoute) {
++    if (!context.component) {
++      let component = getComponentFromRoute(parameterRoute);
++      component && !context.component && (context.component = component);
++    }
++    context.route || (context.route = parameterRoute);
++  }
++};
++
++// src/preview.tsx
++var loaders = [routeComponentLoader], applyDecorators = (storyFn, allDecorators) => (
++  // reorder decorators so `jsxDecorator` is innermost, and `tanstackRouteDecorator` is just outside it
++  // There is an issue if `tanstackRouteDecorator` is innermost. All stories crashes due to a bug with the jsxDecorator.
++  reactApplyDecorators(storyFn, [
++    tanstackRouteDecorator,
++    ...allDecorators
++  ])
++), parameters = {
++  tanstack: {}
++}, optimizeDeps = [
++  "@tanstack/react-devtools",
++  "@tanstack/react-query-devtools",
++  "@tanstack/react-router-devtools"
++];
++
++export {
++  loaders,
++  applyDecorators,
++  parameters,
++  optimizeDeps,
++  preview_exports
++};
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js
+new file mode 100644
+index 0000000..db6ba79
+--- /dev/null
++++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js
+@@ -0,0 +1,48 @@
++// src/routing/navigation-mode.ts
++import { createContext } from "react";
++var NavigationModeContext = createContext("spy");
++function isSameRouteNavigation(router, target) {
++  try {
++    let { matches, location } = router.state, currentLeafId = matches[matches.length - 1]?.routeId;
++    if (currentLeafId == null) {
++      let currentMatches = router.matchRoutes(location.pathname, location.search);
++      currentLeafId = currentMatches[currentMatches.length - 1]?.routeId;
++    }
++    if (currentLeafId == null)
++      return !1;
++    let destination = router.buildLocation(target), destinationMatches = router.matchRoutes(destination.pathname, destination.search), destinationLeafId = destinationMatches[destinationMatches.length - 1]?.routeId;
++    return destinationLeafId != null && destinationLeafId === currentLeafId;
++  } catch {
++    return !1;
++  }
++}
++
++// src/routing/path-utils.ts
++var possiblyNestedRouteGroupPatternRegex = /\([^/]+\)\/?/g;
++function removeGroups(s) {
++  return s.replace(possiblyNestedRouteGroupPatternRegex, "");
++}
++function removeLayoutSegments(routePath = "/") {
++  return routePath.split("/").filter((segment) => !segment.startsWith("_")).join("/");
++}
++var underscoreStartEndRegex = /(^_|_$)/gi, underscoreSlashRegex = /(\/_|_\/)/gi;
++function removeUnderscores(s) {
++  return s?.replace(underscoreStartEndRegex, "").replace(underscoreSlashRegex, "/");
++}
++function normalizeFileRoutePath(path) {
++  return removeGroups(removeUnderscores(removeLayoutSegments(path)) ?? "") || "/";
++}
++function isPathlessSegment(segment) {
++  return segment.startsWith("_") || segment.startsWith("(") && segment.endsWith(")");
++}
++function isPathlessFileRouteId(id) {
++  let segments = id.split("/").filter(Boolean), lastSegment = segments[segments.length - 1];
++  return lastSegment != null && isPathlessSegment(lastSegment);
++}
++
++export {
++  NavigationModeContext,
++  isSameRouteNavigation,
++  normalizeFileRoutePath,
++  isPathlessFileRouteId
++};
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-WQHJSC2D.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-WQHJSC2D.js
+deleted file mode 100644
+index 565e9d7..0000000
+--- a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-WQHJSC2D.js
++++ /dev/null
+@@ -1,238 +0,0 @@
+-import {
+-  normalizeFileRoutePath
+-} from "./chunk-XKNIZ3MM.js";
+-import {
+-  __export
+-} from "./chunk-4BE7D4DS.js";
+-
+-// src/preview.tsx
+-var preview_exports = {};
+-__export(preview_exports, {
+-  applyDecorators: () => applyDecorators,
+-  loaders: () => loaders,
+-  optimizeDeps: () => optimizeDeps,
+-  parameters: () => parameters
+-});
+-import { applyDecorators as reactApplyDecorators } from "@storybook/react/entry-preview-docs";
+-
+-// src/routing/decorator.tsx
+-import React from "react";
+-import {
+-  createMemoryHistory,
+-  createRootRoute,
+-  createRoute as createRoute2,
+-  createRouter,
+-  RouterProvider,
+-  interpolatePath,
+-  defaultStringifySearch
+-} from "@tanstack/react-router";
+-
+-// src/routing/duplicate-tree.ts
+-import { createRoute, RootRoute, createRootRouteWithContext } from "@tanstack/react-router";
+-var MAX_PARENT_WALK = 50;
+-function findRootRoute(route) {
+-  let current = route;
+-  for (let i = 0; i < MAX_PARENT_WALK && current; i += 1) {
+-    if (current instanceof RootRoute)
+-      return current;
+-    let getParent = current.options?.getParentRoute;
+-    current = typeof getParent == "function" ? getParent() : void 0;
+-  }
+-}
+-function getOverrideFor(overrides, routeId) {
+-  return overrides ? overrides[routeId] ?? {} : {};
+-}
+-function initSourceTree(route, counter) {
+-  route.init({ originalIndex: counter.i }), counter.i += 1;
+-  let children = route.children;
+-  if (children?.length)
+-    for (let child of children)
+-      initSourceTree(child, counter);
+-}
+-function cloneChild(oldRoute, parent, overrides, byId) {
+-  let options = oldRoute.options ?? {}, { id: _id, getParentRoute: _g, ...rest } = options, override = getOverrideFor(overrides, oldRoute.id), cloned = createRoute({
+-    ...rest,
+-    ...override,
+-    getParentRoute: () => parent
+-  });
+-  byId.set(oldRoute.id, cloned);
+-  let children = oldRoute.children;
+-  if (children?.length) {
+-    let clonedChildren = children.map(
+-      (child) => cloneChild(child, cloned, overrides, byId)
+-    );
+-    cloned.addChildren(clonedChildren);
+-  }
+-  return cloned;
+-}
+-function duplicateRouteTree(rootRoute, { overrides } = {}) {
+-  initSourceTree(rootRoute, { i: 0 });
+-  let byId = /* @__PURE__ */ new Map(), rootOptions = rootRoute.options ?? {}, rootOverride = getOverrideFor(overrides, "__root__"), { id: _rootId, getParentRoute: _rootGetParent, ...restRoot } = rootOptions, newRoot = createRootRouteWithContext()({
+-    ...restRoot,
+-    ...rootOverride
+-  });
+-  byId.set("__root__", newRoot);
+-  let children = rootRoute.children;
+-  if (children?.length) {
+-    let clonedChildren = children.map(
+-      (child) => cloneChild(child, newRoot, overrides, byId)
+-    );
+-    newRoot.addChildren(clonedChildren);
+-  }
+-  return { root: newRoot, byId };
+-}
+-function resolveStoryLeaf(tree, { path, boundRouteId }) {
+-  let { root, byId } = tree;
+-  if (path) {
+-    let bestMatch, bestMatchLength = -1;
+-    for (let route of byId.values()) {
+-      let fullPath = route.fullPath;
+-      fullPath && fullPath === path && fullPath.length > bestMatchLength && (bestMatch = route, bestMatchLength = fullPath.length);
+-    }
+-    if (bestMatch)
+-      return bestMatch;
+-  }
+-  if (boundRouteId) {
+-    let bound = byId.get(boundRouteId);
+-    if (bound)
+-      return bound;
+-  }
+-  let firstChild = root.children?.[0];
+-  return firstChild || root;
+-}
+-
+-// src/routing/utils.ts
+-import { Route, RootRoute as RootRoute2 } from "@tanstack/react-router";
+-function isRoute(value) {
+-  return value instanceof Route || value instanceof RootRoute2;
+-}
+-
+-// src/routing/decorator.tsx
+-var StoryContext = React.createContext({ Story: () => null }), StoryFromContext = () => {
+-  let { Story } = React.useContext(StoryContext);
+-  return React.createElement(Story, null);
+-}, tanstackRouteDecorator = (Story, context) => React.createElement(TanStackRouterStory, { Story, context });
+-function TanStackRouterStory({ Story, context }) {
+-  let routerContext = context.parameters.tanstack?.router?.useRouterContext?.({
+-    storyContext: context
+-  }), router = React.useMemo(
+-    () => createStoryRouter({ Story: StoryFromContext, context, routerContext }),
+-    // eslint-disable-next-line react-hooks/exhaustive-deps
+-    [context.id]
+-  ), providerContext = React.useMemo(
+-    () => ({
+-      ...context.parameters.tanstack?.router?.context,
+-      ...routerContext
+-    }),
+-    // eslint-disable-next-line react-hooks/exhaustive-deps
+-    [context.id, routerContext]
+-  );
+-  return React.createElement(StoryContext.Provider, { value: { Story } }, React.createElement(RouterProvider, { router, context: providerContext }));
+-}
+-function createStoryRouter({
+-  Story,
+-  context,
+-  routerContext
+-}) {
+-  let routerParameters = context.parameters.tanstack?.router ?? {}, { tree, leaf } = resolveTree(Story, context), routeTree = tree.root, inferredPath = routerParameters?.path || leaf.fullPath || (leaf.id ? normalizeFileRoutePath(leaf.id) : void 0) || routeTree.children?.[0]?.fullPath || "/", resolvedPath = interpolatePath({
+-    path: inferredPath,
+-    params: routerParameters?.params ?? {}
+-  }).interpolatedPath, search = routerParameters?.query ? defaultStringifySearch(routerParameters.query) : "";
+-  search && (resolvedPath += search);
+-  let history = createMemoryHistory({
+-    initialEntries: [resolvedPath]
+-  });
+-  return history.replace(resolvedPath), createRouter({
+-    routeTree,
+-    history,
+-    defaultNotFoundComponent(props) {
+-      return React.createElement("div", null, "Route not found: ", props.routeId);
+-    },
+-    defaultErrorComponent({ error }) {
+-      return React.createElement("div", null, "Story did something wrong : ", String(error));
+-    },
+-    context: routerContext
+-  });
+-}
+-function injectStoryComponent(leaf, Story, overrides, leafId) {
+-  let userOverride = overrides?.[leafId];
+-  userOverride && "component" in userOverride && userOverride.component !== void 0 || leaf.update({ component: () => React.createElement(Story, null) });
+-}
+-function resolveTree(Story, context) {
+-  let metaRoute = context.route, routerParameters = context.parameters.tanstack?.router ?? {}, routerParameterRoute = routerParameters.route, routeOverrides = routerParameters.routeOverrides, resolvedRoute = isRoute(routerParameterRoute) ? routerParameterRoute : isRoute(metaRoute) ? metaRoute : void 0, rootRoute = resolvedRoute ? findRootRoute(resolvedRoute) : void 0;
+-  if (rootRoute) {
+-    let tree = duplicateRouteTree(rootRoute, { overrides: routeOverrides }), leaf = resolveStoryLeaf(tree, {
+-      path: routerParameters.path,
+-      boundRouteId: resolvedRoute && resolvedRoute !== rootRoute ? resolvedRoute.id : void 0
+-    });
+-    return injectStoryComponent(leaf, Story, routeOverrides, leaf.id), { tree, leaf };
+-  }
+-  if (isRoute(routerParameterRoute)) {
+-    let syntheticRoot2 = createRootRoute(
+-      routeOverrides?.__root__ ?? {}
+-    );
+-    routerParameterRoute.update({ getParentRoute: () => syntheticRoot2 }), syntheticRoot2.addChildren([routerParameterRoute]);
+-    let tree = duplicateRouteTree(syntheticRoot2, { overrides: routeOverrides }), leaf = tree.byId.get(routerParameterRoute.id) ?? tree.root;
+-    return injectStoryComponent(leaf, Story, routeOverrides, leaf.id), { tree, leaf };
+-  }
+-  let plainOptions = routerParameterRoute ?? {}, {
+-    path: plainRoutePath,
+-    id: plainRouteId,
+-    ...plainRouteRest
+-  } = plainOptions, syntheticRouteId = plainRoutePath ? void 0 : plainRouteId ?? "storybook-story", syntheticRoot = createRootRoute(
+-    routeOverrides?.__root__ ?? {}
+-  ), syntheticChild = createRoute2({
+-    component: () => React.createElement(Story, null),
+-    id: syntheticRouteId,
+-    path: plainRoutePath,
+-    ...plainRouteRest,
+-    getParentRoute: () => syntheticRoot
+-  });
+-  return syntheticRoot.addChildren([syntheticChild]), injectStoryComponent(syntheticChild, Story, routeOverrides, syntheticChild.id), {
+-    tree: { root: syntheticRoot, byId: /* @__PURE__ */ new Map([[syntheticChild.id, syntheticChild]]) },
+-    leaf: syntheticChild
+-  };
+-}
+-
+-// src/routing/loader.ts
+-import { RootRoute as RootRoute3 } from "@tanstack/react-router";
+-function getComponentFromRoute(route) {
+-  if (route.options?.component)
+-    return route.options.component;
+-  if (route instanceof RootRoute3)
+-    return route.children?.[0]?.options?.component;
+-}
+-var routeComponentLoader = (context) => {
+-  let routerParameters = context.parameters.tanstack?.router ?? {}, parameterRoute = isRoute(routerParameters.route) ? routerParameters.route : void 0;
+-  if (parameterRoute) {
+-    if (!context.component) {
+-      let component = getComponentFromRoute(parameterRoute);
+-      component && !context.component && (context.component = component);
+-    }
+-    context.route || (context.route = parameterRoute);
+-  }
+-};
+-
+-// src/preview.tsx
+-var loaders = [routeComponentLoader], applyDecorators = (storyFn, allDecorators) => (
+-  // reorder decorators so `jsxDecorator` is innermost, and `tanstackRouteDecorator` is just outside it
+-  // There is an issue if `tanstackRouteDecorator` is innermost. All stories crashes due to a bug with the jsxDecorator.
+-  reactApplyDecorators(storyFn, [
+-    tanstackRouteDecorator,
+-    ...allDecorators
+-  ])
+-), parameters = {
+-  tanstack: {}
+-}, optimizeDeps = [
+-  "@tanstack/react-devtools",
+-  "@tanstack/react-query-devtools",
+-  "@tanstack/react-router-devtools"
+-];
+-
+-export {
+-  loaders,
+-  applyDecorators,
+-  parameters,
+-  optimizeDeps,
+-  preview_exports
+-};
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-XKNIZ3MM.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-XKNIZ3MM.js
+deleted file mode 100644
+index db91085..0000000
+--- a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-XKNIZ3MM.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-// src/routing/path-utils.ts
+-var possiblyNestedRouteGroupPatternRegex = /\([^/]+\)\/?/g;
+-function removeGroups(s) {
+-  return s.replace(possiblyNestedRouteGroupPatternRegex, "");
+-}
+-function removeLayoutSegments(routePath = "/") {
+-  return routePath.split("/").filter((segment) => !segment.startsWith("_")).join("/");
+-}
+-var underscoreStartEndRegex = /(^_|_$)/gi, underscoreSlashRegex = /(\/_|_\/)/gi;
+-function removeUnderscores(s) {
+-  return s?.replace(underscoreStartEndRegex, "").replace(underscoreSlashRegex, "/");
+-}
+-function normalizeFileRoutePath(path) {
+-  return removeGroups(removeUnderscores(removeLayoutSegments(path)) ?? "") || "/";
+-}
+-
+-export {
+-  normalizeFileRoutePath
+-};
+diff --git a/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js b/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
+index 1a1ec06..b7abbb8 100644
+--- a/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
++++ b/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
+@@ -1,6 +1,9 @@
+ import {
++  NavigationModeContext,
++  isPathlessFileRouteId,
++  isSameRouteNavigation,
+   normalizeFileRoutePath
+-} from "../_browser-chunks/chunk-XKNIZ3MM.js";
++} from "../_browser-chunks/chunk-KXAO6IKI.js";
+ import {
+   onNavigate
+ } from "../_browser-chunks/chunk-4CKCBIXI.js";
+@@ -13,6 +16,8 @@ import { fn } from "storybook/test";
+ import React from "react";
+ import { useEffect } from "storybook/internal/preview-api";
+ import {
++  Link as _Link,
++  Navigate as _NavigateComponent,
+   useNavigate as _useNavigate,
+   useRouter as _useRouter,
+   useBlocker as _useBlocker,
+@@ -30,43 +35,53 @@ var useNavigate = fn(_useNavigate).mockName("@tanstack/react-router::useNavigate
+   "@tanstack/react-router::useRouterState"
+ ), useLoaderData = fn(_useLoaderData).mockName("@tanstack/react-router::useLoaderData"), useLoaderDeps = fn(_useLoaderDeps).mockName("@tanstack/react-router::useLoaderDeps"), useRouteContext = fn(_useRouteContext).mockName(
+   "@tanstack/react-router::useRouteContext"
+-), useCanGoBack = fn(_useCanGoBack).mockName("@tanstack/react-router::useCanGoBack"), useLinkProps = fn(_useLinkProps).mockName("@tanstack/react-router::useLinkProps"), Navigate = ({ to, href }) => (useEffect(() => {
+-  onNavigate({ to: to || href });
+-}, [to, href]), null), Link = ({
+-  to,
+-  children,
+-  ...props
+-}) => {
+-  let location = useLocation();
+-  return React.createElement(
++), useCanGoBack = fn(_useCanGoBack).mockName("@tanstack/react-router::useCanGoBack"), useLinkProps = fn(_useLinkProps).mockName("@tanstack/react-router::useLinkProps"), Navigate = ((props) => {
++  let { to, href } = props, mode = React.useContext(NavigationModeContext), router = useRouter(), performed = mode === "real" || mode === "same-route" && isSameRouteNavigation(router, props);
++  return useEffect(() => {
++    onNavigate({ to: to || href });
++  }, [to, href]), performed ? React.createElement(_NavigateComponent, props) : null;
++}), Link = ((props) => {
++  let { to, children, ...rest } = props, mode = React.useContext(NavigationModeContext), location = useLocation(), router = useRouter();
++  return mode === "spy" ? React.createElement(
+     "a",
+     {
+       href: to,
++      ...rest,
++      // after the spread: a caller-supplied onClick must not clobber the
++      // spy handler, or nothing prevents the anchor default
+       onClick: (e) => {
+-        e.preventDefault(), onNavigate({ to, from: location.href });
+-      },
+-      ...props
++        rest.onClick?.(e), e.preventDefault(), onNavigate({ to, from: location.href });
++      }
+     },
+     children
+-  );
+-};
+-function createFileRoute(path) {
+-  let normalizedPath = normalizeFileRoutePath(path);
+-  return (options) => createRoute({
+-    path: normalizedPath,
+-    ...options,
+-    isRoot: !1
+-  }).update({
+-    id: path,
+-    path: normalizedPath,
+-    fullPath: normalizedPath
+-    // any because tanstack router does that
++  ) : React.createElement(_Link, {
++    ...props,
++    onClick: (e) => {
++      props.onClick?.(e), onNavigate({ to, from: location.href }), mode === "same-route" && !isSameRouteNavigation(router, props) && e.preventDefault();
++    }
+   });
++});
++function createFileRoute(path) {
++  return (options) => {
++    let pathless = isPathlessFileRouteId(path) && options?.path == null, routePath = options?.path ?? normalizeFileRoutePath(path);
++    return createRoute({
++      ...pathless ? { id: path } : { path: routePath },
++      ...options,
++      isRoot: !1
++    }).update({
++      // routeTree.gen re-updates these later; set them here so route files
++      // imported without the generated tree still carry their identity
++      id: path,
++      ...pathless ? {} : { path: routePath, fullPath: routePath }
++      // any because tanstack router does that
++    });
++  };
+ }
+ export {
+   Link,
+   Navigate,
+   createFileRoute,
++  onNavigate,
+   useBlocker,
+   useCanGoBack,
+   useLinkProps,
+diff --git a/node_modules/@storybook/tanstack-react/dist/index.js b/node_modules/@storybook/tanstack-react/dist/index.js
+index 6a75af8..f122d06 100644
+--- a/node_modules/@storybook/tanstack-react/dist/index.js
++++ b/node_modules/@storybook/tanstack-react/dist/index.js
+@@ -1,7 +1,7 @@
+ import {
+   preview_exports
+-} from "./_browser-chunks/chunk-WQHJSC2D.js";
+-import "./_browser-chunks/chunk-XKNIZ3MM.js";
++} from "./_browser-chunks/chunk-2URA7BDM.js";
++import "./_browser-chunks/chunk-KXAO6IKI.js";
+ import "./_browser-chunks/chunk-4BE7D4DS.js";
+ 
+ // src/index.ts
+diff --git a/node_modules/@storybook/tanstack-react/dist/node/index.js b/node_modules/@storybook/tanstack-react/dist/node/index.js
+index b03fd48..a6e28ad 100644
+--- a/node_modules/@storybook/tanstack-react/dist/node/index.js
++++ b/node_modules/@storybook/tanstack-react/dist/node/index.js
+@@ -1,10 +1,10 @@
+-import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
+-import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
+-import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
++import CJS_COMPAT_NODE_URL_tdkywj2glvo from 'node:url';
++import CJS_COMPAT_NODE_PATH_tdkywj2glvo from 'node:path';
++import CJS_COMPAT_NODE_MODULE_tdkywj2glvo from "node:module";
+ 
+-var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
+-var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
+-var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_tdkywj2glvo.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_tdkywj2glvo.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_tdkywj2glvo.createRequire(import.meta.url);
+ 
+ // ------------------------------------------------------------
+ // end of CJS compatibility banner, injected by Storybook's esbuild configuration
+diff --git a/node_modules/@storybook/tanstack-react/dist/preset.js b/node_modules/@storybook/tanstack-react/dist/preset.js
+index fcf6eba..07ffd60 100644
+--- a/node_modules/@storybook/tanstack-react/dist/preset.js
++++ b/node_modules/@storybook/tanstack-react/dist/preset.js
+@@ -1,10 +1,10 @@
+-import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
+-import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
+-import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
++import CJS_COMPAT_NODE_URL_tdkywj2glvo from 'node:url';
++import CJS_COMPAT_NODE_PATH_tdkywj2glvo from 'node:path';
++import CJS_COMPAT_NODE_MODULE_tdkywj2glvo from "node:module";
+ 
+-var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
+-var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
+-var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_tdkywj2glvo.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_tdkywj2glvo.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_tdkywj2glvo.createRequire(import.meta.url);
+ 
+ // ------------------------------------------------------------
+ // end of CJS compatibility banner, injected by Storybook's esbuild configuration
+@@ -373,6 +373,15 @@ function moduleInterceptionPlugin({
+             "@storybook/react/entry-preview-argtypes",
+             "@storybook/react/entry-preview-docs",
+             "@storybook/tanstack-react",
++            // This plugin's resolveId also runs during dep scanning, so an
++            // optimized `@tanstack/react-router` dep would be a prebundled
++            // copy of the MOCK — including a second copy of every module the
++            // mock pulls in. The mock's exempted import of the real router
++            // then resolves to that copy of itself, breaking anything that
++            // relies on shared module instances (e.g. React contexts between
++            // the decorator and the mock). Keep the router out of dep
++            // optimization so there is a single module graph.
++            "@tanstack/react-router",
+             "@tanstack/react-start",
+             "@tanstack/react-start/server",
+             "@tanstack/react-start-server",
+diff --git a/node_modules/@storybook/tanstack-react/dist/preview.js b/node_modules/@storybook/tanstack-react/dist/preview.js
+index e68885b..fa3bac2 100644
+--- a/node_modules/@storybook/tanstack-react/dist/preview.js
++++ b/node_modules/@storybook/tanstack-react/dist/preview.js
+@@ -3,8 +3,8 @@ import {
+   loaders,
+   optimizeDeps,
+   parameters
+-} from "./_browser-chunks/chunk-WQHJSC2D.js";
+-import "./_browser-chunks/chunk-XKNIZ3MM.js";
++} from "./_browser-chunks/chunk-2URA7BDM.js";
++import "./_browser-chunks/chunk-KXAO6IKI.js";
+ import "./_browser-chunks/chunk-4BE7D4DS.js";
+ export {
+   applyDecorators,

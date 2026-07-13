@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.17",
@@ -32,6 +33,7 @@
     "@vitest/browser-playwright": "^4.1.10",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.71.0",
+    "patch-package": "^8.0.1",
     "playwright": "^1.61.1",
     "storybook": "^10.5.0",
     "typescript": "~6.0.2",
