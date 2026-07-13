@@ -18,3 +18,14 @@ export const Default: Story = {
     await expect(await canvas.findByRole("heading", { name: "Ada Lovelace" })).toBeVisible();
   },
 };
+
+export const NotFound: Story = {
+  parameters: {
+    tanstack: {
+      router: { route: Route, path: "/users/$userId", params: { userId: "999" } as never },
+    },
+  },
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole("heading", { name: "404" })).toBeVisible();
+  },
+};

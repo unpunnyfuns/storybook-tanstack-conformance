@@ -29,6 +29,11 @@ function RootLayout() {
           Posts
         </Link>
         <Link to="/dashboard">Dashboard</Link>
+        <Link to="/pricing">Pricing</Link>
+        <Link to="/posts/archived">Archived</Link>
+        <Link to="/files/$" params={{ _splat: "reports/2026/q2.pdf" }}>
+          Files
+        </Link>
         <Link to="/boom">Boom</Link>
         <AuthToggle />
       </nav>
