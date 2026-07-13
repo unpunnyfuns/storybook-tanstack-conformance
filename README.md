@@ -25,9 +25,18 @@ red in the story suite is a framework issue, not an app issue.
 | `src/routes/posts/$postId/index.stories.tsx`     | Nested layout under a param; `params` and `query` together                                                |
 | `src/routes/posts/_archive/archived.stories.tsx` | Leaf under a **nested pathless layout** (`/posts/_archive`), strict-mode `Route.useLoaderData()`          |
 | `src/routes/files/$.stories.tsx`                 | Splat route; `params: { _splat }` interpolation                                                           |
-| `src/routes/boom.stories.tsx`                    | Loader throws; error boundary renders                                                                     |
+| `src/routes/blog/blog.stories.tsx`               | **Optional path param** (`{-$category}`): matched with and without the param                              |
+| `src/routes/orders/orders.stories.tsx`           | Param with a **static prefix** (`order-{$orderId}`)                                                       |
+| `src/routes/lazy-page.stories.tsx`               | **Lazy file route** (`*.lazy.tsx` via `createLazyFileRoute`) paired with an eager loader                  |
+| `src/routes/search.stories.tsx`                  | `loaderDeps`: loader keyed off a search param, driven by `query`                                          |
+| `src/routes/slow.stories.tsx`                    | Async loader with a route-level `pendingComponent`                                                        |
+| `src/routes/boom.stories.tsx`                    | Loader throws; route-level `errorComponent` renders                                                       |
+| `src/routes/settings/_tabs/index.stories.tsx`    | Index child of a pathless layout; **`beforeLoad` context** consumed by the child                          |
+| `src/routes/settings/_tabs/route.stories.tsx`    | Story bound directly to a pathless layout **that has an index child**                                     |
 | `src/routes/_authed/dashboard.stories.tsx`       | Route under a **pathless layout** at its real URL; `routeOverrides` disabling the guard; router `context` |
 | `src/routes/_authed/route.stories.tsx`           | Story bound **directly to a pathless layout route**                                                       |
+| `src/routes/_admin/audit.stories.tsx`            | Route under a second pathless layout (**sibling pathless layouts**)                                       |
+| `src/routes/users/$userId.stories.tsx`           | (also) `routeOverrides` replacing a **loader** with mock data                                             |
 | `src/tree-mode.stories.tsx`                      | Tree mode with the generated tree: story component injected at the leaf selected by `path` (+ `params`)   |
 
 ### Code-based routes (`createRoute` config tree)
@@ -37,7 +46,7 @@ red in the story suite is a framework issue, not an app issue.
 | `src/code-based/code-based.stories.tsx`     | Story bound to a single `createRoute()`; loader list, and a param route + search validation under an **id-only pathless layout** |
 | `src/code-based/code-tree-mode.stories.tsx` | Tree mode with the code-based tree: leaf selected by `path` + `params`                                                           |
 
-21 stories across 15 files. All stories render real route components (or, in
+32 stories across 23 files. All stories render real route components (or, in
 tree mode, inject a probe component at a real leaf) through
 `parameters.tanstack.router`: `route`, `path`, `params`, `query`,
 `routeOverrides`, `context`.
@@ -56,30 +65,37 @@ npm run dev                       # the app, working, for comparison
 
 | Branch | Framework                             |
 | ------ | ------------------------------------- |
-| `main` | stock `storybook@10.5.0`              |
+| `main` | stock `storybook@latest`              |
 | `next` | stock `storybook@next` (latest alpha) |
 
 Both branches stay stock so results always reflect released framework
-behavior.
+behavior; `npm update` pulls the newest release on either.
 
 ## App structure
 
-| Feature                                                             | File                                  |
-| ------------------------------------------------------------------- | ------------------------------------- |
-| Root layout, nav, error + notFound boundaries, `RouterContext` type | `src/routes/__root.tsx`               |
-| Home / feature index + `validateSearch` for `redirectedFrom`        | `src/routes/index.tsx`                |
-| Flat route                                                          | `src/routes/about.tsx`                |
-| Group directory route (URL-invisible segment)                       | `src/routes/(marketing)/pricing.tsx`  |
-| Layout route + nested `<Outlet>`                                    | `src/routes/users/route.tsx`          |
-| Dynamic path param + loader + `notFound()`                          | `src/routes/users/$userId.tsx`        |
-| Search-param validation, filters, pagination                        | `src/routes/posts/index.tsx`          |
-| Nested layout under a param                                         | `src/routes/posts/$postId/route.tsx`  |
-| Nested pathless layout under a pathful segment                      | `src/routes/posts/_archive/route.tsx` |
-| Splat route                                                         | `src/routes/files/$.tsx`              |
-| Loader that throws (error boundary)                                 | `src/routes/boom.tsx`                 |
-| Pathless layout + `beforeLoad` guard + `redirect`                   | `src/routes/_authed/route.tsx`        |
-| Route context consumer                                              | `src/routes/_authed/dashboard.tsx`    |
-| Standalone code-based tree (id-only layout, loader, param + search) | `src/code-based/tree.tsx`             |
+| Feature                                                             | File                                     |
+| ------------------------------------------------------------------- | ---------------------------------------- |
+| Root layout, nav, error + notFound boundaries, `RouterContext` type | `src/routes/__root.tsx`                  |
+| Home / feature index + `validateSearch` for `redirectedFrom`        | `src/routes/index.tsx`                   |
+| Flat route                                                          | `src/routes/about.tsx`                   |
+| Group directory route (URL-invisible segment)                       | `src/routes/(marketing)/pricing.tsx`     |
+| Layout route + nested `<Outlet>`                                    | `src/routes/users/route.tsx`             |
+| Dynamic path param + loader + `notFound()`                          | `src/routes/users/$userId.tsx`           |
+| Search-param validation, filters, pagination                        | `src/routes/posts/index.tsx`             |
+| Nested layout under a param                                         | `src/routes/posts/$postId/route.tsx`     |
+| Nested pathless layout under a pathful segment                      | `src/routes/posts/_archive/route.tsx`    |
+| Splat route                                                         | `src/routes/files/$.tsx`                 |
+| Optional path param                                                 | `src/routes/blog/{-$category}.tsx`       |
+| Prefixed path param                                                 | `src/routes/orders/order-{$orderId}.tsx` |
+| Lazy file route (eager loader + lazy component)                     | `src/routes/lazy-page.tsx` + `.lazy.tsx` |
+| `loaderDeps`-keyed loader                                           | `src/routes/search.tsx`                  |
+| Slow loader + `pendingComponent`                                    | `src/routes/slow.tsx`                    |
+| Loader that throws + route-level `errorComponent`                   | `src/routes/boom.tsx`                    |
+| Pathless layout providing `beforeLoad` context, with index child    | `src/routes/settings/_tabs/route.tsx`    |
+| Pathless layout + `beforeLoad` guard + `redirect`                   | `src/routes/_authed/route.tsx`           |
+| Sibling pathless layout                                             | `src/routes/_admin/route.tsx`            |
+| Route context consumer                                              | `src/routes/_authed/dashboard.tsx`       |
+| Standalone code-based tree (id-only layout, loader, param + search) | `src/code-based/tree.tsx`                |
 
 `src/routeTree.gen.ts` is generated by `@tanstack/router-plugin`; it is
 gitignored and regenerates on `npm run dev` / `npm test`.
