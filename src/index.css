@@ -1,0 +1,75 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+body {
+  margin: 0;
+}
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #8884;
+  margin-bottom: 1rem;
+}
+.nav a {
+  text-decoration: none;
+}
+.nav a.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.content {
+  min-height: 60vh;
+}
+.panel {
+  padding: 0.5rem 0;
+}
+.panel ul {
+  line-height: 1.9;
+}
+.row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+table {
+  border-collapse: collapse;
+}
+td,
+th {
+  border: 1px solid #8884;
+  padding: 0.35rem 0.6rem;
+  text-align: left;
+}
+button {
+  cursor: pointer;
+}
+.expected {
+  border: 1px solid #8884;
+  border-left: 3px solid #4a90d9;
+  border-radius: 4px;
+  background: #8881;
+  padding: 0.5rem 0.75rem;
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+}
+.expected > strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.expected ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+  line-height: 1.65;
+}
