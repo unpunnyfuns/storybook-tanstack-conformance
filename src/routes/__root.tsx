@@ -31,6 +31,14 @@ function RootLayout() {
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/pricing">Pricing</Link>
         <Link to="/posts/archived">Archived</Link>
+        <Link to="/settings">Settings</Link>
+        <Link to="/blog/{-$category}">Blog</Link>
+        <Link to="/search" search={{ q: "" }}>
+          Search
+        </Link>
+        <Link to="/slow">Slow</Link>
+        <Link to="/audit">Audit</Link>
+        <Link to="/lazy-page">Lazy</Link>
         <Link to="/files/$" params={{ _splat: "reports/2026/q2.pdf" }}>
           Files
         </Link>

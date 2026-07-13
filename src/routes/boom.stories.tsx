@@ -13,10 +13,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The route-level errorComponent catches the loader error. */
 export const ErrorBoundary: Story = {
-  play: async ({ canvasElement }) => {
-    await expect(canvasElement.textContent).toMatch(
-      /Intentional error to exercise the error boundary/u,
-    );
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole("heading", { name: "Boom boundary" })).toBeVisible();
+    await expect(
+      canvas.getByText(/Intentional error to exercise the error boundary/u),
+    ).toBeVisible();
   },
 };

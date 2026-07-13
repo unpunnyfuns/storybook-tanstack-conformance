@@ -19,6 +19,25 @@ export const Default: Story = {
   },
 };
 
+export const MockedLoader: Story = {
+  parameters: {
+    tanstack: {
+      router: {
+        routeOverrides: {
+          "/users/$userId": {
+            loader: () => ({
+              user: { id: "1", name: "Mock User", email: "mock@example.com", role: "member" },
+            }),
+          },
+        },
+      },
+    },
+  },
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole("heading", { name: "Mock User" })).toBeVisible();
+  },
+};
+
 export const NotFound: Story = {
   parameters: {
     tanstack: {
