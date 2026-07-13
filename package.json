@@ -21,8 +21,8 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@storybook/addon-vitest": "^10.5.0",
-    "@storybook/tanstack-react": "^10.5.0",
+    "@storybook/addon-vitest": "latest",
+    "@storybook/tanstack-react": "latest",
     "@tanstack/react-router-devtools": "^1.167.0",
     "@tanstack/router-plugin": "^1.168.19",
     "@types/node": "^24.13.2",
@@ -33,7 +33,7 @@
     "oxfmt": "^0.58.0",
     "oxlint": "^1.71.0",
     "playwright": "^1.61.1",
-    "storybook": "^10.5.0",
+    "storybook": "latest",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vitest": "^4.1.10"

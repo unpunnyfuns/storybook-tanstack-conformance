@@ -56,11 +56,11 @@ npm run dev                       # the app, working, for comparison
 
 | Branch | Framework                             |
 | ------ | ------------------------------------- |
-| `main` | stock `storybook@10.5.0`              |
+| `main` | stock `storybook@latest`              |
 | `next` | stock `storybook@next` (latest alpha) |
 
 Both branches stay stock so results always reflect released framework
-behavior.
+behavior; `npm update` pulls the newest release on either.
 
 ## App structure
 
