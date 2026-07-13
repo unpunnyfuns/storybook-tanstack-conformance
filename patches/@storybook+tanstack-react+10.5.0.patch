@@ -1,8 +1,8 @@
-diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-52Z5KCJP.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-52Z5KCJP.js
 new file mode 100644
-index 0000000..bd7d5f3
+index 0000000..cd81f73
 --- /dev/null
-+++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-2URA7BDM.js
++++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-52Z5KCJP.js
 @@ -0,0 +1,300 @@
 +import {
 +  NavigationModeContext,
@@ -68,7 +68,7 @@ index 0000000..bd7d5f3
 +    ...merged,
 +    getParentRoute: () => parent
 +  });
-+  byId.set(oldRoute.id, cloned);
++  merged.path && originalId != null && !("id" in override) && cloned.update({ id: originalId }), byId.set(oldRoute.id, cloned);
 +  let children = oldRoute.children;
 +  if (children?.length) {
 +    let clonedChildren = children.map(
@@ -731,7 +731,7 @@ index 1a1ec06..b7abbb8 100644
    useCanGoBack,
    useLinkProps,
 diff --git a/node_modules/@storybook/tanstack-react/dist/index.js b/node_modules/@storybook/tanstack-react/dist/index.js
-index 6a75af8..f122d06 100644
+index 6a75af8..e3fc257 100644
 --- a/node_modules/@storybook/tanstack-react/dist/index.js
 +++ b/node_modules/@storybook/tanstack-react/dist/index.js
 @@ -1,7 +1,7 @@
@@ -739,50 +739,50 @@ index 6a75af8..f122d06 100644
    preview_exports
 -} from "./_browser-chunks/chunk-WQHJSC2D.js";
 -import "./_browser-chunks/chunk-XKNIZ3MM.js";
-+} from "./_browser-chunks/chunk-2URA7BDM.js";
++} from "./_browser-chunks/chunk-52Z5KCJP.js";
 +import "./_browser-chunks/chunk-KXAO6IKI.js";
  import "./_browser-chunks/chunk-4BE7D4DS.js";
  
  // src/index.ts
 diff --git a/node_modules/@storybook/tanstack-react/dist/node/index.js b/node_modules/@storybook/tanstack-react/dist/node/index.js
-index b03fd48..a6e28ad 100644
+index b03fd48..3904710 100644
 --- a/node_modules/@storybook/tanstack-react/dist/node/index.js
 +++ b/node_modules/@storybook/tanstack-react/dist/node/index.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_tdkywj2glvo from 'node:url';
-+import CJS_COMPAT_NODE_PATH_tdkywj2glvo from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_tdkywj2glvo from "node:module";
++import CJS_COMPAT_NODE_URL_xuo699au28 from 'node:url';
++import CJS_COMPAT_NODE_PATH_xuo699au28 from 'node:path';
++import CJS_COMPAT_NODE_MODULE_xuo699au28 from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_tdkywj2glvo.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_tdkywj2glvo.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_tdkywj2glvo.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_xuo699au28.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_xuo699au28.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_xuo699au28.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
 diff --git a/node_modules/@storybook/tanstack-react/dist/preset.js b/node_modules/@storybook/tanstack-react/dist/preset.js
-index fcf6eba..07ffd60 100644
+index fcf6eba..6b945c5 100644
 --- a/node_modules/@storybook/tanstack-react/dist/preset.js
 +++ b/node_modules/@storybook/tanstack-react/dist/preset.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_tdkywj2glvo from 'node:url';
-+import CJS_COMPAT_NODE_PATH_tdkywj2glvo from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_tdkywj2glvo from "node:module";
++import CJS_COMPAT_NODE_URL_xuo699au28 from 'node:url';
++import CJS_COMPAT_NODE_PATH_xuo699au28 from 'node:path';
++import CJS_COMPAT_NODE_MODULE_xuo699au28 from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_tdkywj2glvo.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_tdkywj2glvo.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_tdkywj2glvo.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_xuo699au28.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_xuo699au28.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_xuo699au28.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
@@ -803,7 +803,7 @@ index fcf6eba..07ffd60 100644
              "@tanstack/react-start/server",
              "@tanstack/react-start-server",
 diff --git a/node_modules/@storybook/tanstack-react/dist/preview.js b/node_modules/@storybook/tanstack-react/dist/preview.js
-index e68885b..fa3bac2 100644
+index e68885b..1e29138 100644
 --- a/node_modules/@storybook/tanstack-react/dist/preview.js
 +++ b/node_modules/@storybook/tanstack-react/dist/preview.js
 @@ -3,8 +3,8 @@ import {
@@ -812,7 +812,7 @@ index e68885b..fa3bac2 100644
    parameters
 -} from "./_browser-chunks/chunk-WQHJSC2D.js";
 -import "./_browser-chunks/chunk-XKNIZ3MM.js";
-+} from "./_browser-chunks/chunk-2URA7BDM.js";
++} from "./_browser-chunks/chunk-52Z5KCJP.js";
 +import "./_browser-chunks/chunk-KXAO6IKI.js";
  import "./_browser-chunks/chunk-4BE7D4DS.js";
  export {
