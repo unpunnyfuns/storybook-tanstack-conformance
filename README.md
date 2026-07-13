@@ -1,41 +1,37 @@
 # storybook-tanstack-repro
 
-Reproduction for `@storybook/tanstack-react` breaking on route trees that contain
-pathless layout routes. Companion to
-[storybookjs/storybook#35465](https://github.com/storybookjs/storybook/pull/35465).
+Story-level coverage of `@storybook/tanstack-react` against a real TanStack
+Router application. Every route in the app has a colocated story that renders
+the **real route component** through `parameters.tanstack.router`, and every
+story has a play function asserting on the rendered output. `npm test` runs
+the whole suite in a headless browser, so a framework regression shows up as
+red tests, not as a vague "stories look broken".
 
-A minimal Vite + React + TypeScript SPA using TanStack Router file-based routing,
-with stories colocated next to the routes they render. The app itself works
-(`npm run dev`); the stories fail.
+## What is tested
 
-## The bug
+| Story file                                   | Framework feature under test                                                                                                                 | Assertion                                        |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `src/routes/about.stories.tsx`               | Flat route bound via `route` + `path`                                                                                                        | Page heading renders                             |
+| `src/routes/users/index.stories.tsx`         | Route nested under a pathful layout (`users/route.tsx`)                                                                                      | Loader-backed list renders                       |
+| `src/routes/users/$userId.stories.tsx`       | Path param + loader, `params: { userId: '1' }` interpolation                                                                                 | Loader data for the param renders                |
+| `src/routes/posts/index.stories.tsx`         | `validateSearch` + `query` parameters (filters, pagination, sort)                                                                            | Unfiltered heading; filtered match count         |
+| `src/routes/posts/$postId/index.stories.tsx` | Nested layout under a param; `params` and `query` together                                                                                   | Loader data renders; search param drives styling |
+| `src/routes/_authed/dashboard.stories.tsx`   | Route under a **pathless layout** at its real URL `/dashboard`; `routeOverrides` disabling the layout's `beforeLoad` guard; router `context` | Page renders; context value visible              |
+| `src/routes/_authed/route.stories.tsx`       | Story bound **directly to a pathless layout route** ([#34942](https://github.com/storybookjs/storybook/issues/34942))                        | Layout mounts without the not-found fallback     |
 
-On `storybook@10.5.0`, any app route tree containing a pathless segment
-(`_authed/`, `(group)/`) crashes **every story** in the project:
+The app itself (`npm run dev`) is the control: every route works in the
+browser, and each page describes its own expected behavior in the UI. Anything
+red in the story suite is therefore a framework issue, not an app issue.
 
+## Run it
+
+```bash
+npm install
+npx playwright install chromium   # once, for the story test runner
+npm test                          # every story's play function, headless
+npm run storybook                 # browse the stories interactively on :6006
+npm run dev                       # the app, working, for comparison
 ```
-Invariant failed: Duplicate routes found with id: /
-```
-
-The framework's `createFileRoute` mock normalizes the pathless id `/_authed` to
-`path: '/'`, which collides with the app's real index route when the route tree
-is duplicated for the story router. The crash happens in `createStoryRouter`
-before any story renders, so even a story for a plain flat route (`/about`) dies.
-
-On `10.4.6` the same id was normalized to the literal path `/_authed` instead:
-stories did not crash, but routes under a pathless layout were only reachable
-through non-URL workaround paths (`path: '/_authed/dashboard'` instead of the
-real `/dashboard`), and a story bound directly to the layout route could not
-render. The `10.5.0` normalization change
-([#34948](https://github.com/storybookjs/storybook/pull/34948), for
-[#34942](https://github.com/storybookjs/storybook/issues/34942)) removed the
-workaround without fixing the underlying matching, so the failure escalated
-from "wrong URLs" to "nothing renders".
-
-Related upstream history: [#34942](https://github.com/storybookjs/storybook/issues/34942),
-[#34946](https://github.com/storybookjs/storybook/issues/34946),
-[#34950](https://github.com/storybookjs/storybook/pull/34950),
-[#35007](https://github.com/storybookjs/storybook/issues/35007).
 
 ## Branches
 
@@ -45,44 +41,29 @@ Related upstream history: [#34942](https://github.com/storybookjs/storybook/issu
 | `next`    | stock `storybook@next` (latest alpha)              | 9/9 stories fail |
 | `patched` | `10.5.0` + `patch-package` dist built from the fix | 9/9 stories pass |
 
-The `patched` branch applies the built output of
-[storybookjs/storybook#35465](https://github.com/storybookjs/storybook/pull/35465)
-and its stacked follow-ups
-([fork PR #2](https://github.com/unpunnyfuns/storybook/pull/2),
-[fork PR #3](https://github.com/unpunnyfuns/storybook/pull/3)) over the stock
-`dist/`, as evidence the fix resolves every failure below.
+## Current failure on stock Storybook
 
-## Run it
+On `storybook@10.5.0` and the current `next` alpha, every story fails during
+router construction:
 
-```bash
-npm install
-npx playwright install chromium   # once, for the story test runner
-npm test                          # every story's play function, headless
-npm run storybook                 # browse the failures interactively on :6006
-npm run dev                       # the app itself, working, for comparison
+```
+Invariant failed: Duplicate routes found with id: /
 ```
 
-## Stories
+The framework normalizes the pathless id `/_authed` to `path: '/'`, which
+collides with the app's real index route when the route tree is duplicated for
+the story router. Because the crash happens before anything renders, even the
+plain `/about` story dies. Fix in flight:
+[storybookjs/storybook#35465](https://github.com/storybookjs/storybook/pull/35465)
+(plus stacked follow-ups for leaf resolution and opt-in navigation); the
+`patched` branch applies its built output over the stock `dist/` and turns the
+suite green. Upstream history:
+[#34942](https://github.com/storybookjs/storybook/issues/34942),
+[#34946](https://github.com/storybookjs/storybook/issues/34946),
+[#34950](https://github.com/storybookjs/storybook/pull/34950),
+[#35007](https://github.com/storybookjs/storybook/issues/35007).
 
-All stories render the **real route components** through
-`parameters.tanstack.router` (`route`, `path`, `params`, `query`,
-`routeOverrides`, `context`). On `main` every one of them fails with the
-duplicate-route invariant above.
-
-| Story file                                   | Exercises                                                   |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| `src/routes/about.stories.tsx`               | Plain flat route; fails despite touching nothing pathless   |
-| `src/routes/_authed/dashboard.stories.tsx`   | Route under a pathless layout, at its real URL `/dashboard` |
-| `src/routes/_authed/route.stories.tsx`       | Story bound directly to the pathless layout route (#34942)  |
-| `src/routes/users/index.stories.tsx`         | Route under a pathful layout                                |
-| `src/routes/users/$userId.stories.tsx`       | Dynamic param + loader                                      |
-| `src/routes/posts/index.stories.tsx`         | Search-param validation, filters (`query`)                  |
-| `src/routes/posts/$postId/index.stories.tsx` | Nested layout under a param, `params` + `query` together    |
-
-Expected behavior for each page is described in the app UI itself
-(`npm run dev`), so the correct baseline is visible before reading any code.
-
-## Feature → file map
+## App structure
 
 | Feature                                                             | File                                 |
 | ------------------------------------------------------------------- | ------------------------------------ |
