@@ -1,7 +1,7 @@
-# storybook-tanstack-repro
+# storybook-tanstack-conformance
 
-Story-level coverage of `@storybook/tanstack-react` against a real TanStack
-Router application, in both file-based and code-based (config) setups. Every
+Story-level conformance suite for `@storybook/tanstack-react` against a real
+TanStack Router application, in both file-based and code-based (config) setups. Every
 scenario is a story with a play function asserting on rendered output;
 `npm test` runs the whole suite in a headless browser, so a framework
 regression shows up as red tests, not as a vague "stories look broken".
