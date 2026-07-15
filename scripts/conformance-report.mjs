@@ -4,9 +4,9 @@
  * happens in the status job (scripts/update-status.mjs).
  */
 import { spawnSync } from "node:child_process";
-import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 
-const apps = ["router", "start"];
+const apps = readdirSync("apps").toSorted();
 const results = {};
 
 const frameworkVersion = JSON.parse(

@@ -15,13 +15,18 @@ framework issue, not an app issue.
 
 ## Workspaces
 
-| Workspace     | App                                            | Stories |
-| ------------- | ---------------------------------------------- | ------- |
-| `apps/router` | TanStack Router SPA, file + code based routing | 38      |
-| `apps/start`  | TanStack Start (server functions, shell root)  | 39      |
+The suite covers the full routing-mode grid: TanStack Router and TanStack
+Start, each with file-based, code-based, and virtual routing.
 
-The two apps share the same scenario matrix wherever it applies, so a failure
-can be pinned to one flavor or both.
+|            | File-based         | Code-based             | Virtual routes            |
+| ---------- | ------------------ | ---------------------- | ------------------------- |
+| **Router** | `apps/router` (35) | `apps/router-code` (4) | `apps/router-virtual` (3) |
+| **Start**  | `apps/start` (36)  | `apps/start-code` (2)  | `apps/start-virtual` (2)  |
+
+82 stories total. The two file-based apps carry the full scenario matrix
+below; the code and virtual apps prove the same framework machinery against
+their routing modes (id-only layouts, params + search, loaders and
+loaderDeps, server functions, tree mode).
 
 ## Scenario matrix
 
