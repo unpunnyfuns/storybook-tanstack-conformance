@@ -18,19 +18,19 @@
         "total": 3
       },
       "start": {
-        "passed": 1,
-        "failed": 35,
-        "total": 36
+        "passed": 0,
+        "failed": 0,
+        "total": 0
       },
       "start-code": {
-        "passed": 2,
+        "passed": 0,
         "failed": 0,
-        "total": 2
+        "total": 0
       },
       "start-virtual": {
         "passed": 0,
-        "failed": 2,
-        "total": 2
+        "failed": 0,
+        "total": 0
       }
     }
   },
@@ -53,19 +53,19 @@
         "total": 3
       },
       "start": {
-        "passed": 1,
-        "failed": 35,
-        "total": 36
+        "passed": 0,
+        "failed": 0,
+        "total": 0
       },
       "start-code": {
-        "passed": 2,
+        "passed": 0,
         "failed": 0,
-        "total": 2
+        "total": 0
       },
       "start-virtual": {
         "passed": 0,
-        "failed": 2,
-        "total": 2
+        "failed": 0,
+        "total": 0
       }
     }
   },
@@ -88,19 +88,19 @@
         "total": 3
       },
       "start": {
-        "passed": 1,
-        "failed": 35,
-        "total": 36
+        "passed": 0,
+        "failed": 0,
+        "total": 0
       },
       "start-code": {
-        "passed": 2,
+        "passed": 0,
         "failed": 0,
-        "total": 2
+        "total": 0
       },
       "start-virtual": {
         "passed": 0,
-        "failed": 2,
-        "total": 2
+        "failed": 0,
+        "total": 0
       }
     }
   }
