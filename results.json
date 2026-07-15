@@ -22,11 +22,6 @@
         "failed": 0,
         "total": 0
       },
-      "start-code": {
-        "passed": 0,
-        "failed": 0,
-        "total": 0
-      },
       "start-virtual": {
         "passed": 0,
         "failed": 0,
@@ -57,11 +52,6 @@
         "failed": 0,
         "total": 0
       },
-      "start-code": {
-        "passed": 0,
-        "failed": 0,
-        "total": 0
-      },
       "start-virtual": {
         "passed": 0,
         "failed": 0,
@@ -88,11 +78,6 @@
         "total": 3
       },
       "start": {
-        "passed": 0,
-        "failed": 0,
-        "total": 0
-      },
-      "start-code": {
         "passed": 0,
         "failed": 0,
         "total": 0
