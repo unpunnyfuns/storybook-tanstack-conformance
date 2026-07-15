@@ -24,7 +24,7 @@ themselves are verified independently of Storybook.
 | app e2e    | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Router** | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) |
-| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | not buildable                                                                                                                                                                        | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
+| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | ![start-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-code.json)   | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
 
 Story-level conformance suite for `@storybook/tanstack-react`, run against
 real applications covering the whole routing grid: TanStack Router and
@@ -52,12 +52,15 @@ below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
 
-Every app except `start-code` also runs as a real application, verified by
-a build and a Playwright end-to-end test per app (`npm run e2e`), so red
-story suites can always be blamed on the framework. `start-code` is the one
-exception: TanStack Start cannot build a purely code-based route tree (its
-manifest requires generated routes with file paths), so that cell is
-storybook-conformance only.
+Every app also runs as a real application, verified by Playwright
+end-to-end tests (`npm run e2e`) that exercise the actual routing:
+navigation, search params, guards, params, splats, error and notFound
+boundaries. The two file-based apps share one rich suite (their route trees
+are mirrored); the virtual apps share another. So red story suites can
+always be blamed on the framework. One caveat: TanStack Start cannot
+produce a production build from a purely code-based route tree (its
+manifest requires generated routes with file paths), so `start-code` is
+verified in dev mode only, where SSR and server functions work fine.
 
 ## Scenario matrix
 
