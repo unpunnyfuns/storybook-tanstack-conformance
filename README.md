@@ -18,7 +18,7 @@ framework issue, not an app issue.
 | Workspace     | App                                            | Stories |
 | ------------- | ---------------------------------------------- | ------- |
 | `apps/router` | TanStack Router SPA, file + code based routing | 38      |
-| `apps/start`  | TanStack Start (server functions, shell root)  | 36      |
+| `apps/start`  | TanStack Start (server functions, shell root)  | 39      |
 
 The two apps share the same scenario matrix wherever it applies, so a failure
 can be pinned to one flavor or both.
@@ -55,7 +55,7 @@ can be pinned to one flavor or both.
 | URL fragment (hash) provided through `path`                           | ✅     | ✅    |
 | Programmatic navigation asserted on the `useNavigate` spy             | ✅     | ✅    |
 | Tree mode: leaf selected by `path` (+ `params`) in the generated tree | ✅     | ✅    |
-| Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | —     |
+| Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | ✅    |
 | Server function in a loader (mocked per story)                        | —      | ✅    |
 | Per-story server states (same route, different responses)             | —      | ✅    |
 | Server-only module replaced via `sb.mock` + `__mocks__`               | —      | ✅    |
