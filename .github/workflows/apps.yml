@@ -7,6 +7,9 @@ on:
     - cron: "47 5 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-and-e2e:
     runs-on: ubuntu-latest
@@ -34,4 +37,27 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: App end-to-end tests
-        run: npm run e2e
+        id: e2e
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-results.json
+        run: npx playwright test --reporter=list,json
+
+      - name: Publish e2e badges to the status branch
+        run: |
+          node scripts/update-apps-status.mjs
+          git config user.name "conformance-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git fetch origin status || true
+          git switch status 2>/dev/null || git switch --orphan status
+          cp out/badge-e2e-*.json .
+          git add badge-e2e-*.json
+          git commit -m "status: update app e2e results" || echo "no change to commit"
+          for attempt in 1 2 3; do
+            git push origin status && break
+            git pull --rebase origin status
+          done
+
+      - name: Reflect e2e outcome
+        if: ${{ steps.e2e.outcome == 'failure' }}
+        run: exit 1
