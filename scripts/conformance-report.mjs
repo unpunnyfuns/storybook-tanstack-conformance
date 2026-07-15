@@ -1,11 +1,10 @@
 /**
- * Runs both apps' story suites, compares the pass/fail counts against
- * expectations.json, and writes a summary. Exits non-zero only when the
- * results CHANGE: a new framework release fixing or breaking scenarios is
- * exactly the signal this repository exists to catch.
+ * Runs both apps' story suites and writes results.json with the pass/fail
+ * counts and the framework version. Comparison against previous runs
+ * happens in the status job (scripts/update-status.mjs).
  */
 import { spawnSync } from "node:child_process";
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 
 const apps = ["router", "start"];
 const results = {};
@@ -28,39 +27,24 @@ for (const app of apps) {
   };
 }
 
-const expected = JSON.parse(readFileSync("expectations.json", "utf8"));
+writeFileSync(
+  "results.json",
+  JSON.stringify({ version: frameworkVersion, apps: results }, null, 2),
+);
 
 const lines = [
   `## Conformance: @storybook/tanstack-react@${frameworkVersion}`,
   "",
-  "| App | Passed | Failed | Total | Expected |",
-  "| --- | ------ | ------ | ----- | -------- |",
+  "| App | Passed | Failed | Total |",
+  "| --- | ------ | ------ | ----- |",
+  ...apps.map((app) => {
+    const r = results[app];
+    return `| ${app} | ${r.passed} | ${r.failed} | ${r.total} |`;
+  }),
 ];
-
-let changed = false;
-for (const app of apps) {
-  const r = results[app];
-  const e = expected[app];
-  const matches = r.passed === e.passed && r.failed === e.failed && r.total === e.total;
-  if (!matches) changed = true;
-  lines.push(
-    `| ${app} | ${r.passed} | ${r.failed} | ${r.total} | ${
-      matches ? "matches" : `CHANGED (was ${e.passed}/${e.failed}/${e.total})`
-    } |`,
-  );
-}
-
-lines.push(
-  "",
-  changed
-    ? "Results changed. A framework release fixed or broke scenarios; update expectations.json after reviewing."
-    : "Results match expectations.",
-);
 
 const summary = lines.join("\n");
 console.log(summary);
 if (process.env.GITHUB_STEP_SUMMARY) {
   appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary + "\n");
 }
-
-process.exit(changed ? 1 : 0);
