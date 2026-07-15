@@ -34,8 +34,8 @@ scenario is a story with a play function asserting on rendered output;
 shows up as red tests.
 
 Each app is its own control: every route works when the app runs normally
-(`npm run dev` in the workspace). Anything red in the story suites is a
-framework issue, not an app issue.
+(`npm run dev` in the workspace). When the app works and its stories do not,
+the framework is the place to look.
 
 ## Workspaces
 
@@ -56,8 +56,9 @@ Every app also runs as a real application, verified by Playwright
 end-to-end tests (`npm run e2e`) that exercise the actual routing:
 navigation, search params, guards, params, splats, error and notFound
 boundaries. The two file-based apps share one rich suite (their route trees
-are mirrored); the virtual apps share another. So red story suites can
-always be blamed on the framework.
+are mirrored); the virtual apps share another. With the apps verified
+independently, a red story suite points at the framework rather than the
+app under test.
 
 ### Why there is no code-based Start app
 
