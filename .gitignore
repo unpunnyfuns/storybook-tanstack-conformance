@@ -10,7 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-src/routeTree.gen.ts
+**/src/routeTree.gen.ts
 *.local
 
 # Playwright MCP browser artifacts
@@ -29,3 +29,8 @@ src/routeTree.gen.ts
 
 *storybook.log
 storybook-static
+
+# TanStack Start build output
+.nitro/
+.output/
+.tanstack/
