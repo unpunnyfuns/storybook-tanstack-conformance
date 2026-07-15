@@ -176,11 +176,17 @@ every app's suite on both branches, and publishes the counts to the `status`
 branch, which feeds the badges above. No automated commits ever land on
 `main`; the badges are the record.
 
-## Known rendering caveat
+## Known caveats
 
 A Start root route's `shellComponent` renders its full document
 (`<html>`/`<body>`) inside the story canvas, which React flags as invalid
 nesting in the console. Stories still render.
+
+The Start apps use `createServerFn().validator()`, the current TanStack
+Start API. Released framework versions only mock the deprecated
+`inputValidator()`, so every Start story file crashes at import and the
+Start story badges read "collection crashed". The e2e badges show the same
+apps working; the gap is in the framework's mock layer.
 
 ## Disclosure
 
