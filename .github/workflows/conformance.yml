@@ -33,6 +33,9 @@ jobs:
       - name: Refresh storybook packages to their dist-tags
         run: npm update storybook @storybook/tanstack-react @storybook/addon-vitest --workspaces
 
+      - name: Heal optional dependencies
+        run: npm install --no-audit --no-fund
+
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
 
@@ -70,8 +73,8 @@ jobs:
           git config user.name "conformance-bot"
           git config user.email "actions@users.noreply.github.com"
           git switch status 2>/dev/null || git switch --orphan status
-          cp out/results.json out/badge-main.json out/badge-next.json .
-          git add results.json badge-main.json badge-next.json
+          cp out/results.json out/badge-*.json .
+          git add results.json badge-*.json
           git commit -m "status: update conformance results" || echo "no change to commit"
           git push origin status
 

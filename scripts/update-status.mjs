@@ -36,18 +36,31 @@ mkdirSync("out", { recursive: true });
 writeFileSync("out/results.json", JSON.stringify(current, null, 2));
 
 const labels = { main: "storybook@latest", next: "storybook@next" };
+const badgeColor = (passed, total) =>
+  passed === total ? "brightgreen" : passed >= total / 2 ? "yellow" : "red";
+
 for (const ref of refs) {
   const { passed, total } = counts(current[ref]);
-  const color = passed === total ? "brightgreen" : passed >= total / 2 ? "yellow" : "red";
   writeFileSync(
     `out/badge-${ref}.json`,
     JSON.stringify({
       schemaVersion: 1,
       label: `${labels[ref]} (${current[ref].version})`,
       message: `${passed}/${total} passing`,
-      color,
+      color: badgeColor(passed, total),
     }),
   );
+  for (const [app, r] of Object.entries(current[ref].apps)) {
+    writeFileSync(
+      `out/badge-${ref}-${app}.json`,
+      JSON.stringify({
+        schemaVersion: 1,
+        label: app,
+        message: `${r.passed}/${r.total}`,
+        color: badgeColor(r.passed, r.total),
+      }),
+    );
+  }
 }
 
 writeFileSync("out/changed", changed ? "true" : "false");
