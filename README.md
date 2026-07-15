@@ -42,6 +42,13 @@ below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
 
+Every app except `start-code` also runs as a real application, verified by
+a build and a Playwright end-to-end test per app (`npm run e2e`), so red
+story suites can always be blamed on the framework. `start-code` is the one
+exception: TanStack Start cannot build a purely code-based route tree (its
+manifest requires generated routes with file paths), so that cell is
+storybook-conformance only.
+
 ## Scenario matrix
 
 | Scenario                                                              | Router | Start |
@@ -118,12 +125,12 @@ const meta = {
 
 ```bash
 npm install
-npx playwright install chromium   # once, for the story test runner
-npm test                          # both apps' stories, headless
-npm run test:router               # one app at a time
-npm run test:start
-npm run storybook:router          # browse on :6006
-npm run storybook:start           # browse on :6007
+npx playwright install chromium   # once, for the test runners
+npm test                          # every app's stories, headless
+npm run test -w apps/router       # one app at a time
+npm run e2e                       # the apps themselves, as real dev servers
+npm run storybook -w apps/router  # browse one app's stories
+npm run dev -w apps/router        # run one app
 ```
 
 ## Branches
