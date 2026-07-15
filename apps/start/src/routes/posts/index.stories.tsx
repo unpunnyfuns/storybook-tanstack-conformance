@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
+import { useNavigate } from "@storybook/tanstack-react/react-router";
 import { expect } from "storybook/test";
 import { Route } from "./index";
 
@@ -25,5 +26,21 @@ export const FilteredByNews: Story = {
   },
   play: async ({ canvas }) => {
     await expect(canvas.getByText(/Total matching: 8/u)).toBeVisible();
+  },
+};
+
+/**
+ * Programmatic navigation: the Next button calls `useNavigate`, which the
+ * framework backs with a spy around the real hook (importable from
+ * `@storybook/tanstack-react/react-router` for assertions).
+ */
+export const Pagination: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await expect(await canvas.findByText(/Page 1 \//u)).toBeVisible();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Next" }));
+
+    await expect(await canvas.findByText(/Page 2 \//u)).toBeVisible();
+    await expect(useNavigate).toHaveBeenCalled();
   },
 };
