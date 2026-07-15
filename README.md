@@ -14,51 +14,62 @@ framework issue, not an app issue.
 
 | Workspace     | App                                            | Stories |
 | ------------- | ---------------------------------------------- | ------- |
-| `apps/router` | TanStack Router SPA, file + code based routing | 32      |
-| `apps/start`  | TanStack Start (server functions, shell root)  | 4       |
+| `apps/router` | TanStack Router SPA, file + code based routing | 34      |
+| `apps/start`  | TanStack Start (server functions, shell root)  | 32      |
 
-## What is tested
+The two apps share the same scenario matrix wherever it applies, so a failure
+can be pinned to one flavor or both.
 
-### `apps/router`: file-based routes (generated tree)
+## Scenario matrix
 
-| Story file                                       | Scenario                                                                                                  |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| `src/routes/index.stories.tsx`                   | Root index route; `validateSearch` + `query` banner variant                                               |
-| `src/routes/about.stories.tsx`                   | Flat route bound via `route` + `path`                                                                     |
-| `src/routes/(marketing)/pricing.stories.tsx`     | Route in a `(group)` directory, served at its group-free URL                                              |
-| `src/routes/users/index.stories.tsx`             | Route nested under a pathful layout                                                                       |
-| `src/routes/users/$userId.stories.tsx`           | Path param + loader (`params` interpolation); `notFound()` variant; `routeOverrides` replacing a loader   |
-| `src/routes/posts/index.stories.tsx`             | `validateSearch` + `query` (filters, pagination, sort)                                                    |
-| `src/routes/posts/$postId/index.stories.tsx`     | Nested layout under a param; `params` and `query` together                                                |
-| `src/routes/posts/_archive/archived.stories.tsx` | Leaf under a **nested pathless layout** (`/posts/_archive`), strict-mode `Route.useLoaderData()`          |
-| `src/routes/files/$.stories.tsx`                 | Splat route; `params: { _splat }` interpolation                                                           |
-| `src/routes/blog/blog.stories.tsx`               | **Optional path param** (`{-$category}`): matched with and without the param                              |
-| `src/routes/orders/orders.stories.tsx`           | Param with a **static prefix** (`order-{$orderId}`)                                                       |
-| `src/routes/lazy-page.stories.tsx`               | **Lazy file route** (`*.lazy.tsx` via `createLazyFileRoute`) paired with an eager loader                  |
-| `src/routes/search.stories.tsx`                  | `loaderDeps`: loader keyed off a search param, driven by `query`                                          |
-| `src/routes/slow.stories.tsx`                    | Async loader with a route-level `pendingComponent`                                                        |
-| `src/routes/boom.stories.tsx`                    | Loader throws; route-level `errorComponent` renders                                                       |
-| `src/routes/settings/_tabs/index.stories.tsx`    | Index child of a pathless layout; **`beforeLoad` context** consumed by the child                          |
-| `src/routes/settings/_tabs/route.stories.tsx`    | Story bound directly to a pathless layout **that has an index child**                                     |
-| `src/routes/_authed/dashboard.stories.tsx`       | Route under a **pathless layout** at its real URL; `routeOverrides` disabling the guard; router `context` |
-| `src/routes/_authed/route.stories.tsx`           | Story bound **directly to a pathless layout route**                                                       |
-| `src/routes/_admin/audit.stories.tsx`            | Route under a second pathless layout (**sibling pathless layouts**)                                       |
-| `src/tree-mode.stories.tsx`                      | Tree mode with the generated tree: story component injected at the leaf selected by `path` (+ `params`)   |
+| Scenario                                                              | Router | Start |
+| --------------------------------------------------------------------- | ------ | ----- |
+| Flat route bound via `route` + `path`                                 | ✅     | ✅    |
+| Root index route with `validateSearch` + `query`                      | ✅     | —     |
+| Route in a `(group)` directory (group-free URL)                       | ✅     | ✅    |
+| Route nested under a pathful layout                                   | ✅     | ✅    |
+| Path param + loader; `params` interpolation                           | ✅     | ✅    |
+| `notFound()` thrown from a loader                                     | ✅     | ✅    |
+| `routeOverrides` replacing a loader with mock data                    | ✅     | ✅    |
+| `routeOverrides` disabling a `beforeLoad` guard; router `context`     | ✅     | ✅    |
+| `validateSearch` + `query` (filters, pagination, sort)                | ✅     | ✅    |
+| Nested layout under a param; `params` and `query` together            | ✅     | ✅    |
+| Nested pathless layout; strict-mode `Route.useLoaderData()`           | ✅     | ✅    |
+| Splat route (`params: { _splat }`)                                    | ✅     | ✅    |
+| Optional path param (`{-$category}`)                                  | ✅     | ✅    |
+| Param with a static prefix (`order-{$orderId}`)                       | ✅     | ✅    |
+| Lazy file route (`*.lazy.tsx`) paired with an eager loader            | ✅     | ✅    |
+| `loaderDeps`: loader keyed off a search param                         | ✅     | ✅    |
+| Async loader + route-level `pendingComponent`                         | ✅     | ✅    |
+| Loader throws + route-level `errorComponent`                          | ✅     | ✅    |
+| Pathless layout with an index child; `beforeLoad` context             | ✅     | ✅    |
+| Story bound directly to a pathless layout (with and without children) | ✅     | ✅    |
+| Sibling pathless layouts                                              | ✅     | ✅    |
+| TanStack Query: loader `ensureQueryData` + `useSuspenseQuery`         | ✅     | ✅    |
+| TanStack Query: cache seeded per story via `setQueryData`             | ✅     | ✅    |
+| Tree mode: leaf selected by `path` (+ `params`) in the generated tree | ✅     | ✅    |
+| Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | —     |
+| Server function in a loader (mocked per story)                        | —      | ✅    |
+| Per-story server states (same route, different responses)             | —      | ✅    |
+| Rendering under a Start root (`shellComponent`)                       | —      | ✅    |
 
-### `apps/router`: code-based routes (`createRoute` config tree)
+## TanStack Query
 
-| Story file                                  | Scenario                                                                                                                         |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `src/code-based/code-based.stories.tsx`     | Story bound to a single `createRoute()`; loader list, and a param route + search validation under an **id-only pathless layout** |
-| `src/code-based/code-tree-mode.stories.tsx` | Tree mode with the code-based tree: leaf selected by `path` + `params`                                                           |
+Per the framework docs: one `QueryClient` is created in each app's
+`.storybook/preview.tsx`, cleared between stories, and shared through both
+`parameters.tanstack.router.context` and a `QueryClientProvider` decorator.
+Stories seed the cache in `beforeEach`:
 
-### `apps/start`: TanStack Start
+```ts
+export const Seeded: Story = {
+  beforeEach: ({ parameters }) => {
+    const queryClient = parameters.tanstack?.router?.context?.queryClient;
+    queryClient?.setQueryData(["reviews"], [{ id: "9", author: "Grace", text: "Seeded." }]);
+  },
+};
+```
 
-| Story file                             | Scenario                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------- |
-| `src/routes/index.stories.tsx`         | Loader calling a **server function**; per-story server states (list and empty)  |
-| `src/routes/items/$itemId.stories.tsx` | Param route whose loader calls a server function with input validation          |
-| `src/routes/_gated/panel.stories.tsx`  | Pathless layout with `beforeLoad` context under a Start root (`shellComponent`) |
+## Server functions (Start)
 
 Server-function handlers never run in stories: the framework strips them from
 the client bundle (as Start itself does) and exports each server function as a

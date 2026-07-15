@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -5,9 +6,11 @@ import { authStore } from "./auth";
 import "./index.css";
 import { routeTree } from "./routeTree.gen";
 
+const queryClient = new QueryClient();
+
 const router = createRouter({
   routeTree,
-  context: { auth: authStore },
+  context: { auth: authStore, queryClient },
   defaultPendingComponent: () => <div className="panel">Loading…</div>,
   defaultErrorComponent: ({ error }) => (
     <div className="panel">
@@ -25,6 +28,8 @@ declare module "@tanstack/react-router" {
 
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>,
 );
