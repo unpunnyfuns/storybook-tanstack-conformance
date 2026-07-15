@@ -7,6 +7,7 @@
 | `storybook@latest` | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router.json)   | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-code.json)   | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-virtual.json)   |
 | `storybook@next`   | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router.json)   | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-code.json)   | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-virtual.json)   |
 | `storybook@canary` | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-router.json) | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-router-code.json) | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-router-virtual.json) |
+| `patched`          | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router.json) | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-code.json) | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-virtual.json) |
 
 ### Start
 
@@ -15,6 +16,7 @@
 | `storybook@latest` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)   |
 | `storybook@next`   | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)   |
 | `storybook@canary` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start-virtual.json) |
+| `patched`          | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start-virtual.json) |
 
 ### Apps (pure TanStack, no Storybook)
 
@@ -158,23 +160,40 @@ npm run dev -w apps/router        # run one app
 
 ## Branches
 
-| Branch   | Framework                                        |
-| -------- | ------------------------------------------------ |
-| `main`   | stock `storybook@latest`                         |
-| `next`   | stock `storybook@next` (latest alpha)            |
-| `canary` | stock `storybook@canary` (most recent PR canary) |
+| Branch    | Framework                                              |
+| --------- | ------------------------------------------------------ |
+| `main`    | stock `storybook@latest`                               |
+| `next`    | stock `storybook@next` (latest alpha)                  |
+| `canary`  | stock `storybook@canary` (most recent PR canary)       |
+| `patched` | `storybook@latest` plus the pending fixes listed below |
 
 The canary dist-tag points at whichever per-PR canary build was published
 most recently, so its results can swing with unrelated work; the badge label
 carries the exact version.
 
-Both branches stay stock so results always reflect released framework
-behavior; `npm update` pulls the newest release on either.
+The stock branches stay stock so results always reflect released framework
+behavior; `npm update` pulls the newest release on any of them.
 
 A daily CI run installs the current dist-tag resolutions from scratch, runs
-every app's suite on both branches, and publishes the counts to the `status`
+every app's suite on each branch, and publishes the counts to the `status`
 branch, which feeds the badges above. No automated commits ever land on
 `main`; the badges are the record.
+
+## Pending fixes
+
+The `patched` branch applies these via
+[patch-package](https://www.npmjs.com/package/patch-package), so its row
+shows what the suite looks like once they are all released:
+
+| Fix                                                                                | Status                                                              |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [#35465](https://github.com/storybookjs/storybook/pull/35465) pathless layout routes | merged, unreleased                                                  |
+| [3c58fb6](https://github.com/storybookjs/storybook/commit/3c58fb68bb16449f0b5601ea999303712ee2dd33) server fn `validator()` mock | merged, unreleased |
+| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | open                                                        |
+| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | draft                                                               |
+| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | draft                                                               |
+| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | draft                                                             |
+| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | draft                                                               |
 
 ## Known caveats
 

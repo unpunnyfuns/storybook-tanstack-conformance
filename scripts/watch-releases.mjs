@@ -1,15 +1,13 @@
 /**
  * Compares the published @storybook/tanstack-react dist-tags with the
  * versions last tested on the status branch (results.json, passed as argv[2]).
- * Watches latest and next only: canary republishes on every upstream PR build
- * and is covered by the daily schedule instead.
  * Writes changed=true/false to GITHUB_OUTPUT for the workflow to act on.
  */
 import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
 
 const tested = JSON.parse(readFileSync(process.argv[2], "utf8"));
-const tags = { main: "latest", next: "next" };
+const tags = { main: "latest", next: "next", canary: "canary" };
 
 const changed = [];
 for (const [ref, tag] of Object.entries(tags)) {

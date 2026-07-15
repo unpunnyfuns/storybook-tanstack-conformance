@@ -26,7 +26,12 @@ const counts = (data) =>
 mkdirSync("out", { recursive: true });
 writeFileSync("out/results.json", JSON.stringify(current, null, 2));
 
-const labels = { main: "storybook@latest", next: "storybook@next", canary: "storybook@canary" };
+const labels = {
+  main: "storybook@latest",
+  next: "storybook@next",
+  canary: "storybook@canary",
+  patched: "storybook@latest + fixes",
+};
 const badgeColor = (passed, total) => {
   if (total === 0) {
     return "lightgrey";
