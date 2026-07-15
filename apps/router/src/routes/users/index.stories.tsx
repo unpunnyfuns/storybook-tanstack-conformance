@@ -18,3 +18,20 @@ export const Default: Story = {
     await expect(canvas.getByRole("link", { name: "Ada Lovelace" })).toBeVisible();
   },
 };
+
+/**
+ * Links must render the same href a real router would produce: path params
+ * interpolated into the URL, router-only props (like `params`) consumed by
+ * the component instead of leaking onto the DOM element.
+ */
+export const LinkHrefs: Story = {
+  play: async ({ canvas }) => {
+    const userLink = await canvas.findByRole("link", { name: "Ada Lovelace" });
+    await expect(userLink).toHaveAttribute("href", "/users/1");
+    await expect(userLink).not.toHaveAttribute("params");
+
+    const splatLink = await canvas.findByRole("link", { name: "Files" });
+    await expect(splatLink).toHaveAttribute("href", "/files/reports/2026/q2.pdf");
+    await expect(splatLink).not.toHaveAttribute("params");
+  },
+};

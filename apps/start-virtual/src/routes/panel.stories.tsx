@@ -22,3 +22,33 @@ export const Default: Story = {
     await expect(canvas.getByText("gated layout (virtual)")).toBeVisible();
   },
 };
+
+const nestingErrors: string[] = [];
+
+/**
+ * The root `shellComponent` is Start's document shell (`html`/`head`/`body`),
+ * not app UI. Rendering it inside a story makes React log invalid-nesting
+ * errors and hoists the shell's head content into the real document: the
+ * story hijacks the page title and injects the app's meta tags.
+ */
+export const NoDocumentShellInStories: Story = {
+  beforeEach() {
+    const original = console.error;
+    nestingErrors.length = 0;
+    console.error = (...args: unknown[]) => {
+      const message = args.map(String).join(" ");
+      if (message.includes("cannot be a child of")) {
+        nestingErrors.push(message);
+      }
+      original(...args);
+    };
+    return () => {
+      console.error = original;
+    };
+  },
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole("heading", { name: "Panel" })).toBeVisible();
+    await expect(document.title).not.toBe("Start virtual-routes conformance app");
+    await expect(nestingErrors).toEqual([]);
+  },
+};
