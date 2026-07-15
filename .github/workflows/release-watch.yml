@@ -1,0 +1,33 @@
+name: Release watch
+
+on:
+  schedule:
+    - cron: "23 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Compare dist-tags with last tested versions
+        id: check
+        run: |
+          git fetch origin status
+          git show origin/status:results.json > last-results.json
+          node scripts/watch-releases.mjs last-results.json
+
+      - name: Trigger a conformance run
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run conformance.yml --repo "$GITHUB_REPOSITORY"
