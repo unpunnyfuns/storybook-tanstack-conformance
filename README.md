@@ -187,8 +187,8 @@ shows what the suite looks like once they are all released:
 
 | Fix                                                                                | Status                                                              |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [#35465](https://github.com/storybookjs/storybook/pull/35465) pathless layout routes | merged, unreleased                                                  |
 | [#35185](https://github.com/storybookjs/storybook/pull/35185) server fn `validator()` mock | merged, unreleased |
+| [#35465](https://github.com/storybookjs/storybook/pull/35465) pathless layout routes | merged, unreleased                                                  |
 | [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | open                                                        |
 | [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | draft                                                               |
 | [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | draft                                                               |
