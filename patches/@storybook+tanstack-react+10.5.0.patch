@@ -1,28 +1,9 @@
-diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-LTDGLEVR.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-LTDGLEVR.js
 new file mode 100644
-index 0000000..db6ba79
+index 0000000..94ff273
 --- /dev/null
-+++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-KXAO6IKI.js
-@@ -0,0 +1,48 @@
-+// src/routing/navigation-mode.ts
-+import { createContext } from "react";
-+var NavigationModeContext = createContext("spy");
-+function isSameRouteNavigation(router, target) {
-+  try {
-+    let { matches, location } = router.state, currentLeafId = matches[matches.length - 1]?.routeId;
-+    if (currentLeafId == null) {
-+      let currentMatches = router.matchRoutes(location.pathname, location.search);
-+      currentLeafId = currentMatches[currentMatches.length - 1]?.routeId;
-+    }
-+    if (currentLeafId == null)
-+      return !1;
-+    let destination = router.buildLocation(target), destinationMatches = router.matchRoutes(destination.pathname, destination.search), destinationLeafId = destinationMatches[destinationMatches.length - 1]?.routeId;
-+    return destinationLeafId != null && destinationLeafId === currentLeafId;
-+  } catch {
-+    return !1;
-+  }
-+}
-+
++++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-LTDGLEVR.js
+@@ -0,0 +1,27 @@
 +// src/routing/path-utils.ts
 +var possiblyNestedRouteGroupPatternRegex = /\([^/]+\)\/?/g;
 +function removeGroups(s) {
@@ -47,21 +28,18 @@ index 0000000..db6ba79
 +}
 +
 +export {
-+  NavigationModeContext,
-+  isSameRouteNavigation,
 +  normalizeFileRoutePath,
 +  isPathlessFileRouteId
 +};
-diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-Q5P7FWDW.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-Q5P7FWDW.js
+diff --git a/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-S3RDTIM2.js b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-S3RDTIM2.js
 new file mode 100644
-index 0000000..102f97c
+index 0000000..6661298
 --- /dev/null
-+++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-Q5P7FWDW.js
-@@ -0,0 +1,302 @@
++++ b/node_modules/@storybook/tanstack-react/dist/_browser-chunks/chunk-S3RDTIM2.js
+@@ -0,0 +1,301 @@
 +import {
-+  NavigationModeContext,
 +  normalizeFileRoutePath
-+} from "./chunk-KXAO6IKI.js";
++} from "./chunk-LTDGLEVR.js";
 +import {
 +  __export
 +} from "./chunk-4BE7D4DS.js";
@@ -222,8 +200,8 @@ index 0000000..102f97c
 +    }),
 +    // eslint-disable-next-line react-hooks/exhaustive-deps
 +    [context.id, routerContext]
-+  ), navigationMode = context.parameters.tanstack?.router?.navigation ?? "spy";
-+  return React.createElement(StoryContext.Provider, { value: { Story } }, React.createElement(NavigationModeContext.Provider, { value: navigationMode }, React.createElement(RouterProvider, { router, context: providerContext })));
++  );
++  return React.createElement(StoryContext.Provider, { value: { Story } }, React.createElement(RouterProvider, { router, context: providerContext }));
 +}
 +function createStoryRouter({
 +  Story,
@@ -630,67 +608,22 @@ index db91085..0000000
 -  normalizeFileRoutePath
 -};
 diff --git a/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js b/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
-index 1a1ec06..b7abbb8 100644
+index 1a1ec06..2e732a8 100644
 --- a/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
 +++ b/node_modules/@storybook/tanstack-react/dist/export-mocks/react-router.js
-@@ -1,6 +1,9 @@
+@@ -1,6 +1,7 @@
  import {
-+  NavigationModeContext,
 +  isPathlessFileRouteId,
-+  isSameRouteNavigation,
    normalizeFileRoutePath
 -} from "../_browser-chunks/chunk-XKNIZ3MM.js";
-+} from "../_browser-chunks/chunk-KXAO6IKI.js";
++} from "../_browser-chunks/chunk-LTDGLEVR.js";
  import {
    onNavigate
  } from "../_browser-chunks/chunk-4CKCBIXI.js";
-@@ -13,6 +16,8 @@ import { fn } from "storybook/test";
- import React from "react";
- import { useEffect } from "storybook/internal/preview-api";
- import {
-+  Link as _Link,
-+  Navigate as _NavigateComponent,
-   useNavigate as _useNavigate,
-   useRouter as _useRouter,
-   useBlocker as _useBlocker,
-@@ -30,43 +35,53 @@ var useNavigate = fn(_useNavigate).mockName("@tanstack/react-router::useNavigate
-   "@tanstack/react-router::useRouterState"
- ), useLoaderData = fn(_useLoaderData).mockName("@tanstack/react-router::useLoaderData"), useLoaderDeps = fn(_useLoaderDeps).mockName("@tanstack/react-router::useLoaderDeps"), useRouteContext = fn(_useRouteContext).mockName(
-   "@tanstack/react-router::useRouteContext"
--), useCanGoBack = fn(_useCanGoBack).mockName("@tanstack/react-router::useCanGoBack"), useLinkProps = fn(_useLinkProps).mockName("@tanstack/react-router::useLinkProps"), Navigate = ({ to, href }) => (useEffect(() => {
--  onNavigate({ to: to || href });
--}, [to, href]), null), Link = ({
--  to,
--  children,
--  ...props
--}) => {
--  let location = useLocation();
--  return React.createElement(
-+), useCanGoBack = fn(_useCanGoBack).mockName("@tanstack/react-router::useCanGoBack"), useLinkProps = fn(_useLinkProps).mockName("@tanstack/react-router::useLinkProps"), Navigate = ((props) => {
-+  let { to, href } = props, mode = React.useContext(NavigationModeContext), router = useRouter(), performed = mode === "real" || mode === "same-route" && isSameRouteNavigation(router, props);
-+  return useEffect(() => {
-+    onNavigate({ to: to || href });
-+  }, [to, href]), performed ? React.createElement(_NavigateComponent, props) : null;
-+}), Link = ((props) => {
-+  let { to, children, ...rest } = props, mode = React.useContext(NavigationModeContext), location = useLocation(), router = useRouter();
-+  return mode === "spy" ? React.createElement(
-     "a",
-     {
-       href: to,
-+      ...rest,
-+      // after the spread: a caller-supplied onClick must not clobber the
-+      // spy handler, or nothing prevents the anchor default
-       onClick: (e) => {
--        e.preventDefault(), onNavigate({ to, from: location.href });
--      },
--      ...props
-+        rest.onClick?.(e), e.preventDefault(), onNavigate({ to, from: location.href });
-+      }
-     },
-     children
--  );
--};
--function createFileRoute(path) {
+@@ -51,17 +52,20 @@ var useNavigate = fn(_useNavigate).mockName("@tanstack/react-router::useNavigate
+   );
+ };
+ function createFileRoute(path) {
 -  let normalizedPath = normalizeFileRoutePath(path);
 -  return (options) => createRoute({
 -    path: normalizedPath,
@@ -701,14 +634,7 @@ index 1a1ec06..b7abbb8 100644
 -    path: normalizedPath,
 -    fullPath: normalizedPath
 -    // any because tanstack router does that
-+  ) : React.createElement(_Link, {
-+    ...props,
-+    onClick: (e) => {
-+      props.onClick?.(e), onNavigate({ to, from: location.href }), mode === "same-route" && !isSameRouteNavigation(router, props) && e.preventDefault();
-+    }
-   });
-+});
-+function createFileRoute(path) {
+-  });
 +  return (options) => {
 +    let pathless = isPathlessFileRouteId(path) && options?.path == null, routePath = options?.path ?? normalizeFileRoutePath(path);
 +    return createRoute({
@@ -726,12 +652,6 @@ index 1a1ec06..b7abbb8 100644
  }
  export {
    Link,
-   Navigate,
-   createFileRoute,
-+  onNavigate,
-   useBlocker,
-   useCanGoBack,
-   useLinkProps,
 diff --git a/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js b/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js
 index f314325..0c2c097 100644
 --- a/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js
@@ -768,7 +688,7 @@ index f314325..0c2c097 100644
    Navigate,
    StartServer,
 diff --git a/node_modules/@storybook/tanstack-react/dist/index.js b/node_modules/@storybook/tanstack-react/dist/index.js
-index 6a75af8..e8a8e13 100644
+index 6a75af8..d72861d 100644
 --- a/node_modules/@storybook/tanstack-react/dist/index.js
 +++ b/node_modules/@storybook/tanstack-react/dist/index.js
 @@ -1,7 +1,7 @@
@@ -776,50 +696,50 @@ index 6a75af8..e8a8e13 100644
    preview_exports
 -} from "./_browser-chunks/chunk-WQHJSC2D.js";
 -import "./_browser-chunks/chunk-XKNIZ3MM.js";
-+} from "./_browser-chunks/chunk-Q5P7FWDW.js";
-+import "./_browser-chunks/chunk-KXAO6IKI.js";
++} from "./_browser-chunks/chunk-S3RDTIM2.js";
++import "./_browser-chunks/chunk-LTDGLEVR.js";
  import "./_browser-chunks/chunk-4BE7D4DS.js";
  
  // src/index.ts
 diff --git a/node_modules/@storybook/tanstack-react/dist/node/index.js b/node_modules/@storybook/tanstack-react/dist/node/index.js
-index b03fd48..adf18aa 100644
+index b03fd48..f26d28b 100644
 --- a/node_modules/@storybook/tanstack-react/dist/node/index.js
 +++ b/node_modules/@storybook/tanstack-react/dist/node/index.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_d94lr1e62ev from 'node:url';
-+import CJS_COMPAT_NODE_PATH_d94lr1e62ev from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_d94lr1e62ev from "node:module";
++import CJS_COMPAT_NODE_URL_uwggoznbfe from 'node:url';
++import CJS_COMPAT_NODE_PATH_uwggoznbfe from 'node:path';
++import CJS_COMPAT_NODE_MODULE_uwggoznbfe from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_d94lr1e62ev.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_d94lr1e62ev.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_d94lr1e62ev.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_uwggoznbfe.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_uwggoznbfe.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_uwggoznbfe.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
 diff --git a/node_modules/@storybook/tanstack-react/dist/preset.js b/node_modules/@storybook/tanstack-react/dist/preset.js
-index fcf6eba..7e55544 100644
+index fcf6eba..3487c95 100644
 --- a/node_modules/@storybook/tanstack-react/dist/preset.js
 +++ b/node_modules/@storybook/tanstack-react/dist/preset.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_d94lr1e62ev from 'node:url';
-+import CJS_COMPAT_NODE_PATH_d94lr1e62ev from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_d94lr1e62ev from "node:module";
++import CJS_COMPAT_NODE_URL_uwggoznbfe from 'node:url';
++import CJS_COMPAT_NODE_PATH_uwggoznbfe from 'node:path';
++import CJS_COMPAT_NODE_MODULE_uwggoznbfe from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_d94lr1e62ev.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_d94lr1e62ev.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_d94lr1e62ev.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_uwggoznbfe.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_uwggoznbfe.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_uwggoznbfe.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
@@ -854,24 +774,31 @@ index fcf6eba..7e55544 100644
      }
    }), referenced;
  }
-@@ -373,6 +382,15 @@ function moduleInterceptionPlugin({
-             "@storybook/react/entry-preview-argtypes",
-             "@storybook/react/entry-preview-docs",
-             "@storybook/tanstack-react",
-+            // This plugin's resolveId also runs during dep scanning, so an
-+            // optimized `@tanstack/react-router` dep would be a prebundled
-+            // copy of the MOCK — including a second copy of every module the
-+            // mock pulls in. The mock's exempted import of the real router
-+            // then resolves to that copy of itself, breaking anything that
-+            // relies on shared module instances (e.g. React contexts between
-+            // the decorator and the mock). Keep the router out of dep
-+            // optimization so there is a single module graph.
-+            "@tanstack/react-router",
-             "@tanstack/react-start",
-             "@tanstack/react-start/server",
-             "@tanstack/react-start-server",
+@@ -351,16 +360,17 @@ function moduleInterceptionPlugin({
+     enforce: "pre",
+     resolveId: {
+       order: "pre",
+-      handler(id, importer) {
++      async handler(id, importer) {
++        let resolveMock = async (mockPath) => await this.resolve(mockPath, importer, { skipSelf: !0 }) ?? mockPath;
+         if ((id === "@tanstack/react-router" || id.startsWith("@tanstack/react-router/")) && importer && !importer.includes("export-mocks"))
+-          return routerMockPath;
++          return resolveMock(routerMockPath);
+         if (START_SERVER_MODULES.includes(id) || id === "@tanstack/react-start")
+-          return startMockPath;
++          return resolveMock(startMockPath);
+         if (id === "@tanstack/start-storage-context")
+-          return startStorageContextMockPath;
++          return resolveMock(startStorageContextMockPath);
+         for (let pattern of INTERCEPTED_PATTERNS)
+           if (id.includes(pattern))
+-            return startMockPath;
++            return resolveMock(startMockPath);
+         return null;
+       }
+     },
 diff --git a/node_modules/@storybook/tanstack-react/dist/preview.js b/node_modules/@storybook/tanstack-react/dist/preview.js
-index e68885b..618ce04 100644
+index e68885b..e6fecdd 100644
 --- a/node_modules/@storybook/tanstack-react/dist/preview.js
 +++ b/node_modules/@storybook/tanstack-react/dist/preview.js
 @@ -3,8 +3,8 @@ import {
@@ -880,8 +807,8 @@ index e68885b..618ce04 100644
    parameters
 -} from "./_browser-chunks/chunk-WQHJSC2D.js";
 -import "./_browser-chunks/chunk-XKNIZ3MM.js";
-+} from "./_browser-chunks/chunk-Q5P7FWDW.js";
-+import "./_browser-chunks/chunk-KXAO6IKI.js";
++} from "./_browser-chunks/chunk-S3RDTIM2.js";
++import "./_browser-chunks/chunk-LTDGLEVR.js";
  import "./_browser-chunks/chunk-4BE7D4DS.js";
  export {
    applyDecorators,
