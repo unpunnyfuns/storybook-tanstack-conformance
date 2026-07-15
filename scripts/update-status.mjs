@@ -51,7 +51,7 @@ for (const ref of refs) {
       JSON.stringify({
         schemaVersion: 1,
         label: app,
-        message: `${r.passed}/${r.total}`,
+        message: r.total === 0 ? "collection crashed" : `${r.passed}/${r.total}`,
         color: badgeColor(r.passed, r.total),
       }),
     );
