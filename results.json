@@ -1,0 +1,72 @@
+{
+  "main": {
+    "version": "10.5.0",
+    "apps": {
+      "router": {
+        "passed": 1,
+        "failed": 34,
+        "total": 35
+      },
+      "router-code": {
+        "passed": 0,
+        "failed": 4,
+        "total": 4
+      },
+      "router-virtual": {
+        "passed": 0,
+        "failed": 3,
+        "total": 3
+      },
+      "start": {
+        "passed": 1,
+        "failed": 35,
+        "total": 36
+      },
+      "start-code": {
+        "passed": 2,
+        "failed": 0,
+        "total": 2
+      },
+      "start-virtual": {
+        "passed": 0,
+        "failed": 2,
+        "total": 2
+      }
+    }
+  },
+  "next": {
+    "version": "10.6.0-alpha.0",
+    "apps": {
+      "router": {
+        "passed": 1,
+        "failed": 34,
+        "total": 35
+      },
+      "router-code": {
+        "passed": 0,
+        "failed": 4,
+        "total": 4
+      },
+      "router-virtual": {
+        "passed": 0,
+        "failed": 3,
+        "total": 3
+      },
+      "start": {
+        "passed": 1,
+        "failed": 35,
+        "total": 36
+      },
+      "start-code": {
+        "passed": 2,
+        "failed": 0,
+        "total": 2
+      },
+      "start-virtual": {
+        "passed": 0,
+        "failed": 2,
+        "total": 2
+      }
+    }
+  }
+}
