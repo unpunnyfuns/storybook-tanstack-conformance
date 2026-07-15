@@ -8,7 +8,7 @@ export const listItems = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const getItem = createServerFn({ method: "GET" })
-  .inputValidator((id: string) => id)
+  .validator((id: string) => id)
   .handler(async ({ data }) => {
     await db.query("select * from items where id = $1");
     const item = items.find((candidate) => candidate.id === data);

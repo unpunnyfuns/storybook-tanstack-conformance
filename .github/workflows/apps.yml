@@ -1,0 +1,37 @@
+name: Apps
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "47 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  build-and-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install current dist-tags
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
+
+      # start-code is excluded: TanStack Start cannot build a purely
+      # code-based route tree (its manifest requires generated routes).
+      - name: Build every runnable app
+        run: |
+          for app in router router-code router-virtual start start-virtual; do
+            npm run build -w "apps/$app"
+          done
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: App end-to-end tests
+        run: npm run e2e

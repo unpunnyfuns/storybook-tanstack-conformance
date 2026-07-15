@@ -4,7 +4,7 @@ import { items } from "./data";
 export const listItems = createServerFn({ method: "GET" }).handler(() => items);
 
 export const getItem = createServerFn({ method: "GET" })
-  .inputValidator((id: string) => id)
+  .validator((id: string) => id)
   .handler(({ data }) => {
     const item = items.find((candidate) => candidate.id === data);
     if (!item) {
