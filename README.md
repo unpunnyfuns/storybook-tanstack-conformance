@@ -10,11 +10,11 @@
 
 ### Start
 
-| stories passing    | file-based                                                                                                                                                              | code-based                                                                                                                                                                        | virtual routes                                                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storybook@latest` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)   | ![start-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-code.json)   | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)   |
-| `storybook@next`   | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)   | ![start-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-code.json)   | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)   |
-| `storybook@canary` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start.json) | ![start-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start-code.json) | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start-virtual.json) |
+| stories passing    | file-based                                                                                                                                                              | code-based | virtual routes                                                                                                                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storybook@latest` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)   |
+| `storybook@next`   | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)   |
+| `storybook@canary` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-canary-start-virtual.json) |
 
 ### Apps (pure TanStack, no Storybook)
 
@@ -24,7 +24,7 @@ themselves are verified independently of Storybook.
 | app e2e    | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Router** | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) |
-| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | ![start-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-code.json)   | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
+| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | n/a                                                                                                                                                                                  | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
 
 Story-level conformance suite for `@storybook/tanstack-react`, run against
 real applications covering the whole routing grid: TanStack Router and
@@ -42,12 +42,12 @@ framework issue, not an app issue.
 The suite covers the full routing-mode grid: TanStack Router and TanStack
 Start, each with file-based, code-based, and virtual routing.
 
-|            | File-based         | Code-based             | Virtual routes            |
-| ---------- | ------------------ | ---------------------- | ------------------------- |
-| **Router** | `apps/router` (35) | `apps/router-code` (4) | `apps/router-virtual` (3) |
-| **Start**  | `apps/start` (36)  | `apps/start-code` (2)  | `apps/start-virtual` (2)  |
+|            | File-based         | Code-based                                         | Virtual routes            |
+| ---------- | ------------------ | -------------------------------------------------- | ------------------------- |
+| **Router** | `apps/router` (35) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
+| **Start**  | `apps/start` (36)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (2)  |
 
-82 stories total. The two file-based apps carry the full scenario matrix
+80 stories total. The two file-based apps carry the full scenario matrix
 below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
@@ -57,10 +57,19 @@ end-to-end tests (`npm run e2e`) that exercise the actual routing:
 navigation, search params, guards, params, splats, error and notFound
 boundaries. The two file-based apps share one rich suite (their route trees
 are mirrored); the virtual apps share another. So red story suites can
-always be blamed on the framework. One caveat: TanStack Start cannot
-produce a production build from a purely code-based route tree (its
-manifest requires generated routes with file paths), so `start-code` is
-verified in dev mode only, where SSR and server functions work fine.
+always be blamed on the framework.
+
+### Why there is no code-based Start app
+
+TanStack Start cannot produce a production build from a purely code-based
+route tree: its
+[manifest builder](https://github.com/TanStack/router/blob/main/packages/start-plugin-core/src/start-manifest-plugin/manifestBuilder.ts)
+requires every route to carry a generated file path. Plain `createRoute()`
+objects have no files, so there is nothing to generate from, and a
+configuration that cannot ship is not worth conformance-testing. If you
+want the route structure in code on Start, use virtual routes
+(`apps/start-virtual`): structure declared in code, implementations in
+files, fully buildable.
 
 ## Scenario matrix
 
