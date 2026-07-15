@@ -732,6 +732,41 @@ index 1a1ec06..b7abbb8 100644
    useBlocker,
    useCanGoBack,
    useLinkProps,
+diff --git a/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js b/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js
+index f314325..0c2c097 100644
+--- a/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js
++++ b/node_modules/@storybook/tanstack-react/dist/export-mocks/start.js
+@@ -262,10 +262,9 @@ function useServerFn(serverFn) {
+ }
+ function createMockServerFnBuilder() {
+   let builder = () => createMockServerFnBuilder(), _storedOptions;
+-  return builder.options = (opts) => (_storedOptions = opts, builder), builder.middleware = () => createMockServerFnBuilder(), builder.inputValidator = () => createMockServerFnBuilder(), builder.handler = (handlerFn) => {
+-    let mock = fn().mockName("@tanstack/start-client-core::createServerFn.handler()");
+-    return handlerFn && mock.mockImplementation(async (opts) => handlerFn(opts)), mock;
+-  }, builder._getOptions = () => _storedOptions, builder;
++  return builder.options = (opts) => (_storedOptions = opts, builder), builder.middleware = () => createMockServerFnBuilder(), builder.inputValidator = () => createMockServerFnBuilder(), builder.validator = () => createMockServerFnBuilder(), builder.handler = (handlerFn) => (handlerFn ? fn(async (opts) => handlerFn(opts)) : fn()).mockName(
++    "@tanstack/start-client-core::createServerFn.handler()"
++  ), builder._getOptions = () => _storedOptions, builder;
+ }
+ var createServerFn = (options) => {
+   let builder = createMockServerFnBuilder();
+@@ -276,7 +275,7 @@ var createServerFn = (options) => {
+   ...props
+ }) => React.createElement("a", { href: to, ...props }, children), Navigate = ({ to }) => (React.useEffect(() => {
+   onNavigate({ to });
+-}, [to]), null), notFound = () => {
++}, [to]), null), Hydrate = ({ children }) => children ?? null, notFound = () => {
+   throw new Error("Not found");
+ }, createStart = () => ({}), clientCookieStore = /* @__PURE__ */ new Map(), clearCookieStore = () => {
+   clientCookieStore.clear();
+@@ -284,6 +283,7 @@ var createServerFn = (options) => {
+ var start_default = { fetch: fetchHandler };
+ export {
+   HEADERS,
++  Hydrate,
+   Link,
+   Navigate,
+   StartServer,
 diff --git a/node_modules/@storybook/tanstack-react/dist/index.js b/node_modules/@storybook/tanstack-react/dist/index.js
 index 6a75af8..e8a8e13 100644
 --- a/node_modules/@storybook/tanstack-react/dist/index.js
@@ -747,48 +782,79 @@ index 6a75af8..e8a8e13 100644
  
  // src/index.ts
 diff --git a/node_modules/@storybook/tanstack-react/dist/node/index.js b/node_modules/@storybook/tanstack-react/dist/node/index.js
-index b03fd48..20ed426 100644
+index b03fd48..adf18aa 100644
 --- a/node_modules/@storybook/tanstack-react/dist/node/index.js
 +++ b/node_modules/@storybook/tanstack-react/dist/node/index.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_qwznj166hup from 'node:url';
-+import CJS_COMPAT_NODE_PATH_qwznj166hup from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_qwznj166hup from "node:module";
++import CJS_COMPAT_NODE_URL_d94lr1e62ev from 'node:url';
++import CJS_COMPAT_NODE_PATH_d94lr1e62ev from 'node:path';
++import CJS_COMPAT_NODE_MODULE_d94lr1e62ev from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_qwznj166hup.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_qwznj166hup.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_qwznj166hup.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_d94lr1e62ev.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_d94lr1e62ev.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_d94lr1e62ev.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
 diff --git a/node_modules/@storybook/tanstack-react/dist/preset.js b/node_modules/@storybook/tanstack-react/dist/preset.js
-index fcf6eba..27319be 100644
+index fcf6eba..7e55544 100644
 --- a/node_modules/@storybook/tanstack-react/dist/preset.js
 +++ b/node_modules/@storybook/tanstack-react/dist/preset.js
 @@ -1,10 +1,10 @@
 -import CJS_COMPAT_NODE_URL_0p8wnllw6x9 from 'node:url';
 -import CJS_COMPAT_NODE_PATH_0p8wnllw6x9 from 'node:path';
 -import CJS_COMPAT_NODE_MODULE_0p8wnllw6x9 from "node:module";
-+import CJS_COMPAT_NODE_URL_qwznj166hup from 'node:url';
-+import CJS_COMPAT_NODE_PATH_qwznj166hup from 'node:path';
-+import CJS_COMPAT_NODE_MODULE_qwznj166hup from "node:module";
++import CJS_COMPAT_NODE_URL_d94lr1e62ev from 'node:url';
++import CJS_COMPAT_NODE_PATH_d94lr1e62ev from 'node:path';
++import CJS_COMPAT_NODE_MODULE_d94lr1e62ev from "node:module";
  
 -var __filename = CJS_COMPAT_NODE_URL_0p8wnllw6x9.fileURLToPath(import.meta.url);
 -var __dirname = CJS_COMPAT_NODE_PATH_0p8wnllw6x9.dirname(__filename);
 -var require = CJS_COMPAT_NODE_MODULE_0p8wnllw6x9.createRequire(import.meta.url);
-+var __filename = CJS_COMPAT_NODE_URL_qwznj166hup.fileURLToPath(import.meta.url);
-+var __dirname = CJS_COMPAT_NODE_PATH_qwznj166hup.dirname(__filename);
-+var require = CJS_COMPAT_NODE_MODULE_qwznj166hup.createRequire(import.meta.url);
++var __filename = CJS_COMPAT_NODE_URL_d94lr1e62ev.fileURLToPath(import.meta.url);
++var __dirname = CJS_COMPAT_NODE_PATH_d94lr1e62ev.dirname(__filename);
++var require = CJS_COMPAT_NODE_MODULE_d94lr1e62ev.createRequire(import.meta.url);
  
  // ------------------------------------------------------------
  // end of CJS compatibility banner, injected by Storybook's esbuild configuration
-@@ -373,6 +373,15 @@ function moduleInterceptionPlugin({
+@@ -31,7 +31,7 @@ var dirname = function(p) {
+ import { viteFinal as reactViteFinal } from "@storybook/react-vite/preset";
+ 
+ // src/plugins/server-code-elimination.ts
+-import { transformSync, types as t } from "storybook/internal/babel";
++import { types as t, transformSync } from "storybook/internal/babel";
+ var SERVER_FN_RE = /\bcreateServerFn\b/, MIDDLEWARE_RE = /\bcreateMiddleware\b/, ISOMORPHIC_FN_RE = /\bcreateIsomorphicFn\b/, SERVER_ONLY_FN_RE = /\bcreateServerOnlyFn\b/, CLIENT_ONLY_FN_RE = /\bcreateClientOnlyFn\b/, ROUTE_FACTORY_RE = /\b(createFileRoute|createRootRoute|createRootRouteWithContext|createRoute)\b/, ROUTE_FACTORIES = /* @__PURE__ */ new Set([
+   "createFileRoute",
+   "createRootRoute",
+@@ -215,12 +215,21 @@ function stripServerOption(options) {
+     return (t.isIdentifier(key) ? key.name : void 0) !== "server";
+   }), options.properties.length !== initialLength;
+ }
++function getJsxRootIdentifier(name) {
++  for (; t.isJSXMemberExpression(name); )
++    name = name.object;
++  return t.isJSXIdentifier(name) ? name : null;
++}
+ function collectReferencedIdentifiers(programPath) {
+   let referenced = /* @__PURE__ */ new Set();
+   return programPath.traverse({
+     enter(path2) {
+       let { node } = path2;
+       !t.isIdentifier(node) || path2.isBindingIdentifier() || path2.findParent((p) => p.isImportDeclaration()) || referenced.add(node.name);
++    },
++    JSXOpeningElement(path2) {
++      let root = getJsxRootIdentifier(path2.node.name);
++      root && referenced.add(root.name);
+     }
+   }), referenced;
+ }
+@@ -373,6 +382,15 @@ function moduleInterceptionPlugin({
              "@storybook/react/entry-preview-argtypes",
              "@storybook/react/entry-preview-docs",
              "@storybook/tanstack-react",

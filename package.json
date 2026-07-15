@@ -14,10 +14,12 @@
     "test:router": "npm run test -w apps/router",
     "test:start": "npm run test -w apps/start",
     "storybook:router": "npm run storybook -w apps/router",
-    "storybook:start": "npm run storybook -w apps/start"
+    "storybook:start": "npm run storybook -w apps/start",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "oxfmt": "^0.58.0",
-    "oxlint": "^1.71.0"
+    "oxlint": "^1.71.0",
+    "patch-package": "^8.0.1"
   }
 }
