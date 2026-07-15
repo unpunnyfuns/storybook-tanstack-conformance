@@ -134,12 +134,10 @@ npm run storybook:start           # browse on :6007
 Both branches stay stock so results always reflect released framework
 behavior; `npm update` pulls the newest release on either.
 
-A daily CI run refreshes the storybook packages to their dist-tags, runs
-both suites on both branches, and publishes the counts to the `status`
-branch, which feeds the badges above. The run fails only when the counts
-change from the previous run, in either direction, so a framework release
-that fixes or breaks scenarios triggers a notification without any commit
-to `main`.
+A daily CI run installs the current dist-tag resolutions from scratch, runs
+every app's suite on both branches, and publishes the counts to the `status`
+branch, which feeds the badges above. No automated commits ever land on
+`main`; the badges are the record.
 
 ## Known rendering caveat
 
