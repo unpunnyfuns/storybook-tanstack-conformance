@@ -15,9 +15,11 @@
     "test:start": "npm run test -w apps/start",
     "storybook:router": "npm run storybook -w apps/router",
     "storybook:start": "npm run storybook -w apps/start",
+    "e2e": "playwright test",
     "postinstall": "patch-package"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.71.0",
     "patch-package": "^8.0.1"
