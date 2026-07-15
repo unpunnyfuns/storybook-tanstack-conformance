@@ -62,3 +62,19 @@ export function listPosts(opts: {
   const start = (opts.page - 1) * opts.pageSize;
   return { items: sorted.slice(start, start + opts.pageSize), total, pageCount };
 }
+
+export interface Review {
+  id: string;
+  author: string;
+  text: string;
+}
+
+export const reviews: Review[] = [
+  { id: "1", author: "Ada", text: "Solid routing." },
+  { id: "2", author: "Alan", text: "Types all the way down." },
+];
+
+export async function fetchReviews(): Promise<Review[]> {
+  await delay(100);
+  return reviews;
+}

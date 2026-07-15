@@ -1,7 +1,14 @@
 import type { ReactNode } from "react";
-import { HeadContent, Link, Scripts, createRootRoute } from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
+import { HeadContent, Link, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
+import type { AuthStore } from "../auth";
 
-export const Route = createRootRoute({
+export interface RouterContext {
+  auth: AuthStore;
+  queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -30,7 +37,12 @@ function RootDocument({ children }: { children: ReactNode }) {
           <Link to="/items/$itemId" params={{ itemId: "1" }}>
             Item 1
           </Link>{" "}
-          <Link to="/panel">Panel</Link>
+          <Link to="/panel">Panel</Link> <Link to="/about">About</Link>{" "}
+          <Link to="/users">Users</Link>{" "}
+          <Link to="/posts" search={{ tag: "all", page: 1, sort: "newest" }}>
+            Posts
+          </Link>{" "}
+          <Link to="/dashboard">Dashboard</Link> <Link to="/reviews">Reviews</Link>
         </nav>
         {children}
         <Scripts />
