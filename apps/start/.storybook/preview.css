@@ -1,0 +1,11 @@
+/*
+ * Storybook renders stories on its light canvas regardless of the browser's
+ * preferred color scheme, while the app opts into `color-scheme: light dark`
+ * (src/index.css). In a dark-preferring browser that combination yields
+ * dark-scheme (white) text over the light canvas showing through the
+ * transparent preview iframe — unreadable stories. Pin stories to light so
+ * every browser renders them identically; the real app stays adaptive.
+ */
+:root {
+  color-scheme: light;
+}
