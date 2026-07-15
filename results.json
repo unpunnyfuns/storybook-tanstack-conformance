@@ -88,5 +88,35 @@
         "total": 0
       }
     }
+  },
+  "patched": {
+    "version": "10.5.0",
+    "apps": {
+      "router": {
+        "passed": 35,
+        "failed": 0,
+        "total": 35
+      },
+      "router-code": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "router-virtual": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "start": {
+        "passed": 36,
+        "failed": 0,
+        "total": 36
+      },
+      "start-virtual": {
+        "passed": 2,
+        "failed": 0,
+        "total": 2
+      }
+    }
   }
 }
