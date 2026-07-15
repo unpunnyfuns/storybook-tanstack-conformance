@@ -1,6 +1,7 @@
-import type { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
 import { expect } from "storybook/test";
+import { authStore } from "../auth";
 import { Route } from "./reviews";
 
 const meta = {
@@ -29,6 +30,49 @@ export const Seeded: Story = {
   },
   play: async ({ canvas }) => {
     await expect(await canvas.findByText(/Grace: Seeded review/u)).toBeVisible();
+    await expect(canvas.queryByText(/Ada: Solid routing/u)).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Per-story isolated QueryClient via `useRouterContext`: a story loader
+ * creates and seeds a fresh client, the router context and the provider both
+ * read it from `storyContext.loaded`. The shared preview client is bypassed.
+ */
+export const IsolatedClient: Story = {
+  loaders: [
+    () => {
+      const isolatedClient = new QueryClient({
+        defaultOptions: { queries: { retry: false, staleTime: Infinity } },
+      });
+      isolatedClient.setQueryData(
+        ["reviews"],
+        [{ id: "42", author: "Lin", text: "Isolated cache." }],
+      );
+      return { isolatedClient };
+    },
+  ],
+  parameters: {
+    tanstack: {
+      router: {
+        useRouterContext: ({ storyContext }) => ({
+          auth: authStore,
+          queryClient: (storyContext.loaded as { isolatedClient: QueryClient }).isolatedClient,
+        }),
+      },
+    },
+  },
+  decorators: [
+    (Story, context) => (
+      <QueryClientProvider
+        client={(context.loaded as { isolatedClient: QueryClient }).isolatedClient}
+      >
+        <Story />
+      </QueryClientProvider>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByText(/Lin: Isolated cache/u)).toBeVisible();
     await expect(canvas.queryByText(/Ada: Solid routing/u)).not.toBeInTheDocument();
   },
 };
