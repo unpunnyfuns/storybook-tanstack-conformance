@@ -2,9 +2,16 @@
  * Aggregates the matrix results and builds shields.io endpoint badges.
  * Writes everything to out/ for the workflow to commit to the status branch.
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 
-const refs = ["main", "next"];
+// Publish whichever refs produced results; a ref whose suite job failed
+// (for example a broken canary build) is simply absent from this run.
+const refs = existsSync("artifacts")
+  ? readdirSync("artifacts")
+      .filter((name) => name.startsWith("results-"))
+      .map((name) => name.slice("results-".length))
+      .toSorted()
+  : [];
 const current = {};
 for (const ref of refs) {
   current[ref] = JSON.parse(readFileSync(`artifacts/results-${ref}/results.json`, "utf8"));
@@ -19,7 +26,7 @@ const counts = (data) =>
 mkdirSync("out", { recursive: true });
 writeFileSync("out/results.json", JSON.stringify(current, null, 2));
 
-const labels = { main: "storybook@latest", next: "storybook@next" };
+const labels = { main: "storybook@latest", next: "storybook@next", canary: "storybook@canary" };
 const badgeColor = (passed, total) =>
   passed === total ? "brightgreen" : passed > total / 2 ? "yellow" : "red";
 
@@ -29,7 +36,7 @@ for (const ref of refs) {
     `out/badge-${ref}.json`,
     JSON.stringify({
       schemaVersion: 1,
-      label: `${labels[ref]} (${current[ref].version})`,
+      label: `${labels[ref] ?? `storybook@${ref}`} (${current[ref].version})`,
       message: `${passed}/${total} passing`,
       color: badgeColor(passed, total),
     }),
