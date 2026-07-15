@@ -27,14 +27,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install
-        run: npm ci
-
-      - name: Refresh storybook packages to their dist-tags
-        run: npm update storybook @storybook/tanstack-react @storybook/addon-vitest --workspaces
-
-      - name: Heal optional dependencies
-        run: npm install --no-audit --no-fund
+      # A fresh, lockfile-free install: the run should test the CURRENT
+      # dist-tag resolutions, and resolving from scratch also avoids npm's
+      # optional-dependency pruning bug (npm/cli#4828) that a lockfile
+      # generated on another platform triggers.
+      - name: Install current dist-tags
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
