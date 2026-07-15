@@ -1,0 +1,35 @@
+{
+  "name": "router-virtual-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6009",
+    "build-storybook": "storybook build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.170.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@storybook/addon-vitest": "latest",
+    "@storybook/tanstack-react": "latest",
+    "@tanstack/router-plugin": "^1.168.19",
+    "@tanstack/virtual-file-routes": "^1.162.0",
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/browser-playwright": "^4.1.10",
+    "playwright": "^1.61.1",
+    "storybook": "latest",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1",
+    "vitest": "^4.1.10"
+  }
+}
