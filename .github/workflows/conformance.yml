@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ref: [main, next, canary]
+        ref: [main, next, canary, patched]
     runs-on: ubuntu-latest
     name: ${{ matrix.ref }}
     steps:
