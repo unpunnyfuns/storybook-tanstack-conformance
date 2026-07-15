@@ -34,3 +34,6 @@ storybook-static
 .nitro/
 .output/
 .tanstack/
+
+# CI conformance reports
+results-*.json
