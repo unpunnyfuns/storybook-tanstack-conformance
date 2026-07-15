@@ -46,10 +46,10 @@ Start, each with file-based, code-based, and virtual routing.
 
 |            | File-based         | Code-based                                         | Virtual routes            |
 | ---------- | ------------------ | -------------------------------------------------- | ------------------------- |
-| **Router** | `apps/router` (35) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
-| **Start**  | `apps/start` (36)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (2)  |
+| **Router** | `apps/router` (36) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
+| **Start**  | `apps/start` (37)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (3)  |
 
-80 stories total. The two file-based apps carry the full scenario matrix
+83 stories total. The two file-based apps carry the full scenario matrix
 below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
@@ -194,12 +194,10 @@ shows what the suite looks like once they are all released:
 | [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | draft                                                               |
 | [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | draft                                                             |
 | [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | draft                                                               |
+| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | draft                                                   |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | draft                                                   |
 
 ## Known caveats
-
-A Start root route's `shellComponent` renders its full document
-(`<html>`/`<body>`) inside the story canvas, which React flags as invalid
-nesting in the console. Stories still render.
 
 The Start apps use `createServerFn().validator()`, the current TanStack
 Start API. Released framework versions only mock the deprecated
