@@ -77,10 +77,3 @@ jobs:
           git add results.json badge-*.json
           git commit -m "status: update conformance results" || echo "no change to commit"
           git push origin status
-
-      - name: Fail when results changed (notification)
-        run: |
-          if [ "$(cat out/changed)" = "true" ]; then
-            echo "Conformance results changed since the previous run."
-            exit 1
-          fi
