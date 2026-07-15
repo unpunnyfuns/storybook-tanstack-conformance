@@ -27,8 +27,12 @@ mkdirSync("out", { recursive: true });
 writeFileSync("out/results.json", JSON.stringify(current, null, 2));
 
 const labels = { main: "storybook@latest", next: "storybook@next", canary: "storybook@canary" };
-const badgeColor = (passed, total) =>
-  passed === total ? "brightgreen" : passed > total / 2 ? "yellow" : "red";
+const badgeColor = (passed, total) => {
+  if (total === 0) {
+    return "lightgrey";
+  }
+  return passed === total ? "brightgreen" : passed > total / 2 ? "yellow" : "red";
+};
 
 for (const ref of refs) {
   const { passed, total } = counts(current[ref]);
