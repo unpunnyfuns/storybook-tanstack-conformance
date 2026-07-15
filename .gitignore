@@ -37,3 +37,9 @@ storybook-static
 
 # CI conformance reports
 results-*.json
+
+# Playwright artifacts
+playwright-results.json
+test-results/
+playwright-report/
+out/
