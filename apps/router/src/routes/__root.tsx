@@ -1,10 +1,12 @@
 import { Link, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { authStore, useAuth } from "../auth";
 import type { AuthStore } from "../auth";
 
 export interface RouterContext {
   auth: AuthStore;
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -39,6 +41,7 @@ function RootLayout() {
         <Link to="/slow">Slow</Link>
         <Link to="/audit">Audit</Link>
         <Link to="/lazy-page">Lazy</Link>
+        <Link to="/reviews">Reviews</Link>
         <Link to="/files/$" params={{ _splat: "reports/2026/q2.pdf" }}>
           Files
         </Link>
