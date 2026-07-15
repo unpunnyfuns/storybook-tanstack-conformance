@@ -1,5 +1,7 @@
 # storybook-tanstack-conformance
 
+[![Conformance](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml/badge.svg)](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml)
+
 Story-level conformance suite for `@storybook/tanstack-react`, run against two
 real applications: a TanStack Router SPA and a TanStack Start app. Every
 scenario is a story with a play function asserting on rendered output;
@@ -113,6 +115,12 @@ npm run storybook:start           # browse on :6007
 
 Both branches stay stock so results always reflect released framework
 behavior; `npm update` pulls the newest release on either.
+
+A daily CI run refreshes the storybook packages to their dist-tags and runs
+both suites on both branches. The badge stays green while the pass/fail
+counts match `expectations.json`; it turns red when a framework release
+changes the results, in either direction. When that happens, review the run
+summary and update `expectations.json`.
 
 ## Known rendering caveat
 
