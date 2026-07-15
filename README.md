@@ -1,6 +1,7 @@
 # storybook-tanstack-conformance
 
-[![Conformance](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml/badge.svg)](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml)
+[![storybook@latest](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main.json)](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml)
+[![storybook@next](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next.json)](https://github.com/unpunnyfuns/storybook-tanstack-conformance/actions/workflows/conformance.yml)
 
 Story-level conformance suite for `@storybook/tanstack-react`, run against two
 real applications: a TanStack Router SPA and a TanStack Start app. Every
@@ -116,11 +117,12 @@ npm run storybook:start           # browse on :6007
 Both branches stay stock so results always reflect released framework
 behavior; `npm update` pulls the newest release on either.
 
-A daily CI run refreshes the storybook packages to their dist-tags and runs
-both suites on both branches. The badge stays green while the pass/fail
-counts match `expectations.json`; it turns red when a framework release
-changes the results, in either direction. When that happens, review the run
-summary and update `expectations.json`.
+A daily CI run refreshes the storybook packages to their dist-tags, runs
+both suites on both branches, and publishes the counts to the `status`
+branch, which feeds the badges above. The run fails only when the counts
+change from the previous run, in either direction, so a framework release
+that fixes or breaks scenarios triggers a notification without any commit
+to `main`.
 
 ## Known rendering caveat
 

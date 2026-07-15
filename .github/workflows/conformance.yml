@@ -7,8 +7,11 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
-  conformance:
+  suite:
     strategy:
       fail-fast: false
       matrix:
@@ -35,3 +38,46 @@ jobs:
 
       - name: Run conformance suites
         run: node scripts/conformance-report.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ matrix.ref }}
+          path: results.json
+
+  status:
+    needs: suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Build status and badges
+        run: |
+          git fetch origin status || true
+          node scripts/update-status.mjs
+
+      - name: Publish to the status branch
+        run: |
+          git config user.name "conformance-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git switch status 2>/dev/null || git switch --orphan status
+          cp out/results.json out/badge-main.json out/badge-next.json .
+          git add results.json badge-main.json badge-next.json
+          git commit -m "status: update conformance results" || echo "no change to commit"
+          git push origin status
+
+      - name: Fail when results changed (notification)
+        run: |
+          if [ "$(cat out/changed)" = "true" ]; then
+            echo "Conformance results changed since the previous run."
+            exit 1
+          fi
