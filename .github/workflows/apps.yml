@@ -25,12 +25,10 @@ jobs:
           rm -f package-lock.json
           npm install --no-audit --no-fund
 
-      # start-code is excluded: TanStack Start cannot build a purely
-      # code-based route tree (its manifest requires generated routes).
-      - name: Build every runnable app
+      - name: Build every app
         run: |
-          for app in router router-code router-virtual start start-virtual; do
-            npm run build -w "apps/$app"
+          for dir in apps/*/; do
+            npm run build -w "$dir"
           done
 
       - name: Install Playwright
