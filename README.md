@@ -165,7 +165,7 @@ npm run dev -w apps/router        # run one app
 | `main`    | stock `storybook@latest`                               |
 | `next`    | stock `storybook@next` (latest alpha)                  |
 | `canary`  | stock `storybook@canary` (most recent PR canary)       |
-| `patched` | `storybook@latest` plus the pending fixes listed below |
+| `patched` | `storybook@next` plus the pending fixes listed below |
 
 The canary dist-tag points at whichever per-PR canary build was published
 most recently, so its results can swing with unrelated work; the badge label
@@ -181,14 +181,12 @@ branch, which feeds the badges above. No automated commits ever land on
 
 ## Pending fixes
 
-The `patched` branch applies these via
+The `patched` branch applies these to `storybook@next` via
 [patch-package](https://www.npmjs.com/package/patch-package), so its row
-shows what the suite looks like once they are all released:
+shows what `next` looks like once they are all merged and released:
 
 | Fix                                                                                | Status                                                              |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [#35185](https://github.com/storybookjs/storybook/pull/35185) server fn `validator()` mock | merged, unreleased |
-| [#35465](https://github.com/storybookjs/storybook/pull/35465) pathless layout routes | merged, unreleased                                                  |
 | [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | open                                                        |
 | [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | draft                                                               |
 | [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | draft                                                               |
@@ -200,10 +198,12 @@ shows what the suite looks like once they are all released:
 ## Known caveats
 
 The Start apps use `createServerFn().validator()`, the current TanStack
-Start API. Released framework versions only mock the deprecated
-`inputValidator()`, so every Start story file crashes at import and the
-Start story badges read "collection crashed". The e2e badges show the same
-apps working; the gap is in the framework's mock layer.
+Start API. `storybook@latest` only mocks the deprecated `inputValidator()`,
+so every Start story file crashes at import on that row and its badges read
+"collection crashed". `storybook@next` ships the fix
+([#35185](https://github.com/storybookjs/storybook/pull/35185)) and its
+Start rows collect normally. The e2e badges show the same apps working; the
+gap is in the released mock layer.
 
 ## Disclosure
 
