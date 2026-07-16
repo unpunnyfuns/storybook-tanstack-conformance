@@ -5,7 +5,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 
 // Publish whichever refs produced results; a ref whose suite job failed
-// (for example a broken canary build) is simply absent from this run.
+// (for example a broken build) is simply absent from this run.
 const refs = existsSync("artifacts")
   ? readdirSync("artifacts")
       .filter((name) => name.startsWith("results-"))
@@ -29,7 +29,6 @@ writeFileSync("out/results.json", JSON.stringify(current, null, 2));
 const labels = {
   main: "storybook@latest",
   next: "storybook@next",
-  canary: "storybook@canary",
   patched: "storybook@next + fixes",
 };
 const badgeColor = (passed, total) => {

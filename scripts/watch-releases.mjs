@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
 
 const tested = JSON.parse(readFileSync(process.argv[2], "utf8"));
-const tags = { main: "latest", next: "next", canary: "canary" };
+const tags = { main: "latest", next: "next" };
 
 const changed = [];
 for (const [ref, tag] of Object.entries(tags)) {
