@@ -162,13 +162,7 @@ npm run dev -w apps/router        # run one app
 | --------- | ------------------------------------------------------ |
 | `main`    | stock `storybook@latest`                               |
 | `next`    | stock `storybook@next` (latest alpha)                  |
-| `canary`  | stock `storybook@canary` (most recent PR canary)       |
 | `patched` | `storybook@next` plus the pending fixes listed below |
-
-The canary dist-tag points at whichever per-PR canary build was published
-most recently, so its results swing with unrelated work. It still runs in CI
-and its counts land on the `status` branch, but it is left out of the badge
-tables above.
 
 The stock branches stay stock so results always reflect released framework
 behavior; `npm update` pulls the newest release on any of them.
