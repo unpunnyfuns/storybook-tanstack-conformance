@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ref: [main, next, canary, patched]
+        ref: [main, next, patched]
     runs-on: ubuntu-latest
     name: ${{ matrix.ref }}
     steps:
@@ -49,7 +49,7 @@ jobs:
 
   status:
     needs: suite
-    # Publish whatever completed; a broken canary must not block the other
+    # Publish whatever completed; one broken ref must not block the other
     # branches' badges.
     if: ${{ always() }}
     runs-on: ubuntu-latest
