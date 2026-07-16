@@ -4,8 +4,8 @@
     "apps": {
       "router": {
         "passed": 28,
-        "failed": 8,
-        "total": 36
+        "failed": 10,
+        "total": 38
       },
       "router-code": {
         "passed": 3,
@@ -34,8 +34,8 @@
     "apps": {
       "router": {
         "passed": 28,
-        "failed": 8,
-        "total": 36
+        "failed": 10,
+        "total": 38
       },
       "router-code": {
         "passed": 3,
@@ -63,9 +63,9 @@
     "version": "10.6.0-alpha.1-fixes.3",
     "apps": {
       "router": {
-        "passed": 36,
+        "passed": 38,
         "failed": 0,
-        "total": 36
+        "total": 38
       },
       "router-code": {
         "passed": 4,
