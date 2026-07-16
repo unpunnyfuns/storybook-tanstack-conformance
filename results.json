@@ -90,7 +90,7 @@
     }
   },
   "patched": {
-    "version": "10.6.0-alpha.1-fixes.0",
+    "version": "10.6.0-alpha.1-fixes.3",
     "apps": {
       "router": {
         "passed": 36,
