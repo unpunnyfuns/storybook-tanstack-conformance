@@ -30,32 +30,32 @@
     }
   },
   "main": {
-    "version": "10.5.1",
+    "version": "10.5.2",
     "apps": {
       "router": {
-        "passed": 1,
-        "failed": 35,
+        "passed": 28,
+        "failed": 8,
         "total": 36
       },
       "router-code": {
-        "passed": 0,
-        "failed": 4,
+        "passed": 3,
+        "failed": 1,
         "total": 4
       },
       "router-virtual": {
-        "passed": 0,
-        "failed": 3,
+        "passed": 3,
+        "failed": 0,
         "total": 3
       },
       "start": {
-        "passed": 0,
-        "failed": 0,
-        "total": 0
+        "passed": 29,
+        "failed": 8,
+        "total": 37
       },
       "start-virtual": {
-        "passed": 0,
-        "failed": 0,
-        "total": 0
+        "passed": 2,
+        "failed": 1,
+        "total": 3
       }
     }
   },
