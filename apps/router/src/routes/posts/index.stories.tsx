@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
 import { useNavigate } from "@storybook/tanstack-react/react-router";
+import { useNavigate as interceptedUseNavigate } from "@tanstack/react-router";
 import { expect } from "storybook/test";
 import { Route } from "./index";
 
@@ -42,5 +43,18 @@ export const Pagination: Story = {
 
     await expect(await canvas.findByText(/Page 2 \//u)).toBeVisible();
     await expect(useNavigate).toHaveBeenCalled();
+  },
+};
+
+/**
+ * The documented assertion module (`@storybook/tanstack-react/react-router`)
+ * and the interception of `@tanstack/react-router` must resolve to the SAME
+ * module instance. If the interception plugin bypasses Vite's resolver, the
+ * two imports get separate instances: the app calls one spy while user
+ * assertions read the other, and every spy assertion silently fails.
+ */
+export const MockModuleIdentity: Story = {
+  play: async () => {
+    await expect(interceptedUseNavigate).toBe(useNavigate);
   },
 };
