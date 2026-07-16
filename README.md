@@ -199,16 +199,6 @@ a rebase, and the release keeps serving the last good build meanwhile. The
 | [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | draft                                                   |
 | [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | draft                                                   |
 
-## Known caveats
-
-The Start apps use `createServerFn().validator()`, the current TanStack
-Start API. `storybook@latest` only mocks the deprecated `inputValidator()`,
-so every Start story file crashes at import on that row and its badges read
-"collection crashed". `storybook@next` ships the fix
-([#35185](https://github.com/storybookjs/storybook/pull/35185)) and its
-Start rows collect normally. The e2e badges show the same apps working; the
-gap is in the released mock layer.
-
 ## Disclosure
 
 Stories and analysis were developed with AI assistance (Claude Code) and are
