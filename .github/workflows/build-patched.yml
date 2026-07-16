@@ -65,6 +65,8 @@ jobs:
           git merge --no-edit upstream/next
 
       - name: Build the framework
+        env:
+          NX_NO_CLOUD: "true"
         run: |
           corepack enable
           cd code
