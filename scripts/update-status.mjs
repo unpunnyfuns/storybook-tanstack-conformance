@@ -30,7 +30,7 @@ const labels = {
   main: "storybook@latest",
   next: "storybook@next",
   canary: "storybook@canary",
-  patched: "storybook@latest + fixes",
+  patched: "storybook@next + fixes",
 };
 const badgeColor = (passed, total) => {
   if (total === 0) {
