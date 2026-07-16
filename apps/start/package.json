@@ -19,8 +19,8 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@storybook/addon-vitest": "latest",
-    "@storybook/tanstack-react": "latest",
+    "@storybook/addon-vitest": "next",
+    "@storybook/tanstack-react": "next",
     "@tanstack/router-plugin": "^1.168.19",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
@@ -28,7 +28,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/browser-playwright": "^4.1.10",
     "playwright": "^1.61.1",
-    "storybook": "latest",
+    "storybook": "next",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vitest": "^4.1.10"
