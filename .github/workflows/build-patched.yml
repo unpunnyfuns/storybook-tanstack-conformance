@@ -1,0 +1,111 @@
+name: Build patched
+
+on:
+  schedule:
+    - cron: "41 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+env:
+  FIX_BRANCHES: >-
+    fix/tanstack-react-route-overrides-by-id
+    fix/tanstack-react-leaf-selection
+    fix/tanstack-react-clone-route-ids
+    fix/tanstack-react-clone-lazy-bindings
+    fix/tanstack-react-mock-module-resolution
+    fix/tanstack-react-root-shell-component
+    fix/tanstack-react-link-href
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      rebuild: ${{ steps.compare.outputs.rebuild }}
+      framework_sha: ${{ steps.compare.outputs.framework_sha }}
+      fixes_sha: ${{ steps.compare.outputs.fixes_sha }}
+    steps:
+      - name: Compare source SHAs with the current build
+        id: compare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          framework_sha=$(gh api "repos/storybookjs/storybook/commits?sha=next&path=code/frameworks/tanstack-react&per_page=1" --jq '.[0].sha')
+          refs=""
+          for b in $FIX_BRANCHES; do refs="$refs refs/heads/$b"; done
+          fixes_sha=$(git ls-remote https://github.com/unpunnyfuns/storybook.git $refs | sha256sum | cut -c1-16)
+          current=$(gh release view conformance-build --repo "$GITHUB_REPOSITORY" --json body --jq .body 2>/dev/null || echo "")
+          echo "framework_sha=$framework_sha" >> "$GITHUB_OUTPUT"
+          echo "fixes_sha=$fixes_sha" >> "$GITHUB_OUTPUT"
+          if echo "$current" | grep -q "$framework_sha" && echo "$current" | grep -q "$fixes_sha"; then
+            echo "No source movement; keeping the current build."
+            echo "rebuild=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Source moved; rebuilding."
+            echo "rebuild=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: check
+    if: needs.check.outputs.rebuild == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: storybookjs/storybook
+          ref: next
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      # A cherry-pick conflict fails this step. That is the signal that the
+      # pending PRs need a rebase; the release keeps serving the last good
+      # build until the branches are fixed.
+      - name: Apply the pending fixes
+        run: |
+          git config user.name conformance-bot
+          git config user.email actions@users.noreply.github.com
+          git remote add fork https://github.com/unpunnyfuns/storybook.git
+          for b in $FIX_BRANCHES; do git fetch --no-tags fork "$b:refs/fork/$b"; done
+          for b in $FIX_BRANCHES; do
+            commits=$(git rev-list --reverse "HEAD..refs/fork/$b")
+            if [ -n "$commits" ]; then
+              git cherry-pick --empty=drop $commits
+            fi
+          done
+
+      - name: Build the framework
+        run: |
+          corepack enable
+          cd code
+          yarn install
+          npx nx run tanstack-react:compile
+
+      - name: Pack the tarball
+        id: pack
+        run: |
+          cd code/frameworks/tanstack-react
+          base=$(node -p "require('./package.json').version")
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          npm pkg set version="$base-fixes.${{ github.run_number }}" \
+            "dependencies.@storybook/builder-vite=^$base" \
+            "dependencies.@storybook/react=^$base" \
+            "dependencies.@storybook/react-vite=^$base" \
+            "peerDependencies.storybook=^$base"
+          mkdir -p /tmp/out
+          npm pack --pack-destination /tmp/out
+          mv /tmp/out/*.tgz /tmp/out/storybook-tanstack-react-patched.tgz
+
+      - name: Publish and verify
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload conformance-build /tmp/out/storybook-tanstack-react-patched.tgz --clobber --repo "$GITHUB_REPOSITORY"
+          gh release edit conformance-build --repo "$GITHUB_REPOSITORY" \
+            --notes "base: ${{ steps.pack.outputs.base }} @ ${{ needs.check.outputs.framework_sha }} | fixes: ${{ needs.check.outputs.fixes_sha }} | PRs: #35497 #35498 #35499 #35500 #35501 #35504 #35505 | source: https://github.com/unpunnyfuns/storybook/tree/conformance-build"
+          gh workflow run conformance.yml --repo "$GITHUB_REPOSITORY"
