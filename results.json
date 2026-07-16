@@ -88,5 +88,35 @@
         "total": 3
       }
     }
+  },
+  "patched": {
+    "version": "10.6.0-alpha.1-fixes.0",
+    "apps": {
+      "router": {
+        "passed": 36,
+        "failed": 0,
+        "total": 36
+      },
+      "router-code": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "router-virtual": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "start": {
+        "passed": 37,
+        "failed": 0,
+        "total": 37
+      },
+      "start-virtual": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      }
+    }
   }
 }
