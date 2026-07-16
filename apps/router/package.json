@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@storybook/addon-vitest": "next",
-    "@storybook/tanstack-react": "next",
+    "@storybook/tanstack-react": "https://github.com/unpunnyfuns/storybook-tanstack-conformance/releases/download/conformance-build/storybook-tanstack-react-patched.tgz",
     "@tanstack/react-router-devtools": "^1.167.0",
     "@tanstack/router-plugin": "^1.168.19",
     "@types/node": "^24.13.2",
