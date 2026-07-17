@@ -44,10 +44,10 @@ Start, each with file-based, code-based, and virtual routing.
 
 |            | File-based         | Code-based                                         | Virtual routes            |
 | ---------- | ------------------ | -------------------------------------------------- | ------------------------- |
-| **Router** | `apps/router` (39) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
+| **Router** | `apps/router` (38) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
 | **Start**  | `apps/start` (37)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (3)  |
 
-86 stories total. The two file-based apps carry the full scenario matrix
+85 stories total. The two file-based apps carry the full scenario matrix
 below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
@@ -191,9 +191,9 @@ a rebase, and the release keeps serving the last good build meanwhile. The
 | [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | open  | 2 |
 | [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | open   | 1  |
 | [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | merged, awaiting release | 2 |
-| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs and preserved `onClick` in the `Link` mock | open | 2 |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | open | 1 |
 
-Story counts are attributed per fix from the stock failure set; the sum (21)
+Story counts are attributed per fix from the stock failure set; the sum (20)
 is verified jointly by the stock and patched rows differing by exactly that
 many stories. [#35504](https://github.com/storybookjs/storybook/pull/35504) is
 merged upstream but not yet in a `next` release tag, so it still counts toward
