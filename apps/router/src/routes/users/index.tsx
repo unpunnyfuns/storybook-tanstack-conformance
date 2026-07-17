@@ -1,8 +1,10 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { users } from "../../data";
 
-export const Route = createFileRoute("/users/")({
-  component: () => (
+function UsersIndex() {
+  const [tracked, setTracked] = useState(0);
+  return (
     <>
       <section className="expected">
         <strong>Expected behavior</strong>
@@ -10,6 +12,10 @@ export const Route = createFileRoute("/users/")({
           <li>
             Lists all users. Clicking a name navigates to <code>/users/$userId</code> with that id
             as a typed path param.
+          </li>
+          <li>
+            The "Track and open" link carries its own <code>onClick</code>; the mock must run it
+            before the navigation spy, just like a real router.
           </li>
         </ul>
       </section>
@@ -23,6 +29,21 @@ export const Route = createFileRoute("/users/")({
           </li>
         ))}
       </ul>
+      <p>
+        <Link
+          to="/users/$userId"
+          params={{ userId: "1" }}
+          onClick={() => setTracked((count) => count + 1)}
+          data-testid="tracked-link"
+        >
+          Track and open Ada
+        </Link>
+      </p>
+      {tracked > 0 && <p data-testid="tracked-count">onClick ran {tracked}x</p>}
     </>
-  ),
+  );
+}
+
+export const Route = createFileRoute("/users/")({
+  component: UsersIndex,
 });
