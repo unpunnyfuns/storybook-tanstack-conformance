@@ -29,9 +29,11 @@ export const ComponentOverrideOnBoundRoute: Story = {
     tanstack: {
       router: {
         routeOverrides: {
+          // `component` overrides work at runtime (upstream #35497); the
+          // published RouteOverrideOptions type does not expose the field yet.
           "/users/$userId": {
             component: () => <p>component override rendered</p>,
-          },
+          } as never,
         },
       },
     },
