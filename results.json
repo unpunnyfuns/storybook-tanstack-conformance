@@ -3,8 +3,8 @@
     "version": "10.5.2",
     "apps": {
       "router": {
-        "passed": 10,
-        "failed": 3,
+        "passed": 8,
+        "failed": 2,
         "total": 16
       },
       "router-code": {
@@ -33,8 +33,8 @@
     "version": "10.6.0-alpha.1",
     "apps": {
       "router": {
-        "passed": 8,
-        "failed": 2,
+        "passed": 10,
+        "failed": 3,
         "total": 16
       },
       "router-code": {
