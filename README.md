@@ -16,6 +16,11 @@
 | `storybook@next`   | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)   |
 | [`patched`](#pending-fixes) | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start-virtual.json) |
 
+The file-based columns carry the deepest scenario coverage, so their counts
+include issues common to every routing mode, not just file-based ones. The
+thinner code-based and virtual columns simply do not exercise those common
+cases yet ([scope breakdown](#pending-fixes)).
+
 ### Apps (pure TanStack, no Storybook)
 
 Playwright end-to-end tests run each app as a real dev server, so the routes
