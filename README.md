@@ -84,6 +84,7 @@ files, fully buildable.
 | `notFound()` thrown from a loader                                     | ✅     | ✅    |
 | `routeOverrides` replacing a loader with mock data                    | ✅     | ✅    |
 | `routeOverrides` disabling a `beforeLoad` guard; router `context`     | ✅     | ✅    |
+| `routeOverrides` replacing a route's `component`                      | ✅     | —     |
 | `validateSearch` + `query` (filters, pagination, sort)                | ✅     | ✅    |
 | Nested layout under a param; `params` and `query` together            | ✅     | ✅    |
 | Nested pathless layout; strict-mode `Route.useLoaderData()`           | ✅     | ✅    |
@@ -103,12 +104,15 @@ files, fully buildable.
 | Plain component + synthetic route from options (`route: { path }`)    | ✅     | ✅    |
 | URL fragment (hash) provided through `path`                           | ✅     | ✅    |
 | Programmatic navigation asserted on the `useNavigate` spy             | ✅     | ✅    |
+| `Link` mock: `href` interpolated, `params` kept off the DOM           | ✅     | —     |
+| Mock module identity: documented import is the intercepted instance   | ✅     | —     |
 | Tree mode: leaf selected by `path` (+ `params`) in the generated tree | ✅     | ✅    |
 | Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | ✅    |
 | Server function in a loader (mocked per story)                        | —      | ✅    |
 | Per-story server states (same route, different responses)             | —      | ✅    |
 | Server-only module replaced via `sb.mock` + `__mocks__`               | —      | ✅    |
 | Rendering under a Start root (`shellComponent`)                       | —      | ✅    |
+| Start `shellComponent` (document shell) kept out of the story canvas  | —      | ✅    |
 
 ## TanStack Query
 
