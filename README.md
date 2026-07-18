@@ -52,6 +52,14 @@ below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
 
+Most pending fixes are **common** issues in shared framework code
+(`duplicateRouteTree`, mock resolution, the `Link` mock) that every routing
+mode runs through; only the document-shell fix is mode-specific (Start). The
+file-based apps carry the deepest coverage, so they surface those common
+issues first. A high pass rate on the thinner code and virtual apps therefore
+reflects lighter coverage, not immunity: the same common fixes apply there
+once equivalent stories exist. The `Scope` column below marks which is which.
+
 Every app also runs as a real application, verified by Playwright
 end-to-end tests (`npm run e2e`) that exercise the actual routing:
 navigation, search params, guards, params, splats, error and notFound
@@ -73,6 +81,14 @@ want the route structure in code on Start, use virtual routes
 files, fully buildable.
 
 ## Scenario matrix
+
+Most scenarios are **common** — they exercise shared framework machinery and
+hold for any routing mode. A `—` marks where a scenario is not yet mirrored in
+that app, not a gap in support: the common fixes apply to the code and virtual
+apps too, once equivalent stories exist. The Start section below is genuinely
+mode-specific (server functions and the document shell).
+
+### Common (every routing mode)
 
 | Scenario                                                              | Router | Start |
 | --------------------------------------------------------------------- | ------ | ----- |
@@ -108,6 +124,11 @@ files, fully buildable.
 | Mock module identity: documented import is the intercepted instance   | ✅     | —     |
 | Tree mode: leaf selected by `path` (+ `params`) in the generated tree | ✅     | ✅    |
 | Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | ✅    |
+
+### Start-specific (server functions and the document shell)
+
+| Scenario                                                              | Router | Start |
+| --------------------------------------------------------------------- | ------ | ----- |
 | Server function in a loader (mocked per story)                        | —      | ✅    |
 | Per-story server states (same route, different responses)             | —      | ✅    |
 | Server-only module replaced via `sb.mock` + `__mocks__`               | —      | ✅    |
@@ -187,15 +208,15 @@ upstream or a fix branch moves; a failed rebuild means the pending PRs need
 a rebase, and the release keeps serving the last good build meanwhile. The
 `patched` row therefore shows what `next` looks like once these are merged:
 
-| Fix                                                                                | Status | Stories fixed |
-| ---------------------------------------------------------------------------------- | ------ | ------------- |
-| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | open   | 1  |
-| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | open   | 7  |
-| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | open   | 6  |
-| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | open  | 2 |
-| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | open   | 1  |
-| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | merged, awaiting release | 2 |
-| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | open | 1 |
+| Fix                                                                                | Scope | Status | Stories fixed |
+| ---------------------------------------------------------------------------------- | ----- | ------ | ------------- |
+| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | open   | 1  |
+| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | common | open   | 7  |
+| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | open   | 6  |
+| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | common | open  | 2 |
+| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | open   | 1  |
+| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged, awaiting release | 2 |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common | open | 1 |
 
 Story counts are attributed per fix from the stock failure set; the sum (20)
 is verified jointly by the stock and patched rows differing by exactly that
