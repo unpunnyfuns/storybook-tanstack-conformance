@@ -30,7 +30,7 @@
     }
   },
   "next": {
-    "version": "10.6.0-alpha.1",
+    "version": "10.6.0-alpha.2",
     "apps": {
       "router": {
         "passed": 28,
@@ -48,13 +48,13 @@
         "total": 3
       },
       "start": {
-        "passed": 29,
-        "failed": 8,
+        "passed": 30,
+        "failed": 7,
         "total": 37
       },
       "start-virtual": {
-        "passed": 2,
-        "failed": 1,
+        "passed": 3,
+        "failed": 0,
         "total": 3
       }
     }
