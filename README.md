@@ -215,19 +215,19 @@ a rebase, and the release keeps serving the last good build meanwhile. The
 
 | Fix                                                                                | Scope | Status | Stories fixed |
 | ---------------------------------------------------------------------------------- | ----- | ------ | ------------- |
-| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | open   | 1  |
+| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | merged, awaiting release | 1  |
 | [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | common | open   | 7  |
-| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | open   | 6  |
+| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | merged, awaiting release | 6  |
 | [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | common | open  | 2 |
-| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | open   | 1  |
+| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | merged, awaiting release | 1  |
 | [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged, awaiting release | 2 |
 | [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common | open | 1 |
 
 Story counts are attributed per fix from the stock failure set; the sum (20)
 is verified jointly by the stock and patched rows differing by exactly that
-many stories. [#35504](https://github.com/storybookjs/storybook/pull/35504) is
-merged upstream but not yet in a `next` release tag, so it still counts toward
-the gap until an alpha ships it.
+many stories. The merged fixes (#35497, #35499, #35501, #35504) are on `next`
+but not yet in a `next` release tag, so they still count toward the gap until
+an alpha ships them.
 
 ## Disclosure
 
