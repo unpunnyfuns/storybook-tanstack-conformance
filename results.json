@@ -30,11 +30,11 @@
     }
   },
   "next": {
-    "version": "10.6.0-alpha.2",
+    "version": "10.6.0-alpha.3",
     "apps": {
       "router": {
-        "passed": 28,
-        "failed": 10,
+        "passed": 29,
+        "failed": 9,
         "total": 38
       },
       "router-code": {
