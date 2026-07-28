@@ -213,21 +213,27 @@ upstream or a fix branch moves; a failed rebuild means the pending PRs need
 a rebase, and the release keeps serving the last good build meanwhile. The
 `patched` row therefore shows what `next` looks like once these are merged:
 
-| Fix                                                                                | Scope | Status | Stories fixed |
-| ---------------------------------------------------------------------------------- | ----- | ------ | ------------- |
-| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | merged, awaiting release | 1  |
-| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | common | open   | 7  |
-| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | merged, awaiting release | 6  |
-| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | common | open  | 2 |
-| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | merged, awaiting release | 1  |
-| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged, awaiting release | 2 |
-| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common | open | 1 |
+| Fix                                                                                | Scope | Status | In `latest` | In `next` | Stories fixed |
+| ---------------------------------------------------------------------------------- | ----- | ------ | ----------- | --------- | ------------- |
+| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | merged | yes | yes | 1  |
+| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | common | open   | no  | no  | 7  |
+| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | merged | yes | not yet | 6  |
+| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | common | open | no | no | 2 |
+| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | merged | yes | not yet | 1  |
+| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged | not needed | yes | 2 |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common | open | no | no | 1 |
 
-Story counts are attributed per fix from the stock failure set; the sum (20)
-is verified jointly by the stock and patched rows differing by exactly that
-many stories. The merged fixes (#35497, #35499, #35501, #35504) are on `next`
-but not yet in a `next` release tag, so they still count toward the gap until
-an alpha ships them.
+`latest` is currently **ahead of** `next` on these fixes. #35497, #35499 and
+#35501 were backported into 10.5.5, while the newest `next` alpha
+(10.6.0-alpha.3) was cut before the last two of them merged. #35504 is only
+relevant from 10.6 onward, since the 10.5.x line does not render a document
+shell in the first place, so its two stories pass on `latest` without it.
+
+Story counts are attributed per fix from the stock failure set, and each stock
+row's failures are exactly the sum of the fixes it is missing:
+
+- `latest` 10.5.5, 10 failing = #35498 (7) + #35500 (2) + #35505 (1)
+- `next` 10.6.0-alpha.3, 17 failing = the same three plus #35499 (6) and #35501 (1)
 
 ## Disclosure
 
