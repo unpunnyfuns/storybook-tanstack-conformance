@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { Preview } from "@storybook/tanstack-react";
+import { definePreview } from "@storybook/tanstack-react";
 import { sb } from "storybook/test";
 import { authStore } from "../src/auth";
-import "../src/routeTree.gen";
+import { routeTree } from "../src/routeTree.gen";
 import "./preview.css";
 
 // Replace the server-only db client with src/db/__mocks__/client.ts so the
@@ -20,13 +20,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const preview: Preview = {
+export default definePreview({
   beforeEach: () => {
     queryClient.clear();
   },
   parameters: {
     tanstack: {
       router: {
+        route: routeTree,
         context: { auth: authStore, queryClient },
       },
     },
@@ -38,6 +39,4 @@ const preview: Preview = {
       </QueryClientProvider>
     ),
   ],
-};
-
-export default preview;
+});

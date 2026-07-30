@@ -1,9 +1,13 @@
-import type { Preview } from "@storybook/tanstack-react";
-import "../src/routeTree.gen";
+import { definePreview } from "@storybook/tanstack-react";
+import { routeTree } from "../src/routeTree.gen";
 import "./preview.css";
 
-const preview: Preview = {
-  parameters: {},
-};
-
-export default preview;
+export default definePreview({
+  parameters: {
+    tanstack: {
+      router: {
+        route: routeTree,
+      },
+    },
+  },
+});

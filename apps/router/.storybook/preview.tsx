@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { Preview } from "@storybook/tanstack-react";
+import { definePreview } from "@storybook/tanstack-react";
 import { authStore } from "../src/auth";
-import "../src/routeTree.gen";
+import { routeTree } from "../src/routeTree.gen";
 import "../src/index.css";
 import "./preview.css";
 
@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const preview: Preview = {
+export default definePreview({
   beforeEach: () => {
     queryClient.clear();
   },
@@ -30,6 +30,7 @@ const preview: Preview = {
 
     tanstack: {
       router: {
+        route: routeTree,
         context: { auth: authStore, queryClient },
       },
     },
@@ -41,6 +42,4 @@ const preview: Preview = {
       </QueryClientProvider>
     ),
   ],
-};
-
-export default preview;
+});
