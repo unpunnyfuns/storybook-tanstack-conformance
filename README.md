@@ -2,18 +2,18 @@
 
 ### Router
 
-| stories passing    | file-based                                                                                                                                                                | code-based                                                                                                                                                                          | virtual routes                                                                                                                                                                            |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storybook@latest` | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router.json)   | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-code.json)   | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-virtual.json)   |
-| `storybook@next`   | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router.json)   | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-code.json)   | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-virtual.json)   |
-| [`patched`](#pending-fixes) | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router.json) | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-code.json) | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-virtual.json) |
+| stories passing             | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             | app shell (root pathless layout)                                                                                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storybook@latest`          | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router.json)    | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-code.json)    | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-virtual.json)    | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-shell.json)    |
+| `storybook@next`            | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router.json)    | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-code.json)    | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-virtual.json)    | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-shell.json)    |
+| [`patched`](#pending-fixes) | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router.json) | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-code.json) | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-virtual.json) | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-shell.json) |
 
 ### Start
 
-| stories passing    | file-based                                                                                                                                                              | code-based | virtual routes                                                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storybook@latest` | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)   |
-| `storybook@next`   | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)   | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)   |
+| stories passing             | file-based                                                                                                                                                               | code-based | virtual routes                                                                                                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storybook@latest`          | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)    | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)    |
+| `storybook@next`            | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)    | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)    |
 | [`patched`](#pending-fixes) | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start-virtual.json) |
 
 The file-based columns carry the deepest scenario coverage, so their counts
@@ -26,10 +26,10 @@ cases yet ([scope breakdown](#pending-fixes)).
 Playwright end-to-end tests run each app as a real dev server, so the routes
 themselves are verified independently of Storybook.
 
-| app e2e    | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Router** | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) |
-| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | n/a                                                                                                                                                                                  | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
+| app e2e    | app shell                                                                                                                                                                              | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Router** | ![router-shell e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-shell.json) | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) |
+| **Start**  | n/a                                                                                                                                                                                    | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | n/a                                                                                                                                                                                  | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
 
 Story-level conformance suite for `@storybook/tanstack-react`, run against
 real applications covering the whole routing grid: TanStack Router and
@@ -52,7 +52,15 @@ Start, each with file-based, code-based, and virtual routing.
 | **Router** | `apps/router` (38) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
 | **Start**  | `apps/start` (37)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (3)  |
 
-85 stories total. The two file-based apps carry the full scenario matrix
+Plus `apps/router-shell` (4): a second file-based Router app for one route
+shape the grid above cannot host. Its whole route tree lives under a
+root-level pathless layout, so the layout's index owns `/` and the app has no
+`src/routes/index.tsx`. `apps/router` cannot cover this because its own root
+index already claims `/`; a root-level pathless layout with an index child
+would collide with it. The shape is the standard app-shell pattern: chrome
+and auth context in one layout, a `/login` route outside it.
+
+89 stories total. The two grid file-based apps carry the full scenario matrix
 below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
@@ -129,16 +137,17 @@ mode-specific (server functions and the document shell).
 | Mock module identity: documented import is the intercepted instance   | ✅     | —     |
 | Tree mode: leaf selected by `path` (+ `params`) in the generated tree | ✅     | ✅    |
 | Code-based (`createRoute`) tree: bound, param + search, tree mode     | ✅     | ✅    |
+| Root-level pathless layout owning the index (`apps/router-shell`)     | ✅     | —     |
 
 ### Start-specific (server functions and the document shell)
 
-| Scenario                                                              | Router | Start |
-| --------------------------------------------------------------------- | ------ | ----- |
-| Server function in a loader (mocked per story)                        | —      | ✅    |
-| Per-story server states (same route, different responses)             | —      | ✅    |
-| Server-only module replaced via `sb.mock` + `__mocks__`               | —      | ✅    |
-| Rendering under a Start root (`shellComponent`)                       | —      | ✅    |
-| Start `shellComponent` (document shell) kept out of the story canvas  | —      | ✅    |
+| Scenario                                                             | Router | Start |
+| -------------------------------------------------------------------- | ------ | ----- |
+| Server function in a loader (mocked per story)                       | —      | ✅    |
+| Per-story server states (same route, different responses)            | —      | ✅    |
+| Server-only module replaced via `sb.mock` + `__mocks__`              | —      | ✅    |
+| Rendering under a Start root (`shellComponent`)                      | —      | ✅    |
+| Start `shellComponent` (document shell) kept out of the story canvas | —      | ✅    |
 
 ## TanStack Query
 
@@ -180,7 +189,7 @@ const meta = {
 npm install
 npx playwright install chromium   # once, for the test runners
 npm test                          # every app's stories, headless
-npm run test -w apps/router       # one app at a time
+npm run test -w apps/router-shell # one app at a time
 npm run e2e                       # the apps themselves, as real dev servers
 npm run storybook -w apps/router  # browse one app's stories
 npm run dev -w apps/router        # run one app
@@ -188,10 +197,10 @@ npm run dev -w apps/router        # run one app
 
 ## Branches
 
-| Branch    | Framework                                              |
-| --------- | ------------------------------------------------------ |
-| `main`    | stock `storybook@latest`                               |
-| `next`    | stock `storybook@next` (latest alpha)                  |
+| Branch    | Framework                                            |
+| --------- | ---------------------------------------------------- |
+| `main`    | stock `storybook@latest`                             |
+| `next`    | stock `storybook@next` (latest alpha)                |
 | `patched` | `storybook@next` plus the pending fixes listed below |
 
 The stock branches stay stock so results always reflect released framework
@@ -213,15 +222,15 @@ upstream or a fix branch moves; a failed rebuild means the pending PRs need
 a rebase, and the release keeps serving the last good build meanwhile. The
 `patched` row therefore shows what `next` looks like once these are merged:
 
-| Fix                                                                                | Scope | Status | In `latest` | In `next` | Stories fixed |
-| ---------------------------------------------------------------------------------- | ----- | ------ | ----------- | --------- | ------------- |
-| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id | common | merged | yes | yes | 1  |
-| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection   | common | open   | no  | no  | 7  |
-| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning   | common | merged | yes | not yet | 6  |
-| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning | common | open | no | no | 2 |
-| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution | common | merged | yes | not yet | 1  |
-| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged | not needed | yes | 2 |
-| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common | open | no | no | 1 |
+| Fix                                                                                              | Scope      | Status | In `latest` | In `next` | Stories fixed |
+| ------------------------------------------------------------------------------------------------ | ---------- | ------ | ----------- | --------- | ------------- |
+| [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id      | common     | merged | yes         | yes       | 1             |
+| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection               | common     | open   | no          | no        | 7             |
+| [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning               | common     | merged | yes         | not yet   | 6             |
+| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning           | common     | open   | no          | no        | 2             |
+| [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution             | common     | merged | yes         | not yet   | 1             |
+| [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged | not needed  | yes       | 2             |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common     | open   | no          | no        | 1             |
 
 `latest` is currently **ahead of** `next` on these fixes. #35497, #35499 and
 #35501 were backported into 10.5.5, while the newest `next` alpha

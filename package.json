@@ -16,11 +16,13 @@
     "test:router-virtual": "npm run test -w apps/router-virtual",
     "test:start": "npm run test -w apps/start",
     "test:start-virtual": "npm run test -w apps/start-virtual",
+    "test:router-shell": "npm run test -w apps/router-shell",
     "storybook:router": "npm run storybook -w apps/router",
     "storybook:router-code": "npm run storybook -w apps/router-code",
     "storybook:router-virtual": "npm run storybook -w apps/router-virtual",
     "storybook:start": "npm run storybook -w apps/start",
     "storybook:start-virtual": "npm run storybook -w apps/start-virtual",
+    "storybook:router-shell": "npm run storybook -w apps/router-shell",
     "e2e": "playwright test"
   },
   "devDependencies": {
