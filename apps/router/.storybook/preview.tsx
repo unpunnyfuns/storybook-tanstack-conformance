@@ -1,7 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { definePreview } from "@storybook/tanstack-react";
+import type { Preview } from "@storybook/tanstack-react";
 import { authStore } from "../src/auth";
-import { routeTree } from "../src/routeTree.gen";
+// Load-bearing: running routeTree.gen is what gives every file route its path,
+// id and parent. The app does this from src/main.tsx, which Storybook never
+// loads, so without this import stories receive routes with no context. Not a
+// stray import, do not remove.
+import "../src/routeTree.gen";
 import "../src/index.css";
 import "./preview.css";
 
@@ -16,7 +20,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default definePreview({
+const preview: Preview = {
   beforeEach: () => {
     queryClient.clear();
   },
@@ -30,7 +34,6 @@ export default definePreview({
 
     tanstack: {
       router: {
-        route: routeTree,
         context: { auth: authStore, queryClient },
       },
     },
@@ -42,4 +45,6 @@ export default definePreview({
       </QueryClientProvider>
     ),
   ],
-});
+};
+
+export default preview;
