@@ -12,6 +12,11 @@
         "failed": 1,
         "total": 4
       },
+      "router-shell": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
@@ -42,6 +47,11 @@
         "failed": 1,
         "total": 4
       },
+      "router-shell": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
@@ -68,6 +78,11 @@
         "total": 38
       },
       "router-code": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "router-shell": {
         "passed": 4,
         "failed": 0,
         "total": 4
