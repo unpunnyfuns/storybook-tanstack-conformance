@@ -56,4 +56,13 @@ test.describe("server-function semantics", () => {
       });
     }).toPass();
   });
+
+  test("a server fn that throws redirect() navigates the page", async ({ page }) => {
+    await page.goto("/redirector");
+    await expect(page.getByText("done: no")).toBeVisible();
+    await expect(async () => {
+      await page.getByRole("button", { name: "log in" }).click();
+      await expect(page.getByText("done: yes")).toBeVisible({ timeout: 1000 });
+    }).toPass();
+  });
 });
