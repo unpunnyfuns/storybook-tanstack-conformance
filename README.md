@@ -208,25 +208,36 @@ npm run storybook -w apps/router  # browse one app's stories
 npm run dev -w apps/router        # run one app
 ```
 
-## Branches
+## Channels
 
-| Branch    | Framework                                            |
+Everything lives on one branch. Which framework build the suite measures is a
+channel, selected by rewriting the apps' dependency specs:
+
+| Channel   | Framework                                            |
 | --------- | ---------------------------------------------------- |
 | `main`    | stock `storybook@latest`                             |
 | `next`    | stock `storybook@next` (latest alpha)                |
 | `patched` | `storybook@next` plus the pending fixes listed below |
 
-The stock branches stay stock so results always reflect released framework
-behavior; `npm update` pulls the newest release on any of them.
+```bash
+node scripts/channel.mjs next   # point every app at a channel
+npm install
+git checkout -- apps            # back to the committed channel (main)
+```
 
-A daily CI run installs the current dist-tag resolutions from scratch, runs
-every app's suite on each branch, and publishes the counts to the `status`
-branch, which feeds the badges above. No automated commits ever land on
-`main`; the badges are the record.
+Channels used to be git branches whose entire diff was these dependency
+specs. That meant cherry-picking every change three times, and a partial
+rollout once left three apps on the `next` branch silently measuring
+`latest`. The script hits all apps or none.
+
+A daily CI run selects each channel in turn, installs its current
+resolutions from scratch, runs every app's suite, and publishes the counts
+to the `status` branch, which feeds the badges above. No automated commits
+ever land on `main`; the badges are the record.
 
 ## Pending fixes
 
-The `patched` branch installs a prebuilt framework tarball from the
+The `patched` channel installs a prebuilt framework tarball from the
 [conformance-build release](https://github.com/unpunnyfuns/storybook-tanstack-conformance/releases/tag/conformance-build):
 `storybook@next` plus these fixes, built from
 [unpunnyfuns/storybook#conformance-build](https://github.com/unpunnyfuns/storybook/tree/conformance-build).

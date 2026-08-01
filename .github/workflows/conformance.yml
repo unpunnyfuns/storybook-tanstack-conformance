@@ -15,17 +15,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Channels, not branches: every run checks out main and points the
+        # apps at the channel's framework via scripts/channel.mjs. The names
+        # stay main/next/patched so the badge files keep their URLs.
         ref: [main, next, patched]
     runs-on: ubuntu-latest
     name: ${{ matrix.ref }}
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: ${{ matrix.ref }}
 
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+
+      - name: Select the ${{ matrix.ref }} channel
+        run: node scripts/channel.mjs ${{ matrix.ref }}
 
       # A fresh, lockfile-free install: the run should test the CURRENT
       # dist-tag resolutions, and resolving from scratch also avoids npm's
