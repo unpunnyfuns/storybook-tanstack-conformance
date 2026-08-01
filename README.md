@@ -202,11 +202,14 @@ const meta = {
 npm install
 npx playwright install chromium   # once, for the test runners
 npm test                          # every app's stories, headless
-npm run test -w apps/router-shell # one app at a time
+npm test -w apps/router           # one app at a time
 npm run e2e                       # the apps themselves, as real dev servers
 npm run storybook -w apps/router  # browse one app's stories
 npm run dev -w apps/router        # run one app
 ```
+
+Per-app commands go through npm workspaces (`-w apps/<name>`); there are no
+per-app scripts at the root to keep in sync.
 
 ## Channels
 

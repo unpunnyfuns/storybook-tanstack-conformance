@@ -14,8 +14,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc -b",
-    "typecheck": "tsc -b",
+    "build": "vite build && tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6012",
     "build-storybook": "storybook build",
@@ -40,5 +40,8 @@
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vitest": "^4.1.10"
+  },
+  "conformance": {
+    "port": 5307
   }
 }
