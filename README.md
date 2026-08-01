@@ -301,6 +301,10 @@ row's failures are exactly the sum of the fixes it is missing:
 - `latest` 10.5.5, 10 failing = #35498 (7) + #35500 (2) + #35505 (1)
 - `next` 10.6.0-alpha.3, 17 failing = the same three plus #35499 (6) and #35501 (1)
 
+## Plans and audits
+
+The framework is being aligned with real TanStack behavior incrementally; the audit that drives the work and the phase-by-phase plans are public for external review in [docs/plans](docs/plans/README.md) and [docs/audits](docs/audits/2026-08-01-framework-audit.md). Corrections and challenges are welcome as issues on this repo.
+
 ## Disclosure
 
 Stories and analysis were developed with AI assistance (Claude Code) and are
