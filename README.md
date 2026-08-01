@@ -225,6 +225,9 @@ const meta = {
 npm install
 npx playwright install chromium   # once, for the test runners
 npm test                          # every app's stories, headless
+                                  # (also generates the gitignored routeTree.gen
+                                  #  files, so run it before `npm run check` on
+                                  #  a fresh clone)
 npm test -w apps/router           # one app at a time
 npm run e2e                       # the apps themselves, as real dev servers
 npm run storybook -w apps/router  # browse one app's stories
