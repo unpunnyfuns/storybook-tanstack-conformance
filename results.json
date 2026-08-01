@@ -5,37 +5,58 @@
       "router": {
         "passed": 34,
         "failed": 4,
-        "total": 38
+        "total": 38,
+        "failing": [
+          "src/routes/lazy-page.stories.tsx > Default",
+          "src/routes/users/index.stories.tsx > Link Hrefs",
+          "src/tree-mode.stories.tsx > At Flat Route",
+          "src/tree-mode.stories.tsx > At Param Route"
+        ]
       },
       "router-code": {
         "passed": 3,
         "failed": 1,
-        "total": 4
+        "total": 4,
+        "failing": [
+          "src/tree-mode.stories.tsx > Tree Mode By Path"
+        ]
       },
       "router-csf4": {
         "passed": 5,
         "failed": 0,
-        "total": 5
+        "total": 5,
+        "failing": []
       },
       "router-shell": {
         "passed": 4,
         "failed": 0,
-        "total": 4
+        "total": 4,
+        "failing": []
       },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
-        "total": 3
+        "total": 3,
+        "failing": []
       },
       "start": {
         "passed": 33,
         "failed": 4,
-        "total": 37
+        "total": 37,
+        "failing": [
+          "src/routes/index.stories.tsx > No Document Shell In Stories",
+          "src/routes/lazy-page.stories.tsx > Default",
+          "src/tree-mode.stories.tsx > At Flat Route",
+          "src/tree-mode.stories.tsx > At Param Route"
+        ]
       },
       "start-virtual": {
         "passed": 2,
         "failed": 1,
-        "total": 3
+        "total": 3,
+        "failing": [
+          "src/routes/panel.stories.tsx > No Document Shell In Stories"
+        ]
       }
     }
   },
@@ -45,37 +66,64 @@
       "router": {
         "passed": 29,
         "failed": 9,
-        "total": 38
+        "total": 38,
+        "failing": [
+          "src/routes/lazy-page.stories.tsx > Default",
+          "src/routes/posts/_archive/archived.stories.tsx > Default",
+          "src/routes/posts/index.stories.tsx > Mock Module Identity",
+          "src/routes/posts/index.stories.tsx > Pagination",
+          "src/routes/settings/_tabs/index.stories.tsx > Default",
+          "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
+          "src/routes/users/index.stories.tsx > Link Hrefs",
+          "src/tree-mode.stories.tsx > At Flat Route",
+          "src/tree-mode.stories.tsx > At Param Route"
+        ]
       },
       "router-code": {
         "passed": 3,
         "failed": 1,
-        "total": 4
+        "total": 4,
+        "failing": [
+          "src/tree-mode.stories.tsx > Tree Mode By Path"
+        ]
       },
       "router-csf4": {
         "passed": 5,
         "failed": 0,
-        "total": 5
+        "total": 5,
+        "failing": []
       },
       "router-shell": {
         "passed": 4,
         "failed": 0,
-        "total": 4
+        "total": 4,
+        "failing": []
       },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
-        "total": 3
+        "total": 3,
+        "failing": []
       },
       "start": {
         "passed": 30,
         "failed": 7,
-        "total": 37
+        "total": 37,
+        "failing": [
+          "src/routes/lazy-page.stories.tsx > Default",
+          "src/routes/posts/_archive/archived.stories.tsx > Default",
+          "src/routes/posts/index.stories.tsx > Pagination",
+          "src/routes/settings/_tabs/index.stories.tsx > Default",
+          "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
+          "src/tree-mode.stories.tsx > At Flat Route",
+          "src/tree-mode.stories.tsx > At Param Route"
+        ]
       },
       "start-virtual": {
         "passed": 3,
         "failed": 0,
-        "total": 3
+        "total": 3,
+        "failing": []
       }
     }
   },
@@ -85,37 +133,44 @@
       "router": {
         "passed": 38,
         "failed": 0,
-        "total": 38
+        "total": 38,
+        "failing": []
       },
       "router-code": {
         "passed": 4,
         "failed": 0,
-        "total": 4
+        "total": 4,
+        "failing": []
       },
       "router-csf4": {
         "passed": 5,
         "failed": 0,
-        "total": 5
+        "total": 5,
+        "failing": []
       },
       "router-shell": {
         "passed": 4,
         "failed": 0,
-        "total": 4
+        "total": 4,
+        "failing": []
       },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
-        "total": 3
+        "total": 3,
+        "failing": []
       },
       "start": {
         "passed": 37,
         "failed": 0,
-        "total": 37
+        "total": 37,
+        "failing": []
       },
       "start-virtual": {
         "passed": 3,
         "failed": 0,
-        "total": 3
+        "total": 3,
+        "failing": []
       }
     }
   }
