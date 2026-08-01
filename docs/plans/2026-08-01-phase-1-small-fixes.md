@@ -31,10 +31,12 @@ Branch: `fix/tanstack-elimination-id-filter`
 The transform filter only matches ids ending in `.ts`/`.tsx`, so `.js`/`.jsx`/`.mjs` sources and any id carrying a Vite query (`?v=`, `?t=`, `?tsr-split=`) bypass elimination entirely. TanStack's own pipeline uses `/\.[cm]?[tj]sx?($|\?)/`.
 
 **Files:**
+
 - Modify: `src/plugins/server-code-elimination.ts` (the `transform.filter.id.include` array and the handler's extension regex)
 - Test: `src/plugins/server-code-elimination.test.ts`
 
 **Interfaces:**
+
 - Produces: a `transformThroughFilter` test helper other elimination tests can adopt later. Signature: `transformThroughFilter(code: string, id: string): Promise<{ code: string } | null | undefined>`.
 
 - [ ] **Step 1: Write the failing tests, routed through the plugin's real filter**
@@ -58,27 +60,27 @@ async function transformThroughFilter(code: string, id: string) {
   return handler.call({}, code, id);
 }
 
-describe('transform.filter id coverage', () => {
-  it('transforms .jsx sources', async () => {
-    const result = await transformThroughFilter(SERVER_FN_SOURCE, '/app/src/routes/x.jsx');
-    expect(result?.code).toContain('__sb');
+describe("transform.filter id coverage", () => {
+  it("transforms .jsx sources", async () => {
+    const result = await transformThroughFilter(SERVER_FN_SOURCE, "/app/src/routes/x.jsx");
+    expect(result?.code).toContain("__sb");
   });
 
-  it('transforms ids carrying a Vite query', async () => {
-    const result = await transformThroughFilter(SERVER_FN_SOURCE, '/app/src/routes/x.tsx?v=abc123');
-    expect(result?.code).toContain('__sb');
+  it("transforms ids carrying a Vite query", async () => {
+    const result = await transformThroughFilter(SERVER_FN_SOURCE, "/app/src/routes/x.tsx?v=abc123");
+    expect(result?.code).toContain("__sb");
   });
 
-  it('transforms code-splitter ids', async () => {
+  it("transforms code-splitter ids", async () => {
     const result = await transformThroughFilter(
       SERVER_FN_SOURCE,
-      '/app/src/routes/x.tsx?tsr-split=component'
+      "/app/src/routes/x.tsx?tsr-split=component",
     );
-    expect(result?.code).toContain('__sb');
+    expect(result?.code).toContain("__sb");
   });
 
-  it('still skips node_modules', async () => {
-    const result = await transformThroughFilter(SERVER_FN_SOURCE, '/app/node_modules/lib/x.tsx');
+  it("still skips node_modules", async () => {
+    const result = await transformThroughFilter(SERVER_FN_SOURCE, "/app/node_modules/lib/x.tsx");
     expect(result).toBeNull();
   });
 });
@@ -108,10 +110,10 @@ In `src/plugins/server-code-elimination.ts`, change the filter:
 And the handler's early return:
 
 ```ts
-        // Only process JS/TS files
-        if (!/\.[mc]?[jt]sx?($|\?)/.test(id)) {
-          return null;
-        }
+// Only process JS/TS files
+if (!/\.[mc]?[jt]sx?($|\?)/.test(id)) {
+  return null;
+}
 ```
 
 - [ ] **Step 4: Run the full framework suite**
@@ -138,33 +140,34 @@ Branch: `fix/tanstack-strip-validator`
 The plugin strips only the deprecated `.inputValidator()`. The current `.validator()` survives, so server-side schema imports leak into the browser bundle, on both `createMiddleware` and `createServerFn` chains.
 
 **Files:**
+
 - Modify: `src/plugins/server-code-elimination.ts`
 - Test: `src/plugins/server-code-elimination.test.ts`
 
 - [ ] **Step 1: Write the failing tests**
 
 ```ts
-describe('validator stripping', () => {
-  it('strips .validator() from createMiddleware chains', async () => {
+describe("validator stripping", () => {
+  it("strips .validator() from createMiddleware chains", async () => {
     const code = `
 import { createMiddleware } from '@tanstack/react-start';
 import { serverSchema } from './schemas.server';
 export const mw = createMiddleware().validator(serverSchema).server(async ({ next }) => next());
 `;
-    const result = await transform(code, '/app/src/mw.ts');
-    expect(result?.code).not.toContain('validator');
-    expect(result?.code).not.toContain('serverSchema');
+    const result = await transform(code, "/app/src/mw.ts");
+    expect(result?.code).not.toContain("validator");
+    expect(result?.code).not.toContain("serverSchema");
   });
 
-  it('strips .validator() from createServerFn chains', async () => {
+  it("strips .validator() from createServerFn chains", async () => {
     const code = `
 import { createServerFn } from '@tanstack/react-start';
 import { serverSchema } from './schemas.server';
 export const fn2 = createServerFn().validator(serverSchema).handler(async () => 'ok');
 `;
-    const result = await transform(code, '/app/src/fn.ts');
-    expect(result?.code).not.toContain('validator');
-    expect(result?.code).not.toContain('serverSchema');
+    const result = await transform(code, "/app/src/fn.ts");
+    expect(result?.code).not.toContain("validator");
+    expect(result?.code).not.toContain("serverSchema");
   });
 });
 ```
@@ -191,16 +194,16 @@ In the middleware branch (currently `if (methodName === 'server' || methodName =
 In the `createServerFn` branch of the same visitor (the branch that rewrites `.handler()`), add before the handler rewrite, mirroring the middleware guard style used beside it:
 
 ```ts
-            if (
-              resolves(root.rootName, 'createServerFn') &&
-              (methodName === 'validator' || methodName === 'inputValidator')
-            ) {
-              if (t.isMemberExpression(path.node.callee)) {
-                path.replaceWith(path.node.callee.object);
-                state.modified = true;
-              }
-              return;
-            }
+if (
+  resolves(root.rootName, "createServerFn") &&
+  (methodName === "validator" || methodName === "inputValidator")
+) {
+  if (t.isMemberExpression(path.node.callee)) {
+    path.replaceWith(path.node.callee.object);
+    state.modified = true;
+  }
+  return;
+}
 ```
 
 The existing dead-code-elimination pass then removes the now-unreferenced `serverSchema` import; if the first test still finds `serverSchema` in the output, the strip ran but DCE did not, which means the replacement left a reference: inspect the emitted code before touching DCE.
@@ -225,20 +228,21 @@ Branch: `fix/tanstack-isomorphic-order`
 `.client(a).server(b)` (server outermost) currently replaces the whole chain with a no-op, silently discarding the client implementation. Only `.server().client()` works. The real compiler picks the client implementation regardless of chain order.
 
 **Files:**
+
 - Modify: `src/plugins/server-code-elimination.ts`
 - Test: `src/plugins/server-code-elimination.test.ts`
 
 - [ ] **Step 1: Write the failing test**
 
 ```ts
-it('keeps the client impl when .server() is outermost', async () => {
+it("keeps the client impl when .server() is outermost", async () => {
   const code = `
 import { createIsomorphicFn } from '@tanstack/react-start';
 export const f = createIsomorphicFn().client(() => 'CLIENT').server(() => 'SERVER');
 `;
-  const result = await transform(code, '/app/src/iso.ts');
-  expect(result?.code).toContain('CLIENT');
-  expect(result?.code).not.toContain('SERVER');
+  const result = await transform(code, "/app/src/iso.ts");
+  expect(result?.code).toContain("CLIENT");
+  expect(result?.code).not.toContain("SERVER");
 });
 ```
 
@@ -257,7 +261,7 @@ function findClientImplInChain(node: t.CallExpression): t.Expression | null {
     const { callee } = current;
     if (
       t.isIdentifier(callee.property) &&
-      callee.property.name === 'client' &&
+      callee.property.name === "client" &&
       current.arguments[0] &&
       t.isExpression(current.arguments[0])
     ) {
@@ -272,14 +276,14 @@ function findClientImplInChain(node: t.CallExpression): t.Expression | null {
 In the `createIsomorphicFn` visitor's `server` branch, replace the unconditional no-op with:
 
 ```ts
-              if (methodName === 'server') {
-                const parent = path.parent;
-                if (!t.isMemberExpression(parent) || !t.isCallExpression(path.parentPath?.parent)) {
-                  const clientImpl = findClientImplInChain(node);
-                  path.replaceWith(clientImpl ? sbFnCallWithImpl(clientImpl) : sbFnCall());
-                  state.modified = true;
-                }
-              }
+if (methodName === "server") {
+  const parent = path.parent;
+  if (!t.isMemberExpression(parent) || !t.isCallExpression(path.parentPath?.parent)) {
+    const clientImpl = findClientImplInChain(node);
+    path.replaceWith(clientImpl ? sbFnCallWithImpl(clientImpl) : sbFnCall());
+    state.modified = true;
+  }
+}
 ```
 
 - [ ] **Step 4: Full suite, revert check, commit, push**
@@ -301,6 +305,7 @@ Branch: `fix/tanstack-navigate-react-effect`
 The mocked `Navigate` in `export-mocks/react-router.ts` calls `useEffect` from `storybook/internal/preview-api`, which throws whenever the component mounts outside the initial hooks context (any post-click re-render). The sibling mock in `export-mocks/start.ts` already uses `React.useEffect`.
 
 **Files:**
+
 - Modify: `src/export-mocks/react-router.ts`
 - Test: `src/export-mocks/react-router.test.ts`
 
@@ -309,13 +314,13 @@ The mocked `Navigate` in `export-mocks/react-router.ts` calls `useEffect` from `
 Add to `src/export-mocks/react-router.test.ts`:
 
 ```ts
-import { renderToString } from 'react-dom/server';
-import React from 'react';
-import { Navigate } from './react-router.ts';
+import { renderToString } from "react-dom/server";
+import React from "react";
+import { Navigate } from "./react-router.ts";
 
-describe('Navigate', () => {
-  it('renders outside a storybook hooks context without throwing', () => {
-    expect(() => renderToString(React.createElement(Navigate, { to: '/somewhere' }))).not.toThrow();
+describe("Navigate", () => {
+  it("renders outside a storybook hooks context without throwing", () => {
+    expect(() => renderToString(React.createElement(Navigate, { to: "/somewhere" }))).not.toThrow();
   });
 });
 ```
@@ -360,6 +365,7 @@ Branch: `fix/tanstack-create-start-instance`
 The mock's `createStart` returns `{}`; the real one returns `{ getOptions, createMiddleware }`. Apps that declare global middleware through the instance crash at module evaluation in every story that imports their `start.ts`.
 
 **Files:**
+
 - Modify: `src/export-mocks/start.ts`
 - Test: `src/export-mocks/start.test.ts`
 
@@ -368,11 +374,11 @@ The mock's `createStart` returns `{}`; the real one returns `{ getOptions, creat
 Add to `src/export-mocks/start.test.ts`:
 
 ```ts
-it('createStart returns a start instance', async () => {
+it("createStart returns a start instance", async () => {
   const start = createStart(() => ({ requestMiddleware: [] }));
-  expect(typeof start.createMiddleware).toBe('function');
-  const middleware = start.createMiddleware({ type: 'function' });
-  expect(typeof middleware.server).toBe('function');
+  expect(typeof start.createMiddleware).toBe("function");
+  const middleware = start.createMiddleware({ type: "function" });
+  expect(typeof middleware.server).toBe("function");
   await expect(start.getOptions()).resolves.toEqual({ requestMiddleware: [] });
 });
 ```
@@ -388,7 +394,7 @@ Expected: fails with `start.createMiddleware is not a function`.
 In `src/export-mocks/start.ts`, replace `export const createStart = () => ({});` with:
 
 ```ts
-import { createMiddleware as clientCreateMiddleware } from '@tanstack/start-client-core';
+import { createMiddleware as clientCreateMiddleware } from "@tanstack/start-client-core";
 
 export const createStart = (getOptions?: () => unknown) => ({
   getOptions: async () => (getOptions ? getOptions() : {}),
@@ -415,6 +421,7 @@ Branch: `fix/tanstack-optimize-vite-deps`
 `preview.tsx` exports a field named `optimizeDeps` that nothing reads: builder-vite consumes the preset-level `optimizeViteDeps` export instead. The devtools packages listed there are never pre-bundled, causing mid-session dep re-optimization reloads.
 
 **Files:**
+
 - Modify: `src/preview.tsx` (delete the export), `src/preset.ts` (extend the real list)
 - Test: `src/preset.test.ts` (create)
 
@@ -423,17 +430,17 @@ Branch: `fix/tanstack-optimize-vite-deps`
 Create `src/preset.test.ts`:
 
 ```ts
-import { describe, expect, it } from 'vitest';
-import { optimizeViteDeps } from './preset';
+import { describe, expect, it } from "vitest";
+import { optimizeViteDeps } from "./preset";
 
-describe('optimizeViteDeps', () => {
-  it('pre-bundles the TanStack devtools packages', () => {
+describe("optimizeViteDeps", () => {
+  it("pre-bundles the TanStack devtools packages", () => {
     expect(optimizeViteDeps).toEqual(
       expect.arrayContaining([
-        '@tanstack/react-devtools',
-        '@tanstack/react-query-devtools',
-        '@tanstack/react-router-devtools',
-      ])
+        "@tanstack/react-devtools",
+        "@tanstack/react-query-devtools",
+        "@tanstack/react-router-devtools",
+      ]),
     );
   });
 });
@@ -457,13 +464,14 @@ git push -u origin fix/tanstack-optimize-vite-deps
 
 ---
 
-### Task 7: Export the override types and allow __root__ (findings 26 part, 5 of the integration audit)
+### Task 7: Export the override types and allow **root** (findings 26 part, 5 of the integration audit)
 
 Branch: `fix/tanstack-override-types`
 
 The runtime supports `routeOverrides: { __root__: {...} }` but the `RouteTreeOverrides` type cannot express it, and neither `RouteTreeOverrides` nor `RouteOverrideOptions` is exported from the package entry, so consumers cannot type an overrides object at all.
 
 **Files:**
+
 - Modify: `src/routing/types.ts`, `src/index.ts`
 - Test: `src/routing/duplicate-tree.test.ts` (append a typed usage)
 
@@ -472,9 +480,9 @@ The runtime supports `routeOverrides: { __root__: {...} }` but the `RouteTreeOve
 Append to `src/routing/duplicate-tree.test.ts`:
 
 ```ts
-import type { RouteTreeOverrides } from '../index.ts';
+import type { RouteTreeOverrides } from "../index.ts";
 
-it('types a __root__ override without casts', () => {
+it("types a __root__ override without casts", () => {
   const overrides: RouteTreeOverrides = {
     __root__: { notFoundComponent: () => null },
   };
@@ -520,6 +528,7 @@ Branch: `fix/tanstack-missing-params-warning`
 Binding a story to a param route without `parameters.tanstack.router.params` silently produces the literal URL `/users/undefined`. `interpolatePath` reports this through `isMissingParams`, which the decorator discards.
 
 **Files:**
+
 - Modify: `src/routing/decorator.tsx`
 - Test: `src/routing/decorator.test.ts`
 
@@ -528,13 +537,13 @@ Binding a story to a param route without `parameters.tanstack.router.params` sil
 Append to `src/routing/decorator.test.ts`, reusing the file's `fakeContext` helper and mount pattern:
 
 ```ts
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
-describe('missing path params', () => {
-  it('warns when a param route is mounted without params', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+describe("missing path params", () => {
+  it("warns when a param route is mounted without params", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const root = createRootRoute();
-    const detail = createRoute({ path: '/users/$userId', getParentRoute: () => root });
+    const detail = createRoute({ path: "/users/$userId", getParentRoute: () => root });
     root.addChildren([detail]);
 
     const router = createStoryRouter({
@@ -543,7 +552,7 @@ describe('missing path params', () => {
     });
     await router.load();
 
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('params'));
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("params"));
     warn.mockRestore();
   });
 });
@@ -559,16 +568,16 @@ Expected: fails; no warning is emitted (and the router's pathname is `/users/und
 In `src/routing/decorator.tsx`, replace the interpolation statement:
 
 ```ts
-  const interpolated = interpolatePath({
-    path: inferredPath,
-    params: routerParameters?.params ?? {},
-  });
-  if (interpolated.isMissingParams) {
-    console.warn(
-      `[@storybook/tanstack-react] "${inferredPath}" has path params that were not provided via parameters.tanstack.router.params; the mounted URL will contain the literal string "undefined".`
-    );
-  }
-  let resolvedPath = interpolated.interpolatedPath;
+const interpolated = interpolatePath({
+  path: inferredPath,
+  params: routerParameters?.params ?? {},
+});
+if (interpolated.isMissingParams) {
+  console.warn(
+    `[@storybook/tanstack-react] "${inferredPath}" has path params that were not provided via parameters.tanstack.router.params; the mounted URL will contain the literal string "undefined".`,
+  );
+}
+let resolvedPath = interpolated.interpolatedPath;
 ```
 
 - [ ] **Step 4: Full suite, revert check, commit, push**

@@ -46,12 +46,14 @@ README.md                                      (regenerated sections only, via s
 Measures audit findings 4 (middleware and validator discarded), 21/22 (cookie and header semantics).
 
 **Files:**
+
 - Create: `apps/start/src/server-probe-fns.ts`
 - Create: `apps/start/src/routes/server-probes.tsx`
 - Create: `apps/start/src/routes/server-probes.stories.tsx`
 - Modify: `e2e/start.spec.ts` (append)
 
 **Interfaces:**
+
 - Produces: `whoAmI(): Promise<string>`, `increment(opts: { data: unknown }): Promise<number>`, `cookieEcho(): Promise<string>`, `tracked(): Promise<string>`, `clientPhaseLog: string[]`; route `/server-probes` rendering `user: ...`, `sum: ...`, `cookie: ...`, `traced: ...` lines after button clicks. Task 5 consumes the changed story totals.
 
 - [ ] **Step 1: Write the server functions**
@@ -91,7 +93,7 @@ export const tracked = createServerFn({ method: "GET" })
 
 /** The validator transforms input before the handler sees it. */
 export const increment = createServerFn({ method: "POST" })
-  .validator((raw: unknown) => Number(raw))
+  .validator(Number)
   .handler(({ data }) => (data as number) + 1);
 
 /** setCookie writes the response; getCookie reads the request. They do not meet. */
@@ -117,7 +119,12 @@ export const Route = createFileRoute("/server-probes")({
 function ServerProbesPage() {
   const [results, setResults] = useState<Record<string, string>>({});
   const record = (key: string, run: () => Promise<unknown>) => async () => {
-    const value = await run().catch((error: unknown) => `error: ${String(error)}`);
+    let value: unknown;
+    try {
+      value = await run();
+    } catch (error) {
+      value = `error: ${String(error)}`;
+    }
     setResults((prev) => ({ ...prev, [key]: String(value) }));
   };
   return (
@@ -134,7 +141,10 @@ function ServerProbesPage() {
       </button>
       <button
         type="button"
-        onClick={record("traced", async () => `${await tracked()} after ${clientPhaseLog.length} client phases`)}
+        onClick={record(
+          "traced",
+          async () => `${await tracked()} after ${clientPhaseLog.length} client phases`,
+        )}
       >
         tracked
       </button>
@@ -209,6 +219,8 @@ export const MiddlewareClientPhase: Story = {
 
 Append to `e2e/start.spec.ts`:
 
+Under SSR dev mode a page can be visible before React hydrates, and an immediate click is silently lost; wrap each click+assert pair in the `await expect(async () => { ... }).toPass();` retry idiom that `e2e/shared/rich-app.ts` already uses for exactly this race.
+
 ```ts
 test.describe("server-function semantics", () => {
   test("middleware server phase seeds handler context", async ({ page }) => {
@@ -240,12 +252,7 @@ test.describe("server-function semantics", () => {
 - [ ] **Step 5: Run the story suite; the four new stories must fail, existing ones must not change**
 
 Run: `npm run test --workspace=apps/start`
-Expected failures and reasons (capture the output):
-- `MiddlewareServerContext`: mock discards middleware, handler context is undefined, page shows `user: error: ...` or `user: nobody`.
-- `ValidatorTransforms`: mock discards the validator, `"1" + 1` prints `sum: 11`.
-- `CookieScope`: mock stores cookies in one map, prints `cookie: abc`.
-- `MiddlewareClientPhase`: client phase never runs, prints `after 0 client phases`.
-If a story fails for a DIFFERENT reason (crash at import, wrong text entirely), stop and investigate before continuing: the gauge must measure the drift it names.
+Expected failures (capture the output): all four stories fail because the displayed value differs from the real app's. The exact wrong value depends on the channel's framework build. On builds that strip server-fn handler bodies into result-less spies (the current `latest` does this unconditionally; the repo's own `index.stories.tsx` documents it), every call resolves to `undefined`, so expect `user: undefined`, `sum: undefined`, `cookie: undefined`, and `traced: undefined after 0 client phases`. On builds where the handler runs but middleware/validator/cookie semantics drift, expect `user: nobody` or an error, `sum: 11`, `cookie: abc`, `after 0 client phases`. Either way the failure IS the measurement; capture which form each channel produces. If a story fails in a way that matches neither form (crash at import, unrelated text), stop and investigate before continuing.
 
 - [ ] **Step 6: Run the real-app proof; all four must pass**
 
@@ -269,11 +276,13 @@ git commit -m "test: gauge server-function middleware, validator, and cookie sem
 Measures audit finding 8 (useServerFn drops redirect handling).
 
 **Files:**
+
 - Create: `apps/start/src/routes/redirector.tsx`
 - Create: `apps/start/src/routes/redirector.stories.tsx`
 - Modify: `e2e/start.spec.ts` (append)
 
 **Interfaces:**
+
 - Produces: route `/redirector` whose button triggers a server fn that throws `redirect({ to: "/redirector", search: { done: "yes" } })`; the page prints `done: yes` once the redirect is followed.
 
 - [ ] **Step 1: Write the route**
@@ -361,7 +370,7 @@ test("a server fn that throws redirect() navigates the page", async ({ page }) =
 - [ ] **Step 4: Run stories (expect the new one failing), then e2e (expect passing)**
 
 Run: `npm run test --workspace=apps/start`
-Expected: `RedirectNavigates` fails; the mock's `useServerFn` is a passthrough, the thrown redirect becomes an unhandled rejection and `done:` stays `no`.
+Expected: `RedirectNavigates` fails; whether the handler body is stripped (call resolves to `undefined`) or runs and throws an uncaught redirect, the navigation never happens and `done:` stays `no`.
 Run: `npx playwright test e2e/start.spec.ts`
 Expected: all pass.
 
@@ -381,6 +390,7 @@ git commit -m "test: gauge useServerFn redirect handling"
 Measures audit finding 1 (`createStart()` returns `{}`). Deliberately NOT a route: a broken `createStart` must only fail this stories file, never cascade into the generated route tree that every tree-mode story imports.
 
 **Files:**
+
 - Create: `apps/start/src/start-instance.stories.tsx`
 
 - [ ] **Step 1: Write the gauge stories**
@@ -448,12 +458,14 @@ git commit -m "test: gauge the createStart instance shape"
 Measures audit findings 7 (imperative navigation), 9/related (Link click behavior), 10 (Navigate mounted after a click crashes on Storybook preview hooks).
 
 **Files:**
+
 - Create: `apps/router/src/routes/nav-target.tsx`
 - Create: `apps/router/src/routes/nav-probe.tsx`
 - Create: `apps/router/src/navigation.stories.tsx`
 - Modify: `e2e/router.spec.ts` (append)
 
 **Interfaces:**
+
 - Produces: routes `/nav-probe` (three triggers: a Link, a `useNavigate` button, a button that mounts `<Navigate>`) and `/nav-target` (heading `Nav target`).
 
 - [ ] **Step 1: Write the routes**
@@ -587,11 +599,12 @@ test.describe("navigation triggers", () => {
 
 Run: `npm run test --workspace=apps/router`
 Expected on the committed (`main`) channel:
+
 - `ByLink` fails: the mocked Link records the click but blocks navigation.
 - `ByHook` passes: `useNavigate` is currently backed by the real implementation and the whole tree is mounted, so in-tree navigation works. This is a control gauge; it pins the behavior stories may already rely on, so any future navigation-seam change that breaks it is visible.
 - `ByComponent` fails: the mocked Navigate uses Storybook preview hooks and throws when mounted from a post-click re-render.
-Run: `npx playwright test e2e/router.spec.ts`
-Expected: all pass.
+  Run: `npx playwright test e2e/router.spec.ts`
+  Expected: all pass.
 
 - [ ] **Step 5: Check and commit**
 
@@ -607,6 +620,7 @@ git commit -m "test: gauge link, hook, and component navigation in stories"
 ### Task 5: Re-measure all channels, record expectations, publish
 
 **Files:**
+
 - Modify: `expectations.json` (via `verify --update` only)
 - Modify: `README.md` (generated sections only, via `scripts/docs.mjs`)
 
