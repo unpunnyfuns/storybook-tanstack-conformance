@@ -12,6 +12,11 @@
         "failed": 1,
         "total": 4
       },
+      "router-csf4": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
+      },
       "router-shell": {
         "passed": 4,
         "failed": 0,
@@ -47,6 +52,11 @@
         "failed": 1,
         "total": 4
       },
+      "router-csf4": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
+      },
       "router-shell": {
         "passed": 4,
         "failed": 0,
@@ -81,6 +91,11 @@
         "passed": 4,
         "failed": 0,
         "total": 4
+      },
+      "router-csf4": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
       },
       "router-shell": {
         "passed": 4,
