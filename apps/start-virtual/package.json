@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build && tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "storybook": "storybook dev -p 6011",
+    "storybook": "storybook dev -p 6010",
     "build-storybook": "storybook build",
     "test": "vitest run"
   },
