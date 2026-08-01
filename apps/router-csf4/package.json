@@ -42,6 +42,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5307
+    "port": 5307,
+    "family": "Router",
+    "label": "CSF factories"
   }
 }

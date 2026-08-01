@@ -34,6 +34,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5304
+    "port": 5304,
+    "family": "Start",
+    "label": "file-based"
   }
 }

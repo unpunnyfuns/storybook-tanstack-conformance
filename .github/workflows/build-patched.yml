@@ -92,7 +92,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # The tarball is upstream next plus the still-open fixes; the list
+          # lives in fixes.json on the conformance repo, not in this file.
+          open_prs=$(curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/main/fixes.json" \
+            | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).fixes.filter(f=>f.status==='open').map(f=>'#'+f.pr).join(' ')))")
           gh release upload conformance-build /tmp/out/storybook-tanstack-react-patched.tgz --clobber --repo "$GITHUB_REPOSITORY"
           gh release edit conformance-build --repo "$GITHUB_REPOSITORY" \
-            --notes "base: ${{ steps.pack.outputs.base }} @ ${{ needs.check.outputs.framework_sha }} | source: ${{ needs.check.outputs.source_sha }} (https://github.com/unpunnyfuns/storybook/tree/conformance-build) | PRs: #35497 #35498 #35499 #35500 #35501 #35504 #35505"
+            --notes "base: ${{ steps.pack.outputs.base }} @ ${{ needs.check.outputs.framework_sha }} | source: ${{ needs.check.outputs.source_sha }} (https://github.com/unpunnyfuns/storybook/tree/conformance-build) | PRs: $open_prs"
           gh workflow run conformance.yml --repo "$GITHUB_REPOSITORY"

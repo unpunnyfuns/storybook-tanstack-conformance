@@ -34,6 +34,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5305
+    "port": 5305,
+    "family": "Start",
+    "label": "virtual routes"
   }
 }

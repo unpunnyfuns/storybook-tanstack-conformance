@@ -33,6 +33,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5306
+    "port": 5306,
+    "family": "Router",
+    "label": "app shell (root pathless layout)"
   }
 }

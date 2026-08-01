@@ -1,0 +1,67 @@
+{
+  "fixes": [
+    {
+      "pr": 35497,
+      "title": "route overrides matched by id",
+      "scope": "common",
+      "status": "merged",
+      "inLatest": "yes",
+      "inNext": "yes",
+      "storiesFixed": 1
+    },
+    {
+      "pr": 35498,
+      "title": "story leaf selection",
+      "scope": "common",
+      "status": "merged",
+      "inLatest": "no",
+      "inNext": "not yet",
+      "storiesFixed": 7
+    },
+    {
+      "pr": 35499,
+      "title": "route ids in cloning",
+      "scope": "common",
+      "status": "merged",
+      "inLatest": "yes",
+      "inNext": "not yet",
+      "storiesFixed": 6
+    },
+    {
+      "pr": 35500,
+      "title": "lazy bindings in cloning",
+      "scope": "common",
+      "status": "merged",
+      "inLatest": "no",
+      "inNext": "not yet",
+      "storiesFixed": 2
+    },
+    {
+      "pr": 35501,
+      "title": "mock module resolution",
+      "scope": "common",
+      "status": "merged",
+      "inLatest": "yes",
+      "inNext": "not yet",
+      "storiesFixed": 1
+    },
+    {
+      "pr": 35504,
+      "title": "document shell kept out of stories",
+      "scope": "Start-only",
+      "status": "merged",
+      "inLatest": "not needed",
+      "inNext": "yes",
+      "storiesFixed": 2
+    },
+    {
+      "pr": 35505,
+      "title": "real link hrefs in the Link mock",
+      "scope": "common",
+      "status": "open",
+      "inLatest": "no",
+      "inNext": "no",
+      "storiesFixed": 1
+    }
+  ]
+}

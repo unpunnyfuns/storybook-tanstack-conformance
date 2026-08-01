@@ -2,19 +2,27 @@
 
 ### Router
 
+<!-- generated:badges-router -->
+
 | stories passing             | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             | app shell (root pathless layout)                                                                                                                                                       | CSF factories                                                                                                                                                                        |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `storybook@latest`          | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router.json)    | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-code.json)    | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-virtual.json)    | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-shell.json)    | ![router-csf4](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-router-csf4.json)    |
 | `storybook@next`            | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router.json)    | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-code.json)    | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-virtual.json)    | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-shell.json)    | ![router-csf4](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-router-csf4.json)    |
 | [`patched`](#pending-fixes) | ![router](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router.json) | ![router-code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-code.json) | ![router-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-virtual.json) | ![router-shell](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-shell.json) | ![router-csf4](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-router-csf4.json) |
 
+<!-- generated:end -->
+
 ### Start
 
-| stories passing             | file-based                                                                                                                                                               | code-based | virtual routes                                                                                                                                                                           |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storybook@latest`          | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)    | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)    |
-| `storybook@next`            | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)    | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)    |
-| [`patched`](#pending-fixes) | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start.json) | n/a        | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start-virtual.json) |
+<!-- generated:badges-start -->
+
+| stories passing             | file-based                                                                                                                                                               | virtual routes                                                                                                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storybook@latest`          | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start.json)    | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-main-start-virtual.json)    |
+| `storybook@next`            | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start.json)    | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-next-start-virtual.json)    |
+| [`patched`](#pending-fixes) | ![start](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start.json) | ![start-virtual](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-patched-start-virtual.json) |
+
+<!-- generated:end -->
 
 The file-based columns carry the deepest scenario coverage, so their counts
 include issues common to every routing mode, not just file-based ones. The
@@ -26,10 +34,14 @@ cases yet ([scope breakdown](#pending-fixes)).
 Playwright end-to-end tests run each app as a real dev server, so the routes
 themselves are verified independently of Storybook.
 
-| app e2e    | CSF factories                                                                                                                                                                        | app shell                                                                                                                                                                              | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Router** | ![router-csf4 e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-csf4.json) | ![router-shell e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-shell.json) | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) |
-| **Start**  | n/a                                                                                                                                                                                  | n/a                                                                                                                                                                                    | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | n/a                                                                                                                                                                                  | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   |
+<!-- generated:badges-e2e -->
+
+| app e2e    | file-based                                                                                                                                                                 | code-based                                                                                                                                                                           | virtual routes                                                                                                                                                                             | app shell (root pathless layout)                                                                                                                                                       | CSF factories                                                                                                                                                                        |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Router** | ![router e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router.json) | ![router-code e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-code.json) | ![router-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-virtual.json) | ![router-shell e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-shell.json) | ![router-csf4 e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-router-csf4.json) |
+| **Start**  | ![start e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start.json)   | n/a                                                                                                                                                                                  | ![start-virtual e2e](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Funpunnyfuns%2Fstorybook-tanstack-conformance%2Fstatus%2Fbadge-e2e-start-virtual.json)   | n/a                                                                                                                                                                                    | n/a                                                                                                                                                                                  |
+
+<!-- generated:end -->
 
 Story-level conformance suite for `@storybook/tanstack-react`, run against
 real applications covering the whole routing grid: TanStack Router and
@@ -47,12 +59,23 @@ the framework is the place to look.
 The suite covers the full routing-mode grid: TanStack Router and TanStack
 Start, each with file-based, code-based, and virtual routing.
 
-|            | File-based         | Code-based                                         | Virtual routes            |
-| ---------- | ------------------ | -------------------------------------------------- | ------------------------- |
-| **Router** | `apps/router` (38) | `apps/router-code` (4)                             | `apps/router-virtual` (3) |
-| **Start**  | `apps/start` (37)  | n/a ([why](#why-there-is-no-code-based-start-app)) | `apps/start-virtual` (3)  |
+<!-- generated:workspaces -->
 
-Plus `apps/router-shell` (4): a second file-based Router app for one route
+| App                   | Family | Routing / format                 | Stories |
+| --------------------- | ------ | -------------------------------- | ------- |
+| `apps/router`         | Router | file-based                       | 38      |
+| `apps/router-code`    | Router | code-based                       | 4       |
+| `apps/router-virtual` | Router | virtual routes                   | 3       |
+| `apps/start`          | Start  | file-based                       | 37      |
+| `apps/start-virtual`  | Start  | virtual routes                   | 3       |
+| `apps/router-shell`   | Router | app shell (root pathless layout) | 4       |
+| `apps/router-csf4`    | Router | CSF factories                    | 5       |
+
+94 stories total (from expectations.json, channel `main`).
+
+<!-- generated:end -->
+
+`apps/router-shell` is a second file-based Router app for one route
 shape the grid above cannot host. Its whole route tree lives under a
 root-level pathless layout, so the layout's index owns `/` and the app has no
 `src/routes/index.tsx`. `apps/router` cannot cover this because its own root
@@ -60,7 +83,7 @@ index already claims `/`; a root-level pathless layout with an index child
 would collide with it. The shape is the standard app-shell pattern: chrome
 and auth context in one layout, a `/login` route outside it.
 
-Plus `apps/router-csf4` (5): the same framework driven through CSF factories
+`apps/router-csf4` is the same framework driven through CSF factories
 rather than CSF3, using `defineMain`, `definePreview`, `preview.meta()` and
 `meta.story()` as the automigration generates them. The Vite builder takes a
 different code path for a CSF factory preview, emitting an import only for the
@@ -72,7 +95,7 @@ cannot be covered from inside an app written in CSF3.
 builder decides by looking for a `definePreview` import and an ordinary edit to
 a preview file would otherwise move an app between paths unnoticed.
 
-94 stories total. The two grid file-based apps carry the full scenario matrix
+The two grid file-based apps carry the full scenario matrix
 below; the code and virtual apps prove the same framework machinery against
 their routing modes (id-only layouts, params + search, loaders and
 loaderDeps, server functions, tree mode).
@@ -249,15 +272,19 @@ upstream or a fix branch moves; a failed rebuild means the pending PRs need
 a rebase, and the release keeps serving the last good build meanwhile. The
 `patched` row therefore shows what `next` looks like once these are merged:
 
+<!-- generated:fixes -->
+
 | Fix                                                                                              | Scope      | Status | In `latest` | In `next` | Stories fixed |
 | ------------------------------------------------------------------------------------------------ | ---------- | ------ | ----------- | --------- | ------------- |
 | [#35497](https://github.com/storybookjs/storybook/pull/35497) route overrides matched by id      | common     | merged | yes         | yes       | 1             |
-| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection               | common     | open   | no          | no        | 7             |
+| [#35498](https://github.com/storybookjs/storybook/pull/35498) story leaf selection               | common     | merged | no          | not yet   | 7             |
 | [#35499](https://github.com/storybookjs/storybook/pull/35499) route ids in cloning               | common     | merged | yes         | not yet   | 6             |
-| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning           | common     | open   | no          | no        | 2             |
+| [#35500](https://github.com/storybookjs/storybook/pull/35500) lazy bindings in cloning           | common     | merged | no          | not yet   | 2             |
 | [#35501](https://github.com/storybookjs/storybook/pull/35501) mock module resolution             | common     | merged | yes         | not yet   | 1             |
 | [#35504](https://github.com/storybookjs/storybook/pull/35504) document shell kept out of stories | Start-only | merged | not needed  | yes       | 2             |
-| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the `Link` mock | common     | open   | no          | no        | 1             |
+| [#35505](https://github.com/storybookjs/storybook/pull/35505) real link hrefs in the Link mock   | common     | open   | no          | no        | 1             |
+
+<!-- generated:end -->
 
 `latest` is currently **ahead of** `next` on these fixes. #35497, #35499 and
 #35501 were backported into 10.5.5, while the newest `next` alpha

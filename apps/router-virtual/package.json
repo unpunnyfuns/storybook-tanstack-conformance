@@ -33,6 +33,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5303
+    "port": 5303,
+    "family": "Router",
+    "label": "virtual routes"
   }
 }

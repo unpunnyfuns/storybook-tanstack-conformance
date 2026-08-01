@@ -35,6 +35,8 @@
     "vitest": "^4.1.10"
   },
   "conformance": {
-    "port": 5301
+    "port": 5301,
+    "family": "Router",
+    "label": "file-based"
   }
 }
