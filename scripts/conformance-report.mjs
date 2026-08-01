@@ -5,12 +5,19 @@
  */
 import { spawnSync } from "node:child_process";
 import { appendFileSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { relative, resolve } from "node:path";
 
 const apps = readdirSync("apps").toSorted();
 const results = {};
 
+// Resolve the framework from inside an app, not from a hardcoded root path:
+// depending on the channel spec npm may nest the package under an app instead
+// of hoisting it, and every app is on the same channel (scripts/channel.mjs
+// rewrites all or none).
+const appRequire = createRequire(resolve(`apps/${apps[0]}/package.json`));
 const frameworkVersion = JSON.parse(
-  readFileSync("node_modules/@storybook/tanstack-react/package.json", "utf8"),
+  readFileSync(appRequire.resolve("@storybook/tanstack-react/package.json"), "utf8"),
 ).version;
 
 for (const app of apps) {
@@ -20,10 +27,20 @@ for (const app of apps) {
     stdio: ["ignore", "inherit", "inherit"],
   });
   const report = JSON.parse(readFileSync(`results-${app}.json`, "utf8"));
+  // Failing test identities, not just counts: the expected state of the suite
+  // lives in expectations.json, and drift is only diagnosable by name.
+  const failing = report.testResults
+    .flatMap((file) =>
+      file.assertionResults
+        .filter((test) => test.status === "failed")
+        .map((test) => `${relative(resolve(`apps/${app}`), file.name)} > ${test.fullName}`),
+    )
+    .toSorted();
   results[app] = {
     passed: report.numPassedTests,
     failed: report.numFailedTests,
     total: report.numTotalTests,
+    failing,
   };
 }
 

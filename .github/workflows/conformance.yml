@@ -46,6 +46,12 @@ jobs:
       - name: Run conformance suites
         run: node scripts/conformance-report.mjs
 
+      # Red-by-design channels make pass/fail meaningless on its own; the
+      # gate is "exactly the expected tests fail". Drift names the tests and
+      # is accepted, when correct, with `verify.mjs <channel> --update`.
+      - name: Verify against expectations
+        run: node scripts/verify.mjs ${{ matrix.ref }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: results-${{ matrix.ref }}

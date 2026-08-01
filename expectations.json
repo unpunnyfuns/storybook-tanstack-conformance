@@ -1,0 +1,131 @@
+{
+  "channels": {
+    "main": {
+      "version": "10.5.5",
+      "apps": {
+        "router": {
+          "total": 38,
+          "failing": [
+            "src/routes/lazy-page.stories.tsx > Default",
+            "src/routes/users/index.stories.tsx > Link Hrefs",
+            "src/tree-mode.stories.tsx > At Flat Route",
+            "src/tree-mode.stories.tsx > At Param Route"
+          ]
+        },
+        "router-code": {
+          "total": 4,
+          "failing": ["src/tree-mode.stories.tsx > Tree Mode By Path"]
+        },
+        "router-csf4": {
+          "total": 5,
+          "failing": []
+        },
+        "router-shell": {
+          "total": 4,
+          "failing": []
+        },
+        "router-virtual": {
+          "total": 3,
+          "failing": []
+        },
+        "start": {
+          "total": 37,
+          "failing": [
+            "src/routes/index.stories.tsx > No Document Shell In Stories",
+            "src/routes/lazy-page.stories.tsx > Default",
+            "src/tree-mode.stories.tsx > At Flat Route",
+            "src/tree-mode.stories.tsx > At Param Route"
+          ]
+        },
+        "start-virtual": {
+          "total": 3,
+          "failing": ["src/routes/panel.stories.tsx > No Document Shell In Stories"]
+        }
+      }
+    },
+    "next": {
+      "version": "10.6.0-alpha.3",
+      "apps": {
+        "router": {
+          "total": 38,
+          "failing": [
+            "src/routes/lazy-page.stories.tsx > Default",
+            "src/routes/posts/_archive/archived.stories.tsx > Default",
+            "src/routes/posts/index.stories.tsx > Mock Module Identity",
+            "src/routes/posts/index.stories.tsx > Pagination",
+            "src/routes/settings/_tabs/index.stories.tsx > Default",
+            "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
+            "src/routes/users/index.stories.tsx > Link Hrefs",
+            "src/tree-mode.stories.tsx > At Flat Route",
+            "src/tree-mode.stories.tsx > At Param Route"
+          ]
+        },
+        "router-code": {
+          "total": 4,
+          "failing": ["src/tree-mode.stories.tsx > Tree Mode By Path"]
+        },
+        "router-csf4": {
+          "total": 5,
+          "failing": []
+        },
+        "router-shell": {
+          "total": 4,
+          "failing": []
+        },
+        "router-virtual": {
+          "total": 3,
+          "failing": []
+        },
+        "start": {
+          "total": 37,
+          "failing": [
+            "src/routes/lazy-page.stories.tsx > Default",
+            "src/routes/posts/_archive/archived.stories.tsx > Default",
+            "src/routes/posts/index.stories.tsx > Pagination",
+            "src/routes/settings/_tabs/index.stories.tsx > Default",
+            "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
+            "src/tree-mode.stories.tsx > At Flat Route",
+            "src/tree-mode.stories.tsx > At Param Route"
+          ]
+        },
+        "start-virtual": {
+          "total": 3,
+          "failing": []
+        }
+      }
+    },
+    "patched": {
+      "version": "10.6.0-alpha.3-fixes.147",
+      "apps": {
+        "router": {
+          "total": 38,
+          "failing": []
+        },
+        "router-code": {
+          "total": 4,
+          "failing": []
+        },
+        "router-csf4": {
+          "total": 5,
+          "failing": []
+        },
+        "router-shell": {
+          "total": 4,
+          "failing": []
+        },
+        "router-virtual": {
+          "total": 3,
+          "failing": []
+        },
+        "start": {
+          "total": 37,
+          "failing": []
+        },
+        "start-virtual": {
+          "total": 3,
+          "failing": []
+        }
+      }
+    }
+  }
+}
