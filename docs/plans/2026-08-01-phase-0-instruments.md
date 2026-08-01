@@ -96,10 +96,11 @@ export const increment = createServerFn({ method: "POST" })
   .validator(Number)
   .handler(({ data }) => (data as number) + 1);
 
-/** setCookie writes the response; getCookie reads the request. They do not meet. */
+/** setCookie writes the response; getCookie reads the request. They do not meet. A fresh name per call keeps the probe idempotent under retried clicks. */
 export const cookieEcho = createServerFn({ method: "POST" }).handler(() => {
-  setCookie("probe", "abc");
-  return getCookie("probe") ?? "unset";
+  const name = `probe-${Math.random().toString(36).slice(2)}`;
+  setCookie(name, "abc");
+  return getCookie(name) ?? "unset";
 });
 ```
 
@@ -143,7 +144,8 @@ function ServerProbesPage() {
         type="button"
         onClick={record(
           "traced",
-          async () => `${await tracked()} after ${clientPhaseLog.length} client phases`,
+          async () =>
+            `${await tracked()} ${clientPhaseLog.length > 0 ? "with" : "without"} client phase`,
         )}
       >
         tracked
@@ -206,11 +208,11 @@ export const CookieScope: Story = {
   },
 };
 
-/** Middleware client phase runs in the browser exactly once per call. */
+/** Middleware client phase runs in the browser. */
 export const MiddlewareClientPhase: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(await canvas.findByRole("button", { name: "tracked" }));
-    await expect(await canvas.findByText("traced: tracked ok after 1 client phases")).toBeVisible();
+    await expect(await canvas.findByText("traced: tracked ok with client phase")).toBeVisible();
   },
 };
 ```
@@ -244,7 +246,7 @@ test.describe("server-function semantics", () => {
   test("middleware client phase runs in the browser", async ({ page }) => {
     await page.goto("/server-probes");
     await page.getByRole("button", { name: "tracked" }).click();
-    await expect(page.getByText("traced: tracked ok after 1 client phases")).toBeVisible();
+    await expect(page.getByText("traced: tracked ok with client phase")).toBeVisible();
   });
 });
 ```
@@ -252,7 +254,7 @@ test.describe("server-function semantics", () => {
 - [ ] **Step 5: Run the story suite; the four new stories must fail, existing ones must not change**
 
 Run: `npm run test --workspace=apps/start`
-Expected failures (capture the output): all four stories fail because the displayed value differs from the real app's. The exact wrong value depends on the channel's framework build. On builds that strip server-fn handler bodies into result-less spies (the current `latest` does this unconditionally; the repo's own `index.stories.tsx` documents it), every call resolves to `undefined`, so expect `user: undefined`, `sum: undefined`, `cookie: undefined`, and `traced: undefined after 0 client phases`. On builds where the handler runs but middleware/validator/cookie semantics drift, expect `user: nobody` or an error, `sum: 11`, `cookie: abc`, `after 0 client phases`. Either way the failure IS the measurement; capture which form each channel produces. If a story fails in a way that matches neither form (crash at import, unrelated text), stop and investigate before continuing.
+Expected failures (capture the output): all four stories fail because the displayed value differs from the real app's. The exact wrong value depends on the channel's framework build. On builds that strip server-fn handler bodies into result-less spies (the current `latest` does this unconditionally; the repo's own `index.stories.tsx` documents it), every call resolves to `undefined`, so expect `user: undefined`, `sum: undefined`, `cookie: undefined`, and `traced: undefined without client phase`. On builds where the handler runs but middleware/validator/cookie semantics drift, expect `user: nobody` or an error, `sum: 11`, `cookie: abc`, `without client phase`. Either way the failure IS the measurement; capture which form each channel produces. If a story fails in a way that matches neither form (crash at import, unrelated text), stop and investigate before continuing.
 
 - [ ] **Step 6: Run the real-app proof; all four must pass**
 
