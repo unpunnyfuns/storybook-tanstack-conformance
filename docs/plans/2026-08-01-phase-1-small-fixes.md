@@ -464,7 +464,7 @@ git push -u origin fix/tanstack-optimize-vite-deps
 
 ---
 
-### Task 7: Export the override types and allow **root** (findings 26 part, 5 of the integration audit)
+### Task 7: Export the override types and allow `__root__` (findings 26 part, 5 of the integration audit)
 
 Branch: `fix/tanstack-override-types`
 

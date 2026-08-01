@@ -10,6 +10,7 @@
  * `latest`). A script hits all apps or none.
  *
  * Usage: node scripts/channel.mjs <main|next|patched>
+ * After switching channels, run `npm install --prefer-online` so a stale local packument cache cannot pin an outdated dist-tag resolution.
  *
  * Rewrites every app's package.json in place; restore with `git checkout -- apps`.
  * CI runs this after checkout, then installs without a lockfile so each run
