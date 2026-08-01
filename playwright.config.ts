@@ -10,6 +10,7 @@ const apps = [
   { name: "start", port: 5304 },
   { name: "start-virtual", port: 5305 },
   { name: "router-shell", port: 5306 },
+  { name: "router-csf4", port: 5307 },
 ];
 
 export default defineConfig({
