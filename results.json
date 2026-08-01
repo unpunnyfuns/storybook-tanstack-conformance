@@ -3,10 +3,12 @@
     "version": "10.5.5",
     "apps": {
       "router": {
-        "passed": 34,
-        "failed": 4,
-        "total": 38,
+        "passed": 35,
+        "failed": 6,
+        "total": 41,
         "failing": [
+          "src/navigation.stories.tsx > By Component",
+          "src/navigation.stories.tsx > By Link",
           "src/routes/lazy-page.stories.tsx > Default",
           "src/routes/users/index.stories.tsx > Link Hrefs",
           "src/tree-mode.stories.tsx > At Flat Route",
@@ -41,11 +43,18 @@
       },
       "start": {
         "passed": 33,
-        "failed": 4,
-        "total": 37,
+        "failed": 11,
+        "total": 44,
         "failing": [
           "src/routes/index.stories.tsx > No Document Shell In Stories",
           "src/routes/lazy-page.stories.tsx > Default",
+          "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Cookie Scope",
+          "src/routes/server-probes.stories.tsx > Middleware Client Phase",
+          "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Validator Transforms",
+          "src/start-instance.stories.tsx > Global Middleware Setup",
+          "src/start-instance.stories.tsx > Instance Shape",
           "src/tree-mode.stories.tsx > At Flat Route",
           "src/tree-mode.stories.tsx > At Param Route"
         ]
@@ -64,10 +73,12 @@
     "version": "10.6.0-alpha.3",
     "apps": {
       "router": {
-        "passed": 29,
-        "failed": 9,
-        "total": 38,
+        "passed": 30,
+        "failed": 11,
+        "total": 41,
         "failing": [
+          "src/navigation.stories.tsx > By Component",
+          "src/navigation.stories.tsx > By Link",
           "src/routes/lazy-page.stories.tsx > Default",
           "src/routes/posts/_archive/archived.stories.tsx > Default",
           "src/routes/posts/index.stories.tsx > Mock Module Identity",
@@ -107,14 +118,21 @@
       },
       "start": {
         "passed": 30,
-        "failed": 7,
-        "total": 37,
+        "failed": 14,
+        "total": 44,
         "failing": [
           "src/routes/lazy-page.stories.tsx > Default",
           "src/routes/posts/_archive/archived.stories.tsx > Default",
           "src/routes/posts/index.stories.tsx > Pagination",
+          "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Cookie Scope",
+          "src/routes/server-probes.stories.tsx > Middleware Client Phase",
+          "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Validator Transforms",
           "src/routes/settings/_tabs/index.stories.tsx > Default",
           "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
+          "src/start-instance.stories.tsx > Global Middleware Setup",
+          "src/start-instance.stories.tsx > Instance Shape",
           "src/tree-mode.stories.tsx > At Flat Route",
           "src/tree-mode.stories.tsx > At Param Route"
         ]
@@ -132,9 +150,13 @@
     "apps": {
       "router": {
         "passed": 38,
-        "failed": 0,
-        "total": 38,
-        "failing": []
+        "failed": 3,
+        "total": 41,
+        "failing": [
+          "src/navigation.stories.tsx > By Component",
+          "src/navigation.stories.tsx > By Hook",
+          "src/navigation.stories.tsx > By Link"
+        ]
       },
       "router-code": {
         "passed": 4,
@@ -162,9 +184,17 @@
       },
       "start": {
         "passed": 37,
-        "failed": 0,
-        "total": 37,
-        "failing": []
+        "failed": 7,
+        "total": 44,
+        "failing": [
+          "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Cookie Scope",
+          "src/routes/server-probes.stories.tsx > Middleware Client Phase",
+          "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Validator Transforms",
+          "src/start-instance.stories.tsx > Global Middleware Setup",
+          "src/start-instance.stories.tsx > Instance Shape"
+        ]
       },
       "start-virtual": {
         "passed": 3,
