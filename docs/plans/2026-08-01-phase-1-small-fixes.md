@@ -12,8 +12,8 @@
 
 - Repo: `/Users/palnes/src/sbfork`. Before each task: `git fetch upstream && git checkout -b <branch> upstream/next`.
 - Style: single quotes, match surrounding code exactly; the repo has no Prettier config, so never run a formatter over existing lines. No end-of-line comments.
-- Test command: `cd /Users/palnes/src/sbfork/code && yarn vitest run frameworks/tanstack-react` (full framework suite; scope to a single file by appending its path).
-- Typecheck command: `cd /Users/palnes/src/sbfork/code/frameworks/tanstack-react && npx tsc --noEmit -p .`
+- Test command: `cd /Users/palnes/src/sbfork && npx vitest run code/frameworks/tanstack-react` (full framework suite; baseline on `upstream/next` is 79 tests in 6 files as of 2026-08-02, measured on a pristine checkout. Do not confuse this with the `feat/auto-connect-route-tree-vite` branch, which carries extra tests and reports 88 in 8. Scope to a single file by appending its path). Run it from the repo ROOT: from `code/` the workspace config path doubles to `code/code/...` and vitest throws before running anything.
+- Typecheck command: `cd /Users/palnes/src/sbfork/code/frameworks/tanstack-react && npx tsc --noEmit -p .`. Two pre-existing errors in `renderers/react` (`STORYBOOK_ENV`, `FRAMEWORK_OPTIONS`) are baseline noise, not yours; compare against them rather than expecting zero output.
 - TDD with a revert check: after the fix passes, `git stash` the src change, confirm the new test fails, `git stash pop`. A test that cannot fail is not a guard.
 - Push branches to `origin` (the fork). NEVER open a pull request; the repository owner files PRs manually with AI disclosure.
 - Branch naming: `fix/tanstack-<slug>` as given per task.

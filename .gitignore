@@ -44,3 +44,6 @@ playwright-results.json
 test-results/
 playwright-report/
 out/
+
+# Agent plan-execution scratch (ledgers, briefs, review packages)
+.superpowers/
