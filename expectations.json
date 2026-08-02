@@ -119,7 +119,6 @@
           "total": 41,
           "failing": [
             "src/navigation.stories.tsx > By Component",
-            "src/navigation.stories.tsx > By Hook",
             "src/navigation.stories.tsx > By Link"
           ]
         },

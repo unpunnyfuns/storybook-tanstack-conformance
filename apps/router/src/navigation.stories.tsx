@@ -1,24 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
 import { expect, userEvent } from "storybook/test";
+import { NavProbePage } from "./routes/nav-probe";
 import { routeTree } from "./routeTree.gen";
 
 /**
  * Navigation gauges in tree mode: the story mounts the whole app tree at
  * /nav-probe, so /nav-target exists and every trigger has somewhere to go.
+ *
+ * The story component is the route's own page component on purpose. Tree mode
+ * replaces the selected leaf's component with the story's, so a placeholder
+ * here would blank the very triggers these gauges click.
  * Real-app proof lives in e2e/router.spec.ts.
  */
-function NavigationGauge() {
-  return null;
-}
-
 const meta = {
-  component: NavigationGauge,
+  component: NavProbePage,
   parameters: {
     layout: "fullscreen",
     tanstack: { router: { route: routeTree, path: "/nav-probe" } },
   },
   tags: ["ai-generated"],
-} satisfies Meta<typeof NavigationGauge>;
+} satisfies Meta<typeof NavProbePage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
