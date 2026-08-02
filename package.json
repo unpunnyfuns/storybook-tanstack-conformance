@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/*"
   ],
+  "type": "module",
   "scripts": {
     "test": "npm run test --workspaces",
     "lint": "oxlint --deny-warnings",

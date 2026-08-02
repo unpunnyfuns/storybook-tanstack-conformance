@@ -1,4 +1,4 @@
-import { makeAppConfig } from "../../shared/vite";
+import { makeAppConfig } from "../../shared/vite.ts";
 
 // TanStack Start with virtual file routes: the tree structure is declared in
 // src/routes.ts.

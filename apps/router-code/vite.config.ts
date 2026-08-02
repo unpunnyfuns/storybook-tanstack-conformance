@@ -1,4 +1,4 @@
-import { makeAppConfig } from "../../shared/vite";
+import { makeAppConfig } from "../../shared/vite.ts";
 
 // Code-based routing: no router plugin, no generated route tree. The whole
 // router is configured in src/router.tsx with createRoute().
