@@ -39,6 +39,21 @@ They are reachable from a browser, and phase 1 already established the precedent
 
 **Therefore the mock's entire job reduces to supplying an `extractedFn` that calls `__executeServer` in-process instead of issuing a fetch.**
 
+### The seam is an argument, not an options field
+
+`.handler()` takes **two** arguments in a compiled build: `const [extractedFn, serverFn] = args` (`start-client-core/src/createServerFn.ts:99`, stored at `:106`).
+TanStack's compiler rewrites `.handler(fn)` into `.handler(rpcStub, fn)`.
+
+That is a better seam than injecting through options, because the framework already owns a Babel plugin that rewrites `.handler()`. Instead of stripping the handler, it can rewrite `.handler(fn)` into `.handler(inProcessTransport, fn)`, which is structurally the same move TanStack makes and differs only in what the first argument does.
+
+### Two runtime facts that make the in-process path viable
+
+Both were verified by reading the installed packages, because the whole design fails if either is false.
+
+**`__executeServer` does not crash in a browser.** It opens with `getStartContextServerOnly()`, whose name suggests otherwise, but that is `createServerOnlyFn(getStartContext)` and the runtime `createServerOnlyFn` is the identity function `(fn) => fn` (`start-fn-stubs/src/envOnly.ts`). Only a compiler neutralizes it, and the framework's eliminator excludes `node_modules`, so the published `start-client-core` keeps the call intact (confirmed in `dist/esm/getStartContextServerOnly.js`). It therefore resolves to `getStartContext` from `@tanstack/start-storage-context`, which the interception plugin already redirects to the framework's own mock.
+
+**But it does crash when the start context is missing, and that is the same wire as above.** The mock's `createFallbackStartContext` returns `undefined` unless `__TSR_ROUTER__` or `__TSS_START_OPTIONS__` is set (`export-mocks/start-storage-context.ts:14-19`), and `__executeServer` immediately dereferences `startContext.contextAfterGlobalMiddlewares`. So writing `__TSS_START_OPTIONS__` is not only what makes global middleware run, it is what stops the in-process call path throwing at all. Note the fallback also hardcodes `contextAfterGlobalMiddlewares: undefined` and a fresh `new Request('http://localhost/')` per call, which is finding 23 showing through; phase 2 supplies real values for the two fields the call path reads.
+
 ## Architecture
 
 Replace the hand-written builder in `export-mocks/start.ts` with a thin wrapper over the real `createServerFn`, injecting the in-process transport.
@@ -157,6 +172,14 @@ Per the repository's ground rules, every fix lands with a test that failed first
 - **The option's precondition is easy to get wrong.** An app enabling it with an unmocked `node:fs` import gets a build failure. The docs must state the precondition plainly, which is why documentation is scoped as a deliverable.
 - **`__executeServer` depends on start context state** the mock currently keeps in two unsynced stores. Phase 2 supplies only what the call path reads; if that proves insufficient in implementation, the storage-context rework is a phase 3 candidate rather than a scope expansion here.
 - **This phase depends on a phase 1 branch that is not yet filed upstream.** Global middleware only reaches the chain if `getStartOptions`'s isomorphic chain survives compilation, which `fix/tanstack-isomorphic-order` is what repairs. If that branch is rejected or reworked upstream, the global-middleware half of this phase loses its foundation and needs rethinking. The rest of the phase, which is per-function middleware and validators, is unaffected.
+
+## Open questions for the implementation plan
+
+Two things this design does not settle, both about how faithful the in-process transport should be. They need answering before the plan is written, not during it.
+
+**Serialization.** The real transport serializes the payload and the result across the wire. An in-process call skips that entirely, so a story could pass a function, a class instance or a `Date` through a server function and see it arrive intact, where the real app would reject it or mangle it. That is a new way for a story to pass while the app fails, which is exactly the drift this suite exists to catch. The options are to round-trip through TanStack's serializer to stay honest, or to skip it for speed and document the gap. Leaning towards round-tripping, since the phase's whole argument is fidelity, but it needs measuring against what it costs.
+
+**`Response` returns.** A server function may return a `Response`. Whether the in-process path handles that the same way the real transport does is unverified, and it is the kind of case a gauge does not currently cover.
 
 ## Out of scope
 
