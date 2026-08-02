@@ -57,6 +57,14 @@ test.describe("server-function semantics", () => {
     }).toPass();
   });
 
+  test("a server function returning a Response is handed back raw", async ({ page }) => {
+    await page.goto("/server-probes");
+    await expect(async () => {
+      await page.getByRole("button", { name: "respond" }).click();
+      await expect(page.getByText("raw: raw body")).toBeVisible();
+    }).toPass();
+  });
+
   test("a server fn that throws redirect() navigates the page", async ({ page }) => {
     await page.goto("/redirector");
     await expect(page.getByText("done: no")).toBeVisible();

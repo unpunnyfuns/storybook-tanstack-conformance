@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { clientPhaseLog, cookieEcho, increment, tracked, whoAmI } from "../server-probe-fns";
+import {
+  clientPhaseLog,
+  cookieEcho,
+  increment,
+  respond,
+  tracked,
+  whoAmI,
+} from "../server-probe-fns";
 
 export const Route = createFileRoute("/server-probes")({
   component: ServerProbesPage,
@@ -39,10 +46,14 @@ function ServerProbesPage() {
       >
         tracked
       </button>
+      <button type="button" onClick={record("raw", async () => (await respond()).text())}>
+        respond
+      </button>
       <p>user: {results.user ?? "pending"}</p>
       <p>sum: {results.sum ?? "pending"}</p>
       <p>cookie: {results.cookie ?? "pending"}</p>
       <p>traced: {results.traced ?? "pending"}</p>
+      <p>raw: {results.raw ?? "pending"}</p>
     </main>
   );
 }

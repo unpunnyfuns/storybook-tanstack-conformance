@@ -31,7 +31,7 @@
           "failing": []
         },
         "start": {
-          "total": 44,
+          "total": 45,
           "failing": [
             "src/routes/index.stories.tsx > No Document Shell In Stories",
             "src/routes/lazy-page.stories.tsx > Default",
@@ -39,6 +39,7 @@
             "src/routes/server-probes.stories.tsx > Cookie Scope",
             "src/routes/server-probes.stories.tsx > Middleware Client Phase",
             "src/routes/server-probes.stories.tsx > Middleware Server Context",
+            "src/routes/server-probes.stories.tsx > Response Return",
             "src/routes/server-probes.stories.tsx > Validator Transforms",
             "src/start-instance.stories.tsx > Global Middleware Setup",
             "src/start-instance.stories.tsx > Instance Shape",
@@ -88,7 +89,7 @@
           "failing": []
         },
         "start": {
-          "total": 44,
+          "total": 45,
           "failing": [
             "src/routes/lazy-page.stories.tsx > Default",
             "src/routes/posts/_archive/archived.stories.tsx > Default",
@@ -97,6 +98,7 @@
             "src/routes/server-probes.stories.tsx > Cookie Scope",
             "src/routes/server-probes.stories.tsx > Middleware Client Phase",
             "src/routes/server-probes.stories.tsx > Middleware Server Context",
+            "src/routes/server-probes.stories.tsx > Response Return",
             "src/routes/server-probes.stories.tsx > Validator Transforms",
             "src/routes/settings/_tabs/index.stories.tsx > Default",
             "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
@@ -139,12 +141,13 @@
           "failing": []
         },
         "start": {
-          "total": 44,
+          "total": 45,
           "failing": [
             "src/routes/redirector.stories.tsx > Redirect Navigates",
             "src/routes/server-probes.stories.tsx > Cookie Scope",
             "src/routes/server-probes.stories.tsx > Middleware Client Phase",
             "src/routes/server-probes.stories.tsx > Middleware Server Context",
+            "src/routes/server-probes.stories.tsx > Response Return",
             "src/routes/server-probes.stories.tsx > Validator Transforms",
             "src/start-instance.stories.tsx > Global Middleware Setup",
             "src/start-instance.stories.tsx > Instance Shape"

@@ -66,12 +66,12 @@ Start, each with file-based, code-based, and virtual routing.
 | `apps/router`         | Router | file-based                       | 41      |
 | `apps/router-code`    | Router | code-based                       | 4       |
 | `apps/router-virtual` | Router | virtual routes                   | 3       |
-| `apps/start`          | Start  | file-based                       | 44      |
+| `apps/start`          | Start  | file-based                       | 45      |
 | `apps/start-virtual`  | Start  | virtual routes                   | 3       |
 | `apps/router-shell`   | Router | app shell (root pathless layout) | 4       |
 | `apps/router-csf4`    | Router | CSF factories                    | 5       |
 
-104 stories total (from expectations.json, channel `main`).
+105 stories total (from expectations.json, channel `main`).
 
 <!-- generated:end -->
 

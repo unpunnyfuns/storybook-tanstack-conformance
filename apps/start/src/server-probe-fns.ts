@@ -39,3 +39,8 @@ export const cookieEcho = createServerFn({ method: "POST" }).handler(() => {
   setCookie(name, "abc");
   return getCookie(name) ?? "unset";
 });
+
+/** A handler returning a Response is handed back raw, not serialized. */
+export const respond = createServerFn({ method: "GET" }).handler(
+  () => new Response("raw body", { status: 200 }),
+);

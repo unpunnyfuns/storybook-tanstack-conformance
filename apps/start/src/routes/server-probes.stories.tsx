@@ -49,3 +49,11 @@ export const MiddlewareClientPhase: Story = {
     await expect(await canvas.findByText("traced: tracked ok with client phase")).toBeVisible();
   },
 };
+
+/** A handler returning a Response is handed back raw, not serialized. */
+export const ResponseReturn: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(await canvas.findByRole("button", { name: "respond" }));
+    await expect(await canvas.findByText("raw: raw body")).toBeVisible();
+  },
+};
