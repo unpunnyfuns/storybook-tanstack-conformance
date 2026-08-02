@@ -81,6 +81,32 @@ The larger storage-context rework (finding 23) is **not** in scope; `__executeSe
 The real caller already runs `parseRedirect(result.error)` and rethrows a proper redirect object, so `useServerFn` needs only to catch it and navigate rather than leaving an unhandled rejection.
 This is a catch-and-navigate, not a reimplementation.
 
+## Backward compatibility
+
+Today `.handler(fn)` returns a `fn()` spy (`export-mocks/start.ts:595-603`), so the symbol an app imports **is** a mock.
+Every documented pattern depends on that: `myServerFn.mockResolvedValue(...)`, `expect(myServerFn).toHaveBeenCalledWith(...)`.
+Plain delegation would hand back the real `createServerFn` callable instead, which has no mock methods, and would break every one of those stories.
+
+Two of the three compatibility risks are therefore requirements on the implementation, not accepted costs.
+
+**The export must stay a spy.**
+Keep returning a `fn()` whose _default implementation_ runs the real chain, rather than returning the real callable.
+Users who never mock get real middleware and validator behavior; users who call `mockResolvedValue` short-circuit exactly as they do today; call assertions keep working.
+Fidelity is added only on the path that was previously a no-op.
+
+**The default implementation must survive Storybook's automatic mock reset.**
+The README already tells users to mock in `beforeEach` because it runs after that reset.
+A reset that clears implementations would also clear the chain-running default, and the function would silently return `undefined` again.
+This must be handled deliberately: it is the failure mode that passes unit tests and only shows up in a real Storybook session, so the phase needs a story-level check that a server function still runs its chain after a reset, not just a unit test.
+
+**Middleware and validators genuinely start running, and that part is breaking.**
+For calls a story does not mock, middleware side effects now fire and validators now reject input that previously passed unchecked.
+An auth middleware that throws will newly fail stories that passed before.
+Cookies change in the same way: `setCookie` followed by `getCookie` stops round-tripping, so a story asserting today's incorrect behavior breaks.
+
+This last one is the intended correction rather than a defect, but it is still a behavior change for existing users and is treated as one: it needs a release note and an explicit docs callout, not silence.
+It is also an argument for landing the delegation swap and the framework option in that order, so the change in default behavior is reviewable on its own.
+
 ## Documentation
 
 A user-facing docs change is a deliverable of this phase, not a follow-up.
@@ -91,6 +117,8 @@ The page needs to state:
 - Where the transport boundary sits, and that there is no server: the call never leaves the browser.
 - What the framework option does, its `__mocks__` precondition, and when not to enable it.
 - How to supply a handler stub when the option is off, with the existing mocking pattern.
+- That mocking a server function still short-circuits the chain, so the documented `mockResolvedValue` pattern is unchanged.
+- A callout for the breaking part: unmocked calls now run middleware and validators, so middleware side effects fire and invalid input is now rejected.
 
 It slots beside the existing "Handling server-only dependencies" section, which already establishes the vocabulary.
 
