@@ -149,12 +149,11 @@
     "version": "10.6.0-alpha.3-fixes.147",
     "apps": {
       "router": {
-        "passed": 38,
-        "failed": 3,
+        "passed": 39,
+        "failed": 2,
         "total": 41,
         "failing": [
           "src/navigation.stories.tsx > By Component",
-          "src/navigation.stories.tsx > By Hook",
           "src/navigation.stories.tsx > By Link"
         ]
       },
