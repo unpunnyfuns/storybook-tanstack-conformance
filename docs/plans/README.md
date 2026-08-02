@@ -21,5 +21,6 @@ Each phase gets its own document only once the instruments have measured what is
 
 - Every gauge story asserts the behavior of the real running app (proven by a matching Playwright test), not the current behavior of the mock. A gauge that fails in Storybook is the instrument working.
 - Every upstream fix lands with a test that failed before the fix, and the failure is captured before the fix is applied.
+- Every plan states what it breaks for existing users, before it is written up rather than when someone asks. The framework is in production use, so a change that alters an imported symbol's shape, starts executing something that silently no-opped, or contradicts what the docs teach is a finding the plan owes its readers. Impacts that break a documented pattern are requirements on the implementation and get designed out; impacts that are the intended correction stay, and earn a release note and a docs callout.
 - Fixes are staged through this suite's `patched` channel before any upstream submission.
 - Upstream pull requests are filed manually by the repository owner, never automatically.
