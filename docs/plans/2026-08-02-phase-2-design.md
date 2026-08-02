@@ -162,7 +162,9 @@ It slots beside the existing "Handling server-only dependencies" section, which 
 The five gauges are the acceptance test, and they are already written and already red.
 Green on the `patched` channel means the mock reproduces what the Playwright twins measured against a real server.
 
-Framework unit tests cover the pieces the gauges cannot isolate: the transport shim, the cookie request/response split, and the redirect catch.
+Framework unit tests cover the pieces the gauges cannot isolate: the transport shim, the serializer round-trip (both its failure parity and its identity parity), the cookie request/response split, and the redirect catch.
+
+One new instrument is added before its implementation: a gauge plus Playwright twin for a server function returning a `Response`, since nothing measures that today. That takes the phase 0 shape, so it is expected to be red until the branch that handles it lands.
 
 Per the repository's ground rules, every fix lands with a test that failed first, and the failure is captured before the fix is applied.
 
@@ -173,13 +175,27 @@ Per the repository's ground rules, every fix lands with a test that failed first
 - **`__executeServer` depends on start context state** the mock currently keeps in two unsynced stores. Phase 2 supplies only what the call path reads; if that proves insufficient in implementation, the storage-context rework is a phase 3 candidate rather than a scope expansion here.
 - **This phase depends on a phase 1 branch that is not yet filed upstream.** Global middleware only reaches the chain if `getStartOptions`'s isomorphic chain survives compilation, which `fix/tanstack-isomorphic-order` is what repairs. If that branch is rejected or reworked upstream, the global-middleware half of this phase loses its foundation and needs rethinking. The rest of the phase, which is per-function middleware and validators, is unaffected.
 
-## Open questions for the implementation plan
+## How faithful the transport is
 
-Two things this design does not settle, both about how faithful the in-process transport should be. They need answering before the plan is written, not during it.
+Two decisions about the in-process transport, both settled 2026-08-03.
 
-**Serialization.** The real transport serializes the payload and the result across the wire. An in-process call skips that entirely, so a story could pass a function, a class instance or a `Date` through a server function and see it arrive intact, where the real app would reject it or mangle it. That is a new way for a story to pass while the app fails, which is exactly the drift this suite exists to catch. The options are to round-trip through TanStack's serializer to stay honest, or to skip it for speed and document the gap. Leaning towards round-tripping, since the phase's whole argument is fidelity, but it needs measuring against what it costs.
+**It round-trips through TanStack's own serializer.**
+The real transport serializes the payload with `toJSONAsync` and reads the result back with `fromCrossJSON`, using `getDefaultSerovalPlugins()` (`start-client-core/src/client-rpc/serverFnFetcher.ts:8,113-137`).
+All three are reachable: `getDefaultSerovalPlugins` is a public export of the package entry (`src/index.tsx:117`), and `seroval` is already its dependency.
+The in-process path does the same transform, minus the fetch and minus the frame protocol, which exists only to multiplex streams over the wire.
 
-**`Response` returns.** A server function may return a `Response`. Whether the in-process path handles that the same way the real transport does is unverified, and it is the kind of case a gauge does not currently cover.
+Skipping it was the cheaper option and was rejected, because it produces exactly the drift this suite exists to catch: a story could pass a function or a class instance and succeed where the real app rejects it. Round-tripping buys two properties that a plain in-process call cannot:
+
+- **Failure parity.** A non-serializable payload throws in a story the way it would in the app.
+- **Identity parity.** The story receives a copy, so it cannot mutate the object the handler still holds. A shared reference would let a story observe changes the real app never could.
+
+**Known limit:** streamed and raw-stream returns travel over the frame protocol, which the in-process path does not reproduce. That divergence is documented rather than fixed here.
+
+**`Response` returns bypass serialization, mirroring the real handler.**
+The real server side branches on `unwrapped instanceof Response` and returns it raw (`start-server-core/src/server-functions-handler.ts:174`), signalled with the `X_TSS_RAW_RESPONSE` header constant, which is also a public export.
+The in-process path takes the same branch.
+
+Nothing currently measures this: no gauge and no Playwright twin covers a server function returning a `Response`. Per the roadmap's own ordering principle, instruments come before surgery, so **this phase adds that gauge and its twin before implementing the branch**, the same way phase 0 did for the behaviors phase 2 is fixing.
 
 ## Out of scope
 
