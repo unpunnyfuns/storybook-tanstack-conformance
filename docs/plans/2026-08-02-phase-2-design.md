@@ -76,6 +76,26 @@ Finding 21 (`setResponseHeaders` replacing rather than merging) is adjacent and 
 
 The larger storage-context rework (finding 23) is **not** in scope; `__executeServer` reads `request` and `contextAfterGlobalMiddlewares` from the start context, so phase 2 supplies coherent values for those two and no more.
 
+### What phase 1 changed for this plan
+
+Phase 1's intent audit turned up two things that land directly on this architecture, so they are recorded here rather than rediscovered during implementation.
+
+**Global middleware needs one specific wire, and phase 1 only half-built it.**
+`executeMiddleware` collects global middleware via `getStartOptions()?.functionMiddleware` (`start-client-core/src/createServerFn.ts:203`), and `getStartOptions` is itself defined as `createIsomorphicFn().client(() => window.__TSS_START_OPTIONS__).server(...)`.
+Two consequences:
+
+- That is a `.client(a).server(b)` chain, the exact order phase 1's `fix/tanstack-isomorphic-order` repairs. Without that fix the chain collapses to a no-op, `getStartOptions()` returns `undefined`, and global middleware is silently dropped. **Phase 1 task 3 is a prerequisite for this phase**, not merely adjacent.
+- It is still not sufficient. The only writer of `window.__TSS_START_OPTIONS__` is `hydrateStart` (`start-client-core/src/client/hydrateStart.ts:19,24`), which a Storybook build never runs. The framework's own `start-storage-context` mock _reads_ that global (`export-mocks/start-storage-context.ts:16,24`) and nothing ever sets it.
+
+So phase 2 must write the start options into that global, which is also what turns phase 1's `createStart` mock from "shaped" into "wired". Until it does, an app declaring global middleware through the instance still sees it skipped.
+
+**Validators run in the server phase, which sharpens the carve-out.**
+`executeMiddleware` applies `inputValidator` only when `env === 'server'` (`start-client-core/dist/esm/createServerFn.js:95`).
+That is consistent with routing the whole server half through `__executeServer`, and it is the precise reason the validator must survive the build: it is server-phase code, so phase 1 task 2's strip is correct for a client bundle and must be suspended for exactly the same builds that keep the handler.
+
+**Diagnostics use the house logger.**
+Phase 1 established the framework's first log call, and it uses `once.warn` from `storybook/internal/client-logger` rather than bare `console.warn`, because it dedupes and respects `LOGLEVEL`. Any diagnostic this phase adds follows that precedent.
+
 ### Redirects (finding 8)
 
 The real caller already runs `parseRedirect(result.error)` and rethrows a proper redirect object, so `useServerFn` needs only to catch it and navigate rather than leaving an unhandled rejection.
@@ -136,10 +156,12 @@ Per the repository's ground rules, every fix lands with a test that failed first
 - **Chain execution reaches further into real TanStack code than the mock ever has.** A change in `executeMiddleware` upstream could move story behavior. This is the intended trade: delegation means inheriting upstream's behavior, including its changes. The gauges are what detect it.
 - **The option's precondition is easy to get wrong.** An app enabling it with an unmocked `node:fs` import gets a build failure. The docs must state the precondition plainly, which is why documentation is scoped as a deliverable.
 - **`__executeServer` depends on start context state** the mock currently keeps in two unsynced stores. Phase 2 supplies only what the call path reads; if that proves insufficient in implementation, the storage-context rework is a phase 3 candidate rather than a scope expansion here.
+- **This phase depends on a phase 1 branch that is not yet filed upstream.** Global middleware only reaches the chain if `getStartOptions`'s isomorphic chain survives compilation, which `fix/tanstack-isomorphic-order` is what repairs. If that branch is rejected or reworked upstream, the global-middleware half of this phase loses its foundation and needs rethinking. The rest of the phase, which is per-function middleware and validators, is unaffected.
 
 ## Out of scope
 
 - **Work package A, the navigation seam.** `By Link` stays red. It is not a fidelity fix but a product decision: the audit recommends "block and record via `onNavigate` everywhere", under which a story never navigates and the gauge is red by design, while conformance issue #1 sketches an opt-in `tanstack.router.navigation` parameter with spy, same-route and real modes. That decision needs its own design conversation, and issue #1 already rules that it ships last, on top of the fix stack. It also depends on upstream #35505, still open.
 - **Storage-context rework (finding 23)**, beyond the two fields the call path reads.
-- **`RouteOverrideOptions` widening** (`notFoundComponent`, `errorComponent`, `params`, `head`, `search`), carried over from phase 1 as its own single-bug change.
+- **`RouteOverrideOptions` widening** (`notFoundComponent`, `errorComponent`, `params`, `head`, `search`, and also `id` and `path`), carried over from phase 1 as its own single-bug change. Phase 1's intent audit settled the open question about it: the omissions were incidental rather than deliberate, narrowed by attrition across two commits with empty bodies, while the runtime is a blanket spread that accepts anything. The maintainers themselves later re-added `component` and called its absence a bug. So the widening is consistent with the runtime, the docs and their own precedent, and needs no further justification when it is written up.
+- **Mirroring TanStack's parser plugin selection in the elimination plugin.** TanStack pairs its id regex with `getDefaultParserPluginsForFilename`, which enables `jsx` only for files that are not plain TypeScript; the framework hardcodes `['typescript', 'jsx']` with no `try`/`catch`, so an angle-bracket type assertion in a `.ts`, `.mts` or `.cts` file throws out of `transformSync`. This phase touches the elimination plugin for the handler carve-out, so the two are adjacent, but they are separate bugs and stay separate changes.
 - **Leaf resolution via router-core (package D)** and **router option forwarding (package E)**. Both are verified findings with no failing gauge; they belong to a later phase where instruments come first.
