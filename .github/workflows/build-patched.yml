@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "41 */2 * * *"
   workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild even when neither source has moved"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -27,7 +32,13 @@ jobs:
           current=$(gh release view conformance-build --repo "$GITHUB_REPOSITORY" --json body --jq .body 2>/dev/null || echo "")
           echo "framework_sha=$framework_sha" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
-          if echo "$current" | grep -q "$framework_sha" && echo "$current" | grep -q "$source_sha"; then
+          # Without this, a tarball that is wrong for a reason other than its
+          # inputs (a broken build recipe, say) cannot be replaced except by
+          # pushing a throwaway commit to move a SHA.
+          if [ "${{ inputs.force }}" = "true" ]; then
+            echo "Forced rebuild requested."
+            echo "rebuild=true" >> "$GITHUB_OUTPUT"
+          elif echo "$current" | grep -q "$framework_sha" && echo "$current" | grep -q "$source_sha"; then
             echo "No source movement; keeping the current build."
             echo "rebuild=false" >> "$GITHUB_OUTPUT"
           else
