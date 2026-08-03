@@ -536,6 +536,113 @@ git add code/frameworks/tanstack-react/src/export-mocks/
 git commit --no-verify -m "TanStack: Run the real middleware chain and validator in stories"
 ```
 
+The remaining steps are a second, separate commit on the same branch. They exist because of the design correction recorded in the ledger on 2026-08-03: global function middleware cannot run in a Storybook build at all, because `getStartOptions` is built on `createIsomorphicFn`, which the runtime ships as an explicit dummy that discards both implementations and expects a compiler transform that never runs on `node_modules`. The delegation this task just landed makes that gap reachable by story authors for the first time, so it ships with a warning and an escape hatch rather than silently.
+
+Note the contrast that makes the hatch possible, because it is easy to conflate the two helpers: `getStartContextServerOnly` is built on `createServerOnlyFn`, which is plain identity (`(fn) => fn`), and it resolves `getStartContext` from `@tanstack/start-storage-context`, a specifier `plugins/module-interception.ts` **does** redirect to our own mock. So the start context is ours to populate; the start options are not.
+
+- [ ] **Step 6: Write the failing tests**
+
+In `start.test.ts`, mirroring the mocking pattern the phase 1 branch `fix/tanstack-missing-params-warning` established (`vi.mock` on the logger module, which also sidesteps `once`'s message deduplication across tests):
+
+```ts
+vi.mock("storybook/internal/client-logger");
+```
+
+```ts
+describe("global function middleware", () => {
+  it("warns that configured global middleware will not run", () => {
+    createStart(() => ({
+      functionMiddleware: [createMiddleware({ type: "function" })],
+    }));
+    expect(once.warn).toHaveBeenCalledWith(expect.stringContaining("functionMiddleware"));
+  });
+
+  it("does not warn when no global middleware is configured", () => {
+    createStart(() => ({}));
+    expect(once.warn).not.toHaveBeenCalled();
+  });
+});
+```
+
+In `start-storage-context.test.ts` (create it if absent), for the escape hatch:
+
+```ts
+it("seeds contextAfterGlobalMiddlewares from the story's start context", () => {
+  setStoryStartContext({ user: "ada" });
+  expect(getStartContext().contextAfterGlobalMiddlewares).toEqual({ user: "ada" });
+});
+
+it("falls back to an empty object when a story sets no context", () => {
+  setStoryStartContext(undefined);
+  expect(getStartContext({ throwIfNotFound: false })?.contextAfterGlobalMiddlewares).toEqual({});
+});
+```
+
+And the end-to-end assertion in `start.test.ts`, which is the one that proves the hatch actually reaches a handler:
+
+```ts
+it("passes the story's start context to the handler", async () => {
+  setStoryStartContext({ user: "ada" });
+  const call = createServerFn({ method: "GET" }).handler(({ context }: any) => context.user);
+  await expect(call()).resolves.toBe("ada");
+});
+```
+
+- [ ] **Step 7: Run and capture the failures**
+
+Expected: the warning tests fail because `createStart` does not warn; the hatch tests fail because `setStoryStartContext` does not exist.
+
+- [ ] **Step 8: Add the warning to `createStart`**
+
+In `start.ts`, after the options are resolved (both the sync and the awaited-async path from Task 3, so an async config function warns too), warn once when `functionMiddleware` is a non-empty array. Use `once.warn` from `storybook/internal/client-logger`, matching the framework's existing logging call. The message must say what does not happen and what to do instead: that global function middleware does not run in Storybook, and that `parameters.tanstack.start.context` supplies the context such middleware would have produced.
+
+Do not warn on an empty array or a missing key. Most apps configure neither.
+
+- [ ] **Step 9: Add the story start context**
+
+**`setStoryStartContext` must not become an export of `export-mocks/start-storage-context.ts`.** `plugins/module-interception.ts:45` redirects `@tanstack/start-storage-context` to that file, so every export in it is importable under the real package's specifier and becomes public API no real app has. This is the exact defect that blocked Task 2's round 0; read that ledger entry before writing this step. Key the value off a module-local `Symbol.for(...)` on `globalThis`, exactly as `START_CONTEXT_SYMBOL` already does in the same file, and have `createFallbackStartContext` read it:
+
+```ts
+const STORY_CONTEXT_SYMBOL = Symbol.for('storybook.tanstack-react.story-start-context');
+```
+
+```ts
+contextAfterGlobalMiddlewares: browserGlobals[STORY_CONTEXT_SYMBOL] ?? {},
+```
+
+The `?? {}` preserves Task 3's guarantee that this field is never `undefined`, which is what stops `__executeServer` throwing.
+
+The writer is the decorator, which is the only place with the story's parameters. In `routing/decorator.tsx`, inside `tanstackRouteDecorator` (line 50) before it renders, set the symbol from `context.parameters.tanstack?.start?.context`. Set it on every story, including to `undefined` when the parameter is absent, so one story's context cannot leak into the next: Storybook keeps preview modules alive across navigations.
+
+Add the parameter to the public type in `types.ts`, alongside `router` in `TanStackPreviewOptions`:
+
+```ts
+export interface StartParameters {
+  /**
+   * Context a story supplies in place of global function middleware, which
+   * cannot run in a Storybook build. Merged as the base context for server
+   * function handlers, exactly where `contextAfterGlobalMiddlewares` lands.
+   */
+  context?: Record<string, unknown>;
+}
+```
+
+```ts
+  /** TanStack Start configuration for stories. */
+  start?: StartParameters;
+```
+
+Export `StartParameters` from `index.ts` beside `RouterParameters` (line 34).
+
+- [ ] **Step 10: Full suite, typecheck, format, commit**
+
+```bash
+cd /Users/palnes/src/sbfork
+npx vitest run code/frameworks/tanstack-react
+git add code/frameworks/tanstack-react/src/
+git commit --no-verify -m "TanStack: Warn that global middleware cannot run, and let a story supply its context"
+```
+
 ---
 
 ### Task 6: Hand back a `Response` unserialized
@@ -705,7 +812,18 @@ In `types.ts`, extend `FrameworkOptions` with a documented field, matching the s
   executeServerFunctions?: boolean;
 ```
 
-Thread it from `preset.ts` into `serverCodeEliminationPlugin`, following how `preset.ts` already reads framework options. In `server-code-elimination.ts`, gate the `.handler()` and `.validator()` strips on it. Leave every other strip unconditional: `createServerOnlyFn`, `createIsomorphicFn` and the middleware `server` phase are not part of this option.
+Thread it from `preset.ts` into `serverCodeEliminationPlugin`, following how `preset.ts` already reads framework options.
+
+In `server-code-elimination.ts`, gate on the option **every strip that would stop the real chain running end to end**, and leave the rest alone. Do not take the following list on trust; derive the exact set from the source, because the method names in the AST are not the ones the mock's public surface advertises. At minimum, `createServerFn(...).handler(fn)` at line 167 and the middleware `server` / `inputValidator` strip at lines 185-187 are all in scope. Note that the real builder's validator method is `inputValidator` while the mock exposes `validator`, and that `createMiddleware` has an `inputValidator` of its own, so "the validator strip" is ambiguous until you read it.
+
+The middleware `server` phase belongs in scope and an earlier draft of this plan wrongly excluded it. Task 5's tests prove the server middleware phase runs and seeds the handler's context, but those tests run in Node with no eliminator. In a real build this strip deletes the user's `.server()` call before it can run, so an opt-in that suspends only the handler strip would execute the handler with none of the context its middleware was supposed to provide. That is the divergence this phase exists to remove, reintroduced one layer down.
+
+Two strips stay unconditional, and for a stated reason rather than by omission:
+
+- The route `server:` property strip. Route server handlers are a different seam from server functions and this option says nothing about them.
+- `createServerOnlyFn` and `createIsomorphicFn`. `createIsomorphicFn` in particular has an explicit client implementation that is the right one to run in a browser, so keeping the server half would drag genuinely server-only code into the bundle while producing a *less* representative result, not a more representative one.
+
+Add a test asserting a middleware `server` phase survives with the option on, alongside the handler test.
 
 - [ ] **Step 4: Full suite, typecheck, revert check, format, commit**
 
@@ -796,7 +914,13 @@ Composing these branches into the `patched` channel is a release decision for th
 Carry these into each pull request body, from the design document:
 
 - The delegation swap is a **breaking change** for unmocked calls: middleware side effects now fire, validators now reject input that previously passed, and `setCookie` followed by `getCookie` stops round-tripping. It needs a release note.
-- `fix/tanstack-isomorphic-order` from phase 1 is a **prerequisite** for global middleware reaching the chain, because `getStartOptions` is itself a `.client(a).server(b)` isomorphic chain.
+- **Global function middleware cannot run in a Storybook build at all**, and no work in this phase changes that. `getStartOptions` is built on `createIsomorphicFn`, which the runtime ships as an explicit dummy discarding both implementations, and it lives in `@tanstack/start-client-core`, which is neither intercepted nor transformed because the eliminator excludes `/node_modules/`. So `getStartOptions()?.functionMiddleware || []` is always `[]`. Task 5 ships a `once.warn` for anyone who configures global middleware, and a `parameters.tanstack.start.context` escape hatch that seeds `contextAfterGlobalMiddlewares` with what such middleware would have produced. Per-function middleware and validators are unaffected.
+- An **earlier draft of this section claimed `fix/tanstack-isomorphic-order` from phase 1 was a prerequisite** for global middleware. That was wrong and is recorded here so it does not get re-asserted: that fix transforms user code, while the chain that matters is inside `node_modules` and is never transformed by anything in a Storybook build.
+- `feat/tanstack-execute-server-fns` is **not safe to merge before `fix/tanstack-server-fn-delegation`**. The current mock invokes a handler it is given while discarding middleware and validators, so enabling the option without the delegating mock makes handler bodies execute silently with `opts.context` undefined and unvalidated input. The option ships marked experimental and documented to that effect, but the sequencing is a release decision.
+- **The docs page cannot be reviewed against any single branch.** Three of its claims are deliberately cross-branch: `executeServerFunctions`, the cookie paragraph, and every statement about validators. The page is correct for the shipping combination and false for `fix/tanstack-server-fn-delegation` alone. Reviewing it branch-locally will produce false findings in both directions.
+- **If the validator integration fix below lands, four passages in `docs/get-started/frameworks/tanstack-react.mdx` must revert in the same commit**, because the page currently documents the inconsistency rather than the intended design: the third item at `:157`, the last clause of `:199`, all of `:212`, and the "does not restore validators" clause at `:389`.
+- **REQUIRED INTEGRATION FIX, found by the task 9 docs review on 2026-08-03.** Phase 1's `fix/tanstack-strip-validator` (`555ce27`) adds a `createServerFn().validator()` / `.inputValidator()` strip that did not exist when `feat/tanstack-execute-server-fns` was written, so the opt-in does not gate it. In the shipping combination the server function's own validator therefore runs **neither by default nor under the opt-in**, which contradicts what the phase 2 design requires of itself: "phase 1 task 2's strip is correct for a client bundle and must be suspended for exactly the same builds that keep the handler." Whoever integrates these branches must extend the `executeServerFunctions` gate to cover that strip, and must do it in the same change that brings the two branches together, because neither branch can express it alone.
+- The `optimizeDeps.exclude` fix on the delegation branch corrects a **latent pre-existing bug**, not just a new one: `plugins/module-interception.ts` redirected `@tanstack/start-storage-context` via a `resolveId` hook while omitting it from `optimizeDeps.exclude`, and Vite's dep pre-bundler does not run user `resolveId` hooks. It never bit because nothing traversed from inside `@tanstack/start-client-core` into the storage context until this phase made `__executeServer` run. It is dev-server-only; production Rollup runs the hook.
 - Streamed and raw-stream returns travel over TanStack's frame protocol, which the in-process transport does not reproduce. Documented divergence.
 
 ## Self-review notes
