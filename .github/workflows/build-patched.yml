@@ -64,6 +64,12 @@ jobs:
           git fetch --no-tags upstream next
           git merge --no-edit upstream/next
 
+      # The `production` configuration is what passes `--prod` to
+      # scripts/build/build-package.ts, and that script only emits `.d.ts`
+      # files when it sees it. Without it the tarball installs untyped, every
+      # story in every app degrades to `any`, and `tsc` reports TS7016 for the
+      # framework itself. Nothing in CI typechecks a channel, so this went
+      # unnoticed until a local `npm run check` ran against `patched`.
       - name: Build the framework
         env:
           NX_NO_CLOUD: "true"
@@ -71,7 +77,9 @@ jobs:
           corepack enable
           cd code
           yarn install
-          npx nx run tanstack-react:compile
+          npx nx run tanstack-react:compile:production
+          test -f frameworks/tanstack-react/dist/index.d.ts \
+            || { echo "::error::build produced no type declarations"; exit 1; }
 
       - name: Pack the tarball
         id: pack
