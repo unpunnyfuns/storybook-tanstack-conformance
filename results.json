@@ -42,16 +42,18 @@
         "failing": []
       },
       "start": {
-        "passed": 33,
-        "failed": 11,
-        "total": 44,
+        "passed": 34,
+        "failed": 13,
+        "total": 47,
         "failing": [
           "src/routes/index.stories.tsx > No Document Shell In Stories",
           "src/routes/lazy-page.stories.tsx > Default",
           "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Chain Survives Mock Reset",
           "src/routes/server-probes.stories.tsx > Cookie Scope",
           "src/routes/server-probes.stories.tsx > Middleware Client Phase",
           "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Response Return",
           "src/routes/server-probes.stories.tsx > Validator Transforms",
           "src/start-instance.stories.tsx > Global Middleware Setup",
           "src/start-instance.stories.tsx > Instance Shape",
@@ -66,6 +68,67 @@
         "failing": [
           "src/routes/panel.stories.tsx > No Document Shell In Stories"
         ]
+      }
+    }
+  },
+  "next": {
+    "version": "10.6.0-alpha.4",
+    "apps": {
+      "router": {
+        "passed": 38,
+        "failed": 3,
+        "total": 41,
+        "failing": [
+          "src/navigation.stories.tsx > By Component",
+          "src/navigation.stories.tsx > By Link",
+          "src/routes/users/index.stories.tsx > Link Hrefs"
+        ]
+      },
+      "router-code": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "failing": []
+      },
+      "router-csf4": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "failing": []
+      },
+      "router-shell": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "failing": []
+      },
+      "router-virtual": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "failing": []
+      },
+      "start": {
+        "passed": 38,
+        "failed": 9,
+        "total": 47,
+        "failing": [
+          "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Chain Survives Mock Reset",
+          "src/routes/server-probes.stories.tsx > Cookie Scope",
+          "src/routes/server-probes.stories.tsx > Middleware Client Phase",
+          "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Response Return",
+          "src/routes/server-probes.stories.tsx > Validator Transforms",
+          "src/start-instance.stories.tsx > Global Middleware Setup",
+          "src/start-instance.stories.tsx > Instance Shape"
+        ]
+      },
+      "start-virtual": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "failing": []
       }
     }
   },
@@ -106,14 +169,16 @@
         "failing": []
       },
       "start": {
-        "passed": 37,
-        "failed": 7,
-        "total": 44,
+        "passed": 38,
+        "failed": 9,
+        "total": 47,
         "failing": [
           "src/routes/redirector.stories.tsx > Redirect Navigates",
+          "src/routes/server-probes.stories.tsx > Chain Survives Mock Reset",
           "src/routes/server-probes.stories.tsx > Cookie Scope",
           "src/routes/server-probes.stories.tsx > Middleware Client Phase",
           "src/routes/server-probes.stories.tsx > Middleware Server Context",
+          "src/routes/server-probes.stories.tsx > Response Return",
           "src/routes/server-probes.stories.tsx > Validator Transforms",
           "src/start-instance.stories.tsx > Global Middleware Setup",
           "src/start-instance.stories.tsx > Instance Shape"
