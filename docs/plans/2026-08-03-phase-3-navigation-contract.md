@@ -195,7 +195,18 @@ Expected: fails to resolve `./story-navigation.ts`. Paste the output.
 
 - [ ] **Step 3: Write the publisher**
 
-Create `code/frameworks/tanstack-react/src/story-navigation.ts`, mirroring `story-start-context.ts` in the same directory. Read that file first; this one exists for the same reason and should read as its sibling.
+Create `code/frameworks/tanstack-react/src/story-navigation.ts`.
+
+There is a sibling that solves this exact shape for a different value, `story-start-context.ts`, but **it does not exist on this branch**. It was added by phase 2 and lives on `fix/tanstack-server-fn-delegation`, which has not landed upstream. This branch is off `upstream/next`, so write the file standalone from the code below rather than looking for a neighbour to copy.
+
+To read the sibling for reference without switching branches:
+
+```bash
+cd /Users/palnes/src/sbfork
+git show fix/tanstack-server-fn-delegation:code/frameworks/tanstack-react/src/story-start-context.ts
+```
+
+Both files will exist once the branches are composed, and they should read as a pair. That composition happens on `conformance-build` and is not this task's problem.
 
 ```ts
 /**
@@ -262,13 +273,20 @@ In `code/frameworks/tanstack-react/src/routing/types.ts`, add to `RouterParamete
 
 - [ ] **Step 6: Publish it from the decorator**
 
-In `code/frameworks/tanstack-react/src/routing/decorator.tsx`, in `tanstackRouteDecorator`, beside the existing `setStoryStartContext` call:
+In `code/frameworks/tanstack-react/src/routing/decorator.tsx`, make `tanstackRouteDecorator` publish the flag before it renders:
 
 ```ts
-setStoryNavigation(context.parameters.tanstack?.router?.navigate);
+export const tanstackRouteDecorator: Decorator = (Story, context) => {
+  // Set on every story, including back to undefined, so one story's setting
+  // cannot leak into the next: Storybook keeps preview modules alive across
+  // navigations.
+  setStoryNavigation(context.parameters.tanstack?.router?.navigate);
+
+  return <TanStackRouterStory Story={Story} context={context} />;
+};
 ```
 
-Add the import alongside the existing `setStoryStartContext` one. The comment above that call already explains why it runs for every story; extend it to cover both rather than duplicating it.
+On this branch that is the only such call, so it carries its own comment. Phase 2 adds a `setStoryStartContext` call in the same place on a different branch, with the same comment for the same reason; when the two are composed they sit together and one comment covers both. Do not try to anticipate that here.
 
 - [ ] **Step 7: Full suite, typecheck, build, format, commit**
 
