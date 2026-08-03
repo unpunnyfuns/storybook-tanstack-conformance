@@ -95,14 +95,20 @@ The larger storage-context rework (finding 23) is **not** in scope; `__executeSe
 
 Phase 1's intent audit turned up two things that land directly on this architecture, so they are recorded here rather than rediscovered during implementation.
 
-**Global middleware needs one specific wire, and phase 1 only half-built it.**
-`executeMiddleware` collects global middleware via `getStartOptions()?.functionMiddleware` (`start-client-core/src/createServerFn.ts:203`), and `getStartOptions` is itself defined as `createIsomorphicFn().client(() => window.__TSS_START_OPTIONS__).server(...)`.
-Two consequences:
+**Global middleware cannot run in a Storybook build at all. CORRECTED 2026-08-03.**
+An earlier version of this section claimed that writing `window.__TSS_START_OPTIONS__` would let `getStartOptions()?.functionMiddleware` find global middleware, and that phase 1's `fix/tanstack-isomorphic-order` was a prerequisite for it. Both claims were wrong, found while implementing task 4.
 
-- That is a `.client(a).server(b)` chain, the exact order phase 1's `fix/tanstack-isomorphic-order` repairs. Without that fix the chain collapses to a no-op, `getStartOptions()` returns `undefined`, and global middleware is silently dropped. **Phase 1 task 3 is a prerequisite for this phase**, not merely adjacent.
-- It is still not sufficient. The only writer of `window.__TSS_START_OPTIONS__` is `hydrateStart` (`start-client-core/src/client/hydrateStart.ts:19,24`), which a Storybook build never runs. The framework's own `start-storage-context` mock _reads_ that global (`export-mocks/start-storage-context.ts:16,24`) and nothing ever sets it.
+`getStartOptions` lives inside `@tanstack/start-client-core` and is written as `createIsomorphicFn().client(() => window.__TSS_START_OPTIONS__).server(...)`.
+The runtime `createIsomorphicFn` in `@tanstack/start-fn-stubs` is an explicit dummy that discards both implementations and returns a no-op, carrying the comment "this is a dummy function, it will be replaced by the transformer".
+Nothing transforms it in a Storybook build: `start-client-core` is absent from the module-interception plugin's redirect list, and the elimination plugin excludes `node_modules`.
 
-So phase 2 must write the start options into that global, which is also what turns phase 1's `createStart` mock from "shaped" into "wired". Until it does, an app declaring global middleware through the instance still sees it skipped.
+So `getStartOptions()` returns `undefined`, `getStartOptions()?.functionMiddleware || []` is always `[]`, and no amount of work on our side changes that. Phase 1's isomorphic-order fix transforms user code; the chain that matters here is in `node_modules` and is never reached.
+
+Task 3 still earns its place, for the other reason: writing the global is what makes `createFallbackStartContext` stop returning `undefined`, which is what stops `__executeServer` throwing on `startContext.contextAfterGlobalMiddlewares`.
+
+**Per-function middleware and validators are unaffected**, because they come from the user's own `.middleware([...])` call and never route through `getStartOptions`. Everything this phase's five gauges measure still works.
+
+Making global middleware run would mean intercepting `getStartOptions`, either by adding `start-client-core` to the interception list or by supplying our own. That is a separate decision and is not required by any gauge.
 
 **Validators run in the server phase, which sharpens the carve-out.**
 `executeMiddleware` applies `inputValidator` only when `env === 'server'` (`start-client-core/dist/esm/createServerFn.js:95`).
@@ -173,7 +179,7 @@ Per the repository's ground rules, every fix lands with a test that failed first
 - **Chain execution reaches further into real TanStack code than the mock ever has.** A change in `executeMiddleware` upstream could move story behavior. This is the intended trade: delegation means inheriting upstream's behavior, including its changes. The gauges are what detect it.
 - **The option's precondition is easy to get wrong.** An app enabling it with an unmocked `node:fs` import gets a build failure. The docs must state the precondition plainly, which is why documentation is scoped as a deliverable.
 - **`__executeServer` depends on start context state** the mock currently keeps in two unsynced stores. Phase 2 supplies only what the call path reads; if that proves insufficient in implementation, the storage-context rework is a phase 3 candidate rather than a scope expansion here.
-- **This phase depends on a phase 1 branch that is not yet filed upstream.** Global middleware only reaches the chain if `getStartOptions`'s isomorphic chain survives compilation, which `fix/tanstack-isomorphic-order` is what repairs. If that branch is rejected or reworked upstream, the global-middleware half of this phase loses its foundation and needs rethinking. The rest of the phase, which is per-function middleware and validators, is unaffected.
+- **Global middleware does not run in stories, and this phase does not change that.** See the corrected note above: `getStartOptions` resolves to an untransformed dummy inside `node_modules`, so its middleware list is always empty. No gauge depends on it. An app relying on global middleware will see it skipped, which is worth stating in the documentation alongside the other limits.
 
 ## How faithful the transport is
 
