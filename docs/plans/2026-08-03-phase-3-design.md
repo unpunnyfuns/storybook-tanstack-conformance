@@ -114,9 +114,26 @@ Finding 10's crash half, the `storybook/internal/preview-api` hook that threw on
 
 `useNavigate` and `useRouter().navigate` stop navigating by default.
 
-A story that calls either and then asserts something about the destination will fail until it sets `parameters.tanstack.router.navigate: true`.
-This is the intended correction rather than an accident: the whole point is that "off" means nothing navigates.
+**This breaks a documented pattern, deliberately.**
+The framework docs say so in two places: "Automatically mock `@tanstack/react-router` so navigation hooks work in stories" and "keeps hooks such as `useNavigate()` ... available in stories".
+Both lines need updating in this phase, or the docs will teach something the framework no longer does.
+
+It is also an exercised pattern, not a theoretical one.
+The `Pagination` story in `apps/router` and again in `apps/start` clicks a Next button and asserts `Page 2` becomes visible, which only passes if navigation actually happens.
+`By Hook` in `apps/router/src/navigation.stories.tsx` is the third.
+All three need `parameters.tanstack.router.navigate: true` in this phase.
+
+The roadmap's ground rules say an impact that breaks a documented pattern gets designed out rather than shipped.
+This one is shipped instead, as a deliberate exception taken with the evidence in hand, because designing it out means either abandoning symmetry or defaulting navigation on.
+Defaulting on would silently start navigating every story that clicks a `Link` today, which is a larger and less visible blast radius than the one accepted here.
+The framework is early enough that the smaller, louder break is the better trade.
+
 It needs a release note and a docs callout.
+
+A codemod can help but cannot finish the job.
+It can find stories whose component or route reaches `useNavigate` and add the parameter, which covers the common case where a story uses either imperative navigation or `Link` but not both.
+It cannot be a behavior-preserving transform in general, precisely because the switch is symmetric: setting it to `true` in a story that uses both restores the hook's navigation and simultaneously starts navigating that story's links.
+Ship it as a migration aid that annotates for review, not as a guaranteed-correct rewrite.
 
 In exchange, both start recording to `onNavigate`, which they never did.
 Any story that already asserts on the spy keeps working, and gains coverage of imperative navigation it could not previously see.
@@ -131,6 +148,10 @@ Deleting `Link` and `Navigate` from the Start mock is a breaking change only for
 
 `By Hook` also sets it.
 That is the honest cost of the change: it passes today only because the seam is inconsistent.
+
+So do the two `Pagination` stories, in `apps/router` and `apps/start`.
+They are the reason the breaking change is real rather than theoretical, and they are the migration this phase performs on itself.
+Their totals do not move, but the diff shows what every affected user will have to do.
 
 Two gauges are missing and this phase adds them, because otherwise the default path ships untested:
 
