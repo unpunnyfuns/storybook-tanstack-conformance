@@ -102,7 +102,7 @@
       }
     },
     "patched": {
-      "version": "10.6.0-alpha.3-fixes.147",
+      "version": "10.6.0-alpha.4-fixes.174",
       "apps": {
         "router": {
           "total": 41,
@@ -129,17 +129,7 @@
         },
         "start": {
           "total": 47,
-          "failing": [
-            "src/routes/redirector.stories.tsx > Redirect Navigates",
-            "src/routes/server-probes.stories.tsx > Chain Survives Mock Reset",
-            "src/routes/server-probes.stories.tsx > Cookie Scope",
-            "src/routes/server-probes.stories.tsx > Middleware Client Phase",
-            "src/routes/server-probes.stories.tsx > Middleware Server Context",
-            "src/routes/server-probes.stories.tsx > Response Return",
-            "src/routes/server-probes.stories.tsx > Validator Transforms",
-            "src/start-instance.stories.tsx > Global Middleware Setup",
-            "src/start-instance.stories.tsx > Instance Shape"
-          ]
+          "failing": ["src/routes/redirector.stories.tsx > Redirect Navigates"]
         },
         "start-virtual": {
           "total": 3,
