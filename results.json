@@ -1,6 +1,6 @@
 {
   "main": {
-    "version": "10.5.5",
+    "version": "10.5.6",
     "apps": {
       "router": {
         "passed": 35,
@@ -66,82 +66,6 @@
         "failing": [
           "src/routes/panel.stories.tsx > No Document Shell In Stories"
         ]
-      }
-    }
-  },
-  "next": {
-    "version": "10.6.0-alpha.3",
-    "apps": {
-      "router": {
-        "passed": 30,
-        "failed": 11,
-        "total": 41,
-        "failing": [
-          "src/navigation.stories.tsx > By Component",
-          "src/navigation.stories.tsx > By Link",
-          "src/routes/lazy-page.stories.tsx > Default",
-          "src/routes/posts/_archive/archived.stories.tsx > Default",
-          "src/routes/posts/index.stories.tsx > Mock Module Identity",
-          "src/routes/posts/index.stories.tsx > Pagination",
-          "src/routes/settings/_tabs/index.stories.tsx > Default",
-          "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
-          "src/routes/users/index.stories.tsx > Link Hrefs",
-          "src/tree-mode.stories.tsx > At Flat Route",
-          "src/tree-mode.stories.tsx > At Param Route"
-        ]
-      },
-      "router-code": {
-        "passed": 3,
-        "failed": 1,
-        "total": 4,
-        "failing": [
-          "src/tree-mode.stories.tsx > Tree Mode By Path"
-        ]
-      },
-      "router-csf4": {
-        "passed": 5,
-        "failed": 0,
-        "total": 5,
-        "failing": []
-      },
-      "router-shell": {
-        "passed": 4,
-        "failed": 0,
-        "total": 4,
-        "failing": []
-      },
-      "router-virtual": {
-        "passed": 3,
-        "failed": 0,
-        "total": 3,
-        "failing": []
-      },
-      "start": {
-        "passed": 30,
-        "failed": 14,
-        "total": 44,
-        "failing": [
-          "src/routes/lazy-page.stories.tsx > Default",
-          "src/routes/posts/_archive/archived.stories.tsx > Default",
-          "src/routes/posts/index.stories.tsx > Pagination",
-          "src/routes/redirector.stories.tsx > Redirect Navigates",
-          "src/routes/server-probes.stories.tsx > Cookie Scope",
-          "src/routes/server-probes.stories.tsx > Middleware Client Phase",
-          "src/routes/server-probes.stories.tsx > Middleware Server Context",
-          "src/routes/server-probes.stories.tsx > Validator Transforms",
-          "src/routes/settings/_tabs/index.stories.tsx > Default",
-          "src/routes/settings/_tabs/route.stories.tsx > Layout With Index Child",
-          "src/start-instance.stories.tsx > Global Middleware Setup",
-          "src/start-instance.stories.tsx > Instance Shape",
-          "src/tree-mode.stories.tsx > At Flat Route",
-          "src/tree-mode.stories.tsx > At Param Route"
-        ]
-      },
-      "start-virtual": {
-        "passed": 3,
-        "failed": 0,
-        "total": 3,
-        "failing": []
       }
     }
   },
