@@ -174,19 +174,20 @@ So do the two `Pagination` stories, in `apps/router` and `apps/start`.
 They are the reason the breaking change is real rather than theoretical, and they are the migration this phase performs on itself.
 Their totals do not move, but the diff shows what every affected user will have to do.
 
-Two gauges are missing and this phase adds them, because otherwise the default path ships untested:
+The default path also needs covering, or the off state ships untested:
 
-- with the flag off, a clicked `Link` records on the spy and the canvas does not change
-- with the flag off, `useNavigate` records on the spy and the canvas does not change
+- with the flag off, a clicked `Link` records on the spy and does not navigate
+- with the flag off, `useNavigate` records on the spy and does not navigate
+- with the flag on, both navigate and record
 
-Both assert framework behavior rather than real-app behavior, so neither needs an e2e twin.
-The existing trio do assert real-app behavior and already have twins in `e2e/router.spec.ts`.
+These are framework unit tests in the fork, not conformance gauges, for two reasons.
 
-Both also depend on the spy export landing first, since neither can be written until a story can import `onNavigate`.
-That dependency is why the export is task 1 rather than a tidy-up at the end.
+They assert framework behavior rather than real-app behavior, and this suite's rule is that a gauge asserts what the real app does. "Records and stays put" is deliberately not what the real app does.
 
-`onNavigate` accumulates calls across stories in a file, because Storybook's `clearMocks` does not reach a module-scope `fn()` from `storybook/test`.
-Phase 2 hit this in the framework's own suite. Every new gauge asserting on the spy clears it first.
+More practically, a story importing `@storybook/tanstack-react/spies` would not resolve on `main` or `next`, whose published framework has no such subpath. That is a module resolution failure, so it would take down those channels entirely rather than failing one test. Conformance stories cannot assert on the spy until the export has shipped to npm, and nothing in this phase should assume it has.
+
+`onNavigate` accumulates calls across tests in a file, because Storybook's `clearMocks` does not reach a module-scope `fn()` from `storybook/test`.
+Phase 2 hit this in the framework's own suite. Every test asserting on the spy clears it first.
 
 ## Risks
 
