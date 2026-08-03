@@ -59,6 +59,27 @@ Both states are internally consistent, which is what finding 7 asks for.
 Off means nothing navigates, rather than "nothing navigates except the one path that does".
 Turning it on also revives `useBlocker`, which starts receiving real history transitions.
 
+## The spy no story can reach
+
+Recording is only worth anything if a story can read the recording, and today it cannot.
+
+`onNavigate` is exported from `export-mocks/spies.ts` and re-exported by nothing.
+Not `react-router.ts`, not `start.ts`, not `index.ts`, and there is no `spies` entry in the package's `exports` map.
+
+The docs tell users to assert on it twice: "Assert on the spy there rather than on a rejection", and "Import from this module when you need direct access to the mock APIs (for example, to assert against navigation spies in tests)".
+Neither is possible.
+
+This also explains something the conformance suite shows and nobody had explained: across more than seventy stories, not one asserts on `onNavigate`.
+That looked like a coverage gap. It was an impossibility.
+
+So this phase ships the export first, as its own deliverable on its own branch, before any of the contract work.
+It goes out as a new subpath, `@storybook/tanstack-react/spies`, pointing at `export-mocks/spies.ts`.
+
+The subpath rather than a re-export from `react-router.ts` is deliberate.
+That file is the redirect target for `@tanstack/react-router`, so re-exporting the spy there would make `import { onNavigate } from '@tanstack/react-router'` resolve, which is surface no real app has and the defect class that blocked a phase 2 task.
+`spies.ts` is not a redirect target, so exporting from it adds nothing to any real TanStack specifier.
+It is also the honest boundary: the spy is a Storybook concept, not a router API.
+
 ## Where the switch lives
 
 A story parameter, `parameters.tanstack.router.navigate`, defaulting to `false`.
@@ -160,6 +181,12 @@ Two gauges are missing and this phase adds them, because otherwise the default p
 
 Both assert framework behavior rather than real-app behavior, so neither needs an e2e twin.
 The existing trio do assert real-app behavior and already have twins in `e2e/router.spec.ts`.
+
+Both also depend on the spy export landing first, since neither can be written until a story can import `onNavigate`.
+That dependency is why the export is task 1 rather than a tidy-up at the end.
+
+`onNavigate` accumulates calls across stories in a file, because Storybook's `clearMocks` does not reach a module-scope `fn()` from `storybook/test`.
+Phase 2 hit this in the framework's own suite. Every new gauge asserting on the spy clears it first.
 
 ## Risks
 
