@@ -435,7 +435,9 @@ export const useRouter = fn((() => {
 
 - [ ] **Step 6: Make `Link` and `Navigate` honour the flag**
 
-`Link` currently destructures the real `onClick` out and always calls `preventDefault()`. It should do that only when navigation is off:
+**Read `Link` and `Navigate` on this branch before touching them.** An earlier draft of this step described the versions on the `patched` channel, which carry work from `fix/tanstack-react-link-href` (PR #35505) and `fix/tanstack-navigate-react-effect` that has not landed upstream. On `upstream/next`, `Link` is a bare anchor with `href: to` and no `useLinkProps`, and `Navigate` has no de-duplication ref.
+
+`Link` calls `preventDefault()` unconditionally today. Keep that unconditional. The anchor's `href` is a route path, so letting the browser follow it would trigger a full page load out of the Storybook iframe rather than a client-side route change. Navigate through the router instead, which is also what real TanStack `Link` does with a click:
 
 ```ts
       onClick: (e: React.MouseEvent) => {
