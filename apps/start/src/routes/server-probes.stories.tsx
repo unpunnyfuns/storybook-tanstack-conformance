@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
-import { expect, userEvent } from "storybook/test";
+import { expect, type Mock, userEvent } from "storybook/test";
+import { tracked } from "../server-probe-fns";
 import { Route } from "./server-probes";
 
 /**
@@ -55,5 +56,34 @@ export const ResponseReturn: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(await canvas.findByRole("button", { name: "respond" }));
     await expect(await canvas.findByText("raw: raw body")).toBeVisible();
+  },
+};
+
+/**
+ * Not a gauge: the supported way to stand in for a server function. It exists
+ * so the story after it starts from an overridden mock, which Storybook's
+ * automatic reset has to undo.
+ */
+export const TrackedOverridden: Story = {
+  beforeEach() {
+    (tracked as unknown as Mock).mockResolvedValue("mocked");
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(await canvas.findByRole("button", { name: "tracked" }));
+    await expect(await canvas.findByText(/traced: mocked/u)).toBeVisible();
+  },
+};
+
+/**
+ * In the real app every call runs the whole chain, every time. The story
+ * before this one overrode `tracked`, so Storybook's automatic reset runs in
+ * between; an unmocked call after it must still run the client middleware and
+ * reach the handler, not return the previous story's value and not return
+ * undefined.
+ */
+export const ChainSurvivesMockReset: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(await canvas.findByRole("button", { name: "tracked" }));
+    await expect(await canvas.findByText("traced: tracked ok with client phase")).toBeVisible();
   },
 };

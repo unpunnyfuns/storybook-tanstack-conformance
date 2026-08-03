@@ -603,7 +603,7 @@ Do not warn on an empty array or a missing key. Most apps configure neither.
 **`setStoryStartContext` must not become an export of `export-mocks/start-storage-context.ts`.** `plugins/module-interception.ts:45` redirects `@tanstack/start-storage-context` to that file, so every export in it is importable under the real package's specifier and becomes public API no real app has. This is the exact defect that blocked Task 2's round 0; read that ledger entry before writing this step. Key the value off a module-local `Symbol.for(...)` on `globalThis`, exactly as `START_CONTEXT_SYMBOL` already does in the same file, and have `createFallbackStartContext` read it:
 
 ```ts
-const STORY_CONTEXT_SYMBOL = Symbol.for('storybook.tanstack-react.story-start-context');
+const STORY_CONTEXT_SYMBOL = Symbol.for("storybook.tanstack-react.story-start-context");
 ```
 
 ```ts
@@ -821,7 +821,7 @@ The middleware `server` phase belongs in scope and an earlier draft of this plan
 Two strips stay unconditional, and for a stated reason rather than by omission:
 
 - The route `server:` property strip. Route server handlers are a different seam from server functions and this option says nothing about them.
-- `createServerOnlyFn` and `createIsomorphicFn`. `createIsomorphicFn` in particular has an explicit client implementation that is the right one to run in a browser, so keeping the server half would drag genuinely server-only code into the bundle while producing a *less* representative result, not a more representative one.
+- `createServerOnlyFn` and `createIsomorphicFn`. `createIsomorphicFn` in particular has an explicit client implementation that is the right one to run in a browser, so keeping the server half would drag genuinely server-only code into the bundle while producing a _less_ representative result, not a more representative one.
 
 Add a test asserting a middleware `server` phase survives with the option on, alongside the handler test.
 
