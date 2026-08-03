@@ -52,6 +52,19 @@ jobs:
       - name: Verify against expectations
         run: node scripts/verify.mjs ${{ matrix.ref }}
 
+      # A channel can be green on behaviour and still ship a framework the
+      # apps cannot type against. Every patched tarball did exactly that: it
+      # was built without `--prod`, so it carried no `.d.ts` at all, `tsc`
+      # reported TS7016 for the framework itself, and every story silently
+      # degraded to `any`. Nothing here looked, because nothing here ran tsc.
+      #
+      # This runs after the suites on purpose: typecheck needs the
+      # `routeTree.gen.ts` files, and the report is what generates them.
+      # `always()` so a drift failure above still leaves this signal visible.
+      - name: Typecheck the apps against this channel
+        if: always()
+        run: npm run typecheck --workspaces
+
       - uses: actions/upload-artifact@v4
         with:
           name: results-${{ matrix.ref }}
