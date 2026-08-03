@@ -923,6 +923,26 @@ Carry these into each pull request body, from the design document:
 - The `optimizeDeps.exclude` fix on the delegation branch corrects a **latent pre-existing bug**, not just a new one: `plugins/module-interception.ts` redirected `@tanstack/start-storage-context` via a `resolveId` hook while omitting it from `optimizeDeps.exclude`, and Vite's dep pre-bundler does not run user `resolveId` hooks. It never bit because nothing traversed from inside `@tanstack/start-client-core` into the storage context until this phase made `__executeServer` run. It is dev-server-only; production Rollup runs the hook.
 - Streamed and raw-stream returns travel over TanStack's frame protocol, which the in-process transport does not reproduce. Documented divergence.
 
+## Confirmed against a real Storybook dev server (2026-08-03)
+
+The `optimizeDeps` claim had been carried as unconfirmed through the whole phase, because it is dev-server-only and nothing in the unit suites or the conformance runs could reach it. It has now been tested directly: the framework was built from `fix/tanstack-server-fn-delegation`, packed the way `.github/workflows/build-patched.yml` packs it (`npm pkg set` to replace the yarn `workspace:` specs, which npm cannot install), installed into `apps/start` alongside Storybook core `10.6.0-alpha.4`, and driven in a browser.
+
+**The delegation works in a real browser.** The reset gauge renders `traced: undefined with client phase`, against `without client phase` on the published framework. The client middleware phase runs, which means the in-process transport was invoked and `__executeServer` was reached, and it did not throw. The `undefined` is the stripped handler, expected without the opt-in.
+
+**The `optimizeDeps` fix is real, and its trigger is narrower than the final review predicted.** Tested by reverting only `plugins/module-interception.ts` and rebuilding:
+
+| Build                                                    | `start-client-core` pre-bundled | `AsyncLocalStorage` inlined | Runtime                                             |
+| -------------------------------------------------------- | ------------------------------- | --------------------------- | --------------------------------------------------- |
+| fix reverted, no direct import                           | no                              | not applicable              | works                                               |
+| fix reverted, user imports `@tanstack/start-client-core` | yes                             | 2                           | `TypeError: AsyncLocalStorage is not a constructor` |
+| fix applied, same direct import                          | yes                             | 0                           | clean                                               |
+
+So the failure is **not** "`storybook dev` throws on every server function", which is how the review characterized it and how it was reported onward. The framework's own use of `@tanstack/start-client-core` never triggers it, because `@storybook/tanstack-react` is itself in `optimizeDeps.exclude` and Vite's dep scanner does not crawl into an excluded package, so the specifier never enters the pre-bundle. The bug needs something else to pull it in, and a user importing it directly does exactly that.
+
+That case was not hypothetical: the docs page's own central mocking snippet imported from `@tanstack/start-client-core` until the final review caught it, so the shipped documentation would have walked a reader straight into this.
+
+Worth recording about the method, because it nearly produced a false result: the first "fixed" rebuild was not fixed. `git checkout <sha> -- <file>` stages what it restores, so the later `git checkout -- <file>` restored the reverted version out of the index rather than `HEAD`. The build was identical to the broken one and would have read as "the fix changes nothing". Use `git checkout HEAD -- <file>` and check `git status` shows a clean index before rebuilding.
+
 ## Integration findings from the final review (2026-08-03)
 
 A reviewer built the actual composition in a throwaway worktree, `upstream/next@95ecd805382` plus all eight phase 1 branches plus all four phase 2 branches, and probed the result. Exactly four files conflict textually: `export-mocks/start.ts`, `export-mocks/start.test.ts`, `plugins/server-code-elimination.ts` and `plugins/server-code-elimination.test.ts`. Everything else merges cleanly in any order, and no branch adds an export to a redirect-target file, so the public-surface constraint holds across the whole set.
