@@ -651,6 +651,43 @@ Restore the seven app manifests individually. `git checkout -- apps` would also 
 
 ---
 
+### Task 7: Gate the `useServerFn` redirect, the fifth entry point
+
+**Repo:** `/Users/palnes/src/sbfork`, branch `fix/tanstack-use-server-fn-redirect`, which is where this code lives. Added on 2026-08-04, after task 6 found the gap.
+
+`useServerFn` catches a thrown `redirect()`, records it on `onNavigate` and returns `undefined`. It never navigates, whatever the story asked for, because `navigationEnabled()` is module-local to `export-mocks/react-router.ts` and `useServerFn` lives in `export-mocks/start.ts`. So the `Redirect Navigates` gauge cannot flip and `patched` stops at 106 of 107.
+
+This is our own mock code, written in phase 2, not a path inside real router internals. The docs correctly carve out router-resolved redirects and `useLinkProps`, which the framework does not control. This one it does, so the contract applies.
+
+**Files:**
+
+- Modify: `code/frameworks/tanstack-react/src/export-mocks/start.ts`
+- Test: `code/frameworks/tanstack-react/src/export-mocks/start.test.ts`
+
+- [ ] **Step 1: Write the failing tests**
+
+Two: with the flag off, a server function throwing `redirect()` records on the spy and does not navigate. With it on, it records and navigates. Read how the existing `useServerFn` redirect tests are set up before writing, and follow their harness rather than inventing one.
+
+- [ ] **Step 2: Run and capture the failures**
+
+Expected: the flag-on test fails because nothing navigates today. Paste it.
+
+- [ ] **Step 3: Read the flag**
+
+Declare a local `Symbol.for('storybook.tanstack-react.story-navigation')` reader in `start.ts`, mirroring the one in `react-router.ts`. Do not import it. Both files are redirect targets of `plugins/module-interception.ts`, so an export from either becomes API no real app has, and a three line duplicate is the established pattern here.
+
+This keeps the branch standalone: the writer ships on `fix/tanstack-navigation-contract` and until that lands the flag simply reads false, which is today's behavior.
+
+- [ ] **Step 4: Navigate when asked**
+
+Keep the recording unconditional. When the flag is on, navigate as well. `useServerFn` is a hook, so it can call the router. Match what the real `useServerFn` does with a caught redirect rather than inventing a mechanism, and update the comment that currently states navigation is blocked on purpose.
+
+- [ ] **Step 5: Suite, typecheck, build, revert check, commit**
+
+Use `git checkout HEAD -- <file>` for the revert check, never `git checkout -- <file>`.
+
+---
+
 ## Self-review notes
 
 - Task 1 must land before anything in this suite can assert on `onNavigate`, but nothing in this plan does. The conformance stories assert on rendered output, not the spy, precisely so they keep working on channels whose framework has no `./spies` subpath.
