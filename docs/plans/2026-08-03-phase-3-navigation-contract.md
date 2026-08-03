@@ -514,11 +514,15 @@ Add `navigate` to the router parameters section, wherever `routeOverrides` and `
 
 - [ ] **Step 3: Add the breaking-change callout**
 
-In the same place the phase 2 breaking changes are called out, add that `useNavigate` and `useRouter().navigate` no longer navigate by default, that a story asserting on a destination must set `parameters.tanstack.router.navigate: true`, and that both now record on `onNavigate` where they previously recorded nothing.
+**There is no existing breaking-changes callout on this branch.** Phase 2 adds one, on `fix/tanstack-server-fn-delegation`, and it is not here. Put the callout next to the behavior it describes, in the mocking section, and leave `MIGRATION.md` alone: its only TanStack section is the react-vite migration guide, and choosing a version heading is a release decision.
+
+Say that `useNavigate` and `useRouter().navigate` no longer navigate by default, that a story asserting on a destination must set `parameters.tanstack.router.navigate: true`, and that both now record on `onNavigate` where they previously recorded nothing.
 
 - [ ] **Step 4: Document the spy import**
 
-Task 1 added the `@storybook/tanstack-react/spies` subpath. The two places that tell users to assert on the navigation spy do not say where to import it from, because until now there was nowhere. Name the subpath in both.
+Task 1 added the `@storybook/tanstack-react/spies` subpath, on its own branch, so it does not exist here. Document it anyway; it ships in the same release.
+
+**On this branch there is exactly one place** telling users to assert on the navigation spy, in the section describing the mock modules, and it does not say where to import it from because until this phase there was nowhere. Name the subpath there. An earlier draft of this step said there were two; the second is in a `useServerFn` paragraph that phase 2 adds on a different branch, and nothing in `docs/` on this branch mentions `useServerFn` at all.
 
 - [ ] **Step 5: Docs check, commit**
 
