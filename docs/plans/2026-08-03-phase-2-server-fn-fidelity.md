@@ -943,6 +943,30 @@ That case was not hypothetical: the docs page's own central mocking snippet impo
 
 Worth recording about the method, because it nearly produced a false result: the first "fixed" rebuild was not fixed. `git checkout <sha> -- <file>` stages what it restores, so the later `git checkout -- <file>` restored the reverted version out of the index rather than `HEAD`. The build was identical to the broken one and would have read as "the fix changes nothing". Use `git checkout HEAD -- <file>` and check `git status` shows a clean index before rebuilding.
 
+## The composition, resolved on `conformance-build` (2026-08-03)
+
+All twelve branches are merged onto `unpunnyfuns/storybook`'s `conformance-build`, locally and unpushed. Upstream `next` merged clean, the eight phase 1 branches merged clean in sequence, and the four phase 2 branches produced the four conflicting files the final review predicted. Composed suite: **155 tests, 11 files, no type errors.**
+
+Four resolutions were judgment calls rather than mechanical merges.
+
+**The `executeServerFunctions` gate now covers phase 1's `createServerFn` validator strip.** This is the required integration fix recorded below. Stripping the validator while keeping the handler is the one combination neither mode should produce, and it is what kept `Validator Transforms` red.
+
+**The `createMiddleware` `.validator` strip stays unconditional**, unlike the `server` and `inputValidator` phases beside it. The real builder has no `validator` method, so a chain calling it works only because the strip deletes it at build time; letting it survive under the option throws `createMiddleware(...).validator is not a function` at module evaluation and takes down the whole story file. The asymmetry is deliberate and commented at the site. Both this and the gate above are locked by tests that were confirmed to discriminate by mutating the source and watching exactly one test fail.
+
+**`createStart` composes rather than picking a side.** It returns phase 1's `{ getOptions, createMiddleware }`, which is the shape the real `createStart` returns, and keeps phase 2's option publishing and global-middleware warning. The real implementation is entirely lazy; this one calls the thunk once eagerly, because nothing in a Storybook preview ever calls `getOptions()` and staying lazy would mean the options are never published and the warning never fires. `getOptions()` hands back that same result rather than calling the thunk again, so a story sees it run exactly once. The real `getOptions()` also dedupes `serializationAdapters`; that is not reproduced, because a merge is the wrong place to add behavior neither side shipped.
+
+**The `@vitest-environment` collision is resolved by splitting the file**, not by choosing an environment. `useServerFn`'s tests now live in `export-mocks/use-server-fn.test.ts` with the `happy-dom` pragma, and `start.test.ts` stays in Node. Keeping them together would have forced happy-dom on the cookie tests, which seed a request cookie through a header the fetch spec forbids and happy-dom therefore drops.
+
+### A phase 1 branch does not build, and its own gate cannot see it
+
+`fix/tanstack-create-start-instance` fails `yarn build tanstack-react` on its own with `TS2883: The inferred type of 'createStart' cannot be named without a reference to 'CreateMiddlewareFn'`. Returning the real `createMiddleware` makes the inferred type reference a `node_modules` path that tsc refuses to write into a `.d.ts`. It passed review because this plan's typecheck command is `tsc --noEmit`, which does not emit declarations and so never reaches the error. **Every branch that changes an exported value's type needs a real package build, not just `--noEmit`.** Fixed in the composition with an explicit return annotation; the branch itself still carries the defect.
+
+### Measured against the composed build
+
+`apps/start` goes from **34/47 to 46/47** passing. All seven server-probe gauges pass, including `Validator Transforms`, which the final review predicted would stay red and which the validator gate above is what flips. The single remaining failure is `Redirect Navigates` in `redirector.stories.tsx`, a route-level redirect gauge that no branch in this phase addresses.
+
+`expectations.json` was deliberately **not** re-recorded from this build. The composition was installed from a local tarball, while `patched` tracks the published one, so recording it would encode a state CI cannot reproduce. Re-record when the real tarball is rebuilt from `conformance-build`.
+
 ## Integration findings from the final review (2026-08-03)
 
 A reviewer built the actual composition in a throwaway worktree, `upstream/next@95ecd805382` plus all eight phase 1 branches plus all four phase 2 branches, and probed the result. Exactly four files conflict textually: `export-mocks/start.ts`, `export-mocks/start.test.ts`, `plugins/server-code-elimination.ts` and `plugins/server-code-elimination.test.ts`. Everything else merges cleanly in any order, and no branch adds an export to a redirect-target file, so the public-surface constraint holds across the whole set.
