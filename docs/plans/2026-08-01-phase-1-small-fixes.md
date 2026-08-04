@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Land eight independent, few-line fixes in `@storybook/tanstack-react`, each with a test that provably failed first, each on its own branch so it can become one small upstream pull request.
+**Goal:** Land nine independent fixes in `@storybook/tanstack-react`, each with a test that provably failed first, each on its own branch so it can become one small upstream pull request. Eight are a few lines each; task 9, added later, adopts a larger self-contained branch that was already written.
 
 **Architecture:** Every task is self-contained: branch off `upstream/next`, write the failing test, capture the failure, apply the minimal fix, prove the test guards (revert check), push the branch to the fork. No task depends on another; they can land upstream in any order. Larger semantic changes (navigation seam, leaf resolution, mock execution pipeline) are explicitly out of scope; they are phase 2.
 
@@ -12,7 +12,7 @@
 
 - Repo: `/Users/palnes/src/sbfork`. Before each task: `git fetch upstream && git checkout -b <branch> upstream/next`.
 - Style: single quotes, match surrounding code exactly; the repo has no Prettier config, so never run a formatter over existing lines. No end-of-line comments.
-- Test command: `cd /Users/palnes/src/sbfork && npx vitest run code/frameworks/tanstack-react` (full framework suite; baseline on `upstream/next` is 79 tests in 6 files as of 2026-08-02, measured on a pristine checkout. Do not confuse this with the `feat/auto-connect-route-tree-vite` branch, which carries extra tests and reports 88 in 8. Scope to a single file by appending its path). Run it from the repo ROOT: from `code/` the workspace config path doubles to `code/code/...` and vitest throws before running anything.
+- Test command: `cd /Users/palnes/src/sbfork && npx vitest run code/frameworks/tanstack-react` (full framework suite; baseline on `upstream/next` is 79 tests in 6 files as of 2026-08-02, measured on a pristine checkout. Tasks 1 to 8 measure against that. Task 9's branch is the exception: it adds two preset plugins with their own tests and reports 88 in 8, so measure it against its own base rather than against this number. Scope to a single file by appending its path). Run it from the repo ROOT: from `code/` the workspace config path doubles to `code/code/...` and vitest throws before running anything.
 - Typecheck command: `cd /Users/palnes/src/sbfork/code/frameworks/tanstack-react && npx tsc --noEmit -p .`. Two pre-existing errors in `renderers/react` (`STORYBOOK_ENV`, `FRAMEWORK_OPTIONS`) are baseline noise, not yours; compare against them rather than expecting zero output.
 - **Typechecking is not enough for a branch that changes the type of anything exported.** `--noEmit` skips declaration emit, so it cannot see an inferred type that has no portable name in a `.d.ts` (`TS2883`). Task 4 of this plan shipped that exact defect: returning the real `createMiddleware` from `createStart` made the inferred type reference `CreateMiddlewareFn` through a `node_modules` path, and the package build failed while the typecheck stayed clean. Found on 2026-08-03 while composing the release, fixed on the branch in `046bf06` with an explicit return annotation. Such a branch also needs `cd /Users/palnes/src/sbfork/scripts && PATH="/Users/palnes/src/sbfork/node_modules/.bin:$PATH" NODE_ENV=production jiti ./build-package.ts tanstack-react --no-watch --prod`.
 - TDD with a revert check: after the fix passes, `git stash` the src change, confirm the new test fails, `git stash pop`. A test that cannot fail is not a guard.
@@ -591,9 +591,27 @@ git push -u origin fix/tanstack-missing-params-warning
 
 ---
 
+### Task 9: Connect the app's generated route tree (added 2026-08-04)
+
+**Branch:** `feat/tanstack-auto-connect-route-tree`, already written as `feat/auto-connect-route-tree-vite` at `7c2aa2be1af`. This task adopts existing work rather than describing work to do, which is why it has no step list.
+
+A file route carries only its own file path until `routeTree.gen.ts` runs `.update()` over it and supplies the id, path and parent that position it in a tree. An app gets that from its entry module, which Storybook never loads. So the decorator receives routes with no context: they cannot derive a URL and cannot reach the layouts above them.
+
+Every story in this suite works around that today by importing `routeTree` itself and passing `route: routeTree`. The branch makes the framework locate and load the generated tree instead, with a `generatedRouteTree` framework option taking a path or `false`.
+
+It belongs in this phase because it is one self-contained commit that depends on nothing and blocks nothing, which is the phase's whole criterion. It is larger than the other eight, at 312 lines across two preset plugins, but it touches no mock and no routing file.
+
+**Two things it does not inherit from the other eight:**
+
+It changes default behavior, where the others correct behavior that was already wrong. The framework begins loading a file it never loaded. The blast radius is narrow, since code-based and virtual routing find nothing and do nothing, and `generatedRouteTree: false` opts out, but it earns a line in the release note that a bug fix does not.
+
+**It has no instrument, and phase 0 did not measure it.** Nothing in the conformance suite asserts that a file route reaches a story correctly without `route: routeTree`, because every story passes it. Before this ships, the suite should carry a gauge that binds a file route without that parameter: red on `main` and `next`, green on `patched`. That is the phase 0 pattern and it is small, but it does not exist yet, so this task ships unmeasured until it does.
+
+It conflicts with `conformance-build` as of 2026-08-04, having been written before twelve branches that also touch `preset.ts` and `types.ts`. The conflicts are mechanical; composing it is a merge, not a rewrite.
+
 ## After all tasks
 
-Build the eight branches into the conformance suite's `patched` channel only when the repository owner asks; the patched tarball currently carries a different fix stack and mixing them is a release decision, not an implementation step. Likewise, upstream PRs for these branches are filed manually by the owner.
+Build the nine branches into the conformance suite's `patched` channel only when the repository owner asks; the patched tarball currently carries a different fix stack and mixing them is a release decision, not an implementation step. Likewise, upstream PRs for these branches are filed manually by the owner.
 
 ## Self-review notes
 
