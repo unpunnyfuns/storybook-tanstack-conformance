@@ -237,7 +237,7 @@ row's failures are exactly the sum of the fixes it is missing:
 
 ## Plans and audits
 
-The framework is being aligned with real TanStack behavior incrementally; the audit that drives the work and the phase-by-phase plans are public for external review in [docs/plans](docs/plans/README.md) and [docs/audits](docs/audits/2026-08-01-framework-audit.md). Corrections and challenges are welcome as issues on this repo.
+The framework is being aligned with real TanStack behavior incrementally; the audit that drives the work and the phase-by-phase plans are public for external review in [docs/plans](docs/plans/README.md) and [docs/audits](docs/audits/2026-08-01-framework-audit.md), with [later findings](docs/audits/2026-08-05-post-audit-findings.md) collected as the instruments surface them. Corrections and challenges are welcome as issues on this repo.
 
 ## Disclosure
 

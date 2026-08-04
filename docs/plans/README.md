@@ -4,6 +4,8 @@ This directory holds the public plans for incrementally aligning `@storybook/tan
 
 Source material: [the framework audit](../audits/2026-08-01-framework-audit.md), a file-by-file comparison of the framework (Storybook `next` branch) against the installed TanStack packages. Thirty findings, seventeen of them verified by executing the framework's code against the real packages.
 
+Findings that surfaced later, from building instruments rather than reading code, are collected in [post-audit findings](../audits/2026-08-05-post-audit-findings.md).
+
 ## Strategy
 
 The framework is in production use, so it gets fixed in flight: the smallest possible changes, over many steps, each independently shippable and revertible. The ordering principle is instruments before surgery. This conformance suite is the flight instrument panel: every app runs the same assertions in Storybook and in the real app (Playwright against a real dev server), so a claim about "what the real app does" is measured, not assumed.
