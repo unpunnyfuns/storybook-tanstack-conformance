@@ -30,6 +30,13 @@
           "total": 4,
           "failing": []
         },
+        "router-standalone": {
+          "total": 4,
+          "failing": [
+            "src/routes/settings/_tabs/index.stories.tsx > At The Ancestor Url",
+            "src/routes/settings/_tabs/index.stories.tsx > At The Trailing Slash Url"
+          ]
+        },
         "router-virtual": {
           "total": 3,
           "failing": []
@@ -85,6 +92,13 @@
           "total": 4,
           "failing": []
         },
+        "router-standalone": {
+          "total": 4,
+          "failing": [
+            "src/routes/settings/_tabs/index.stories.tsx > At The Ancestor Url",
+            "src/routes/settings/_tabs/index.stories.tsx > At The Trailing Slash Url"
+          ]
+        },
         "router-virtual": {
           "total": 3,
           "failing": []
@@ -110,7 +124,7 @@
       }
     },
     "patched": {
-      "version": "10.6.0-alpha.4-fixes.187",
+      "version": "10.6.0-alpha.4-fixes.191",
       "apps": {
         "router": {
           "total": 41,
@@ -129,6 +143,10 @@
           "failing": []
         },
         "router-shell": {
+          "total": 4,
+          "failing": []
+        },
+        "router-standalone": {
           "total": 4,
           "failing": []
         },
