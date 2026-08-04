@@ -46,6 +46,47 @@ jobs:
             echo "rebuild=true" >> "$GITHUB_OUTPUT"
           fi
 
+  # The tarball is built from conformance-build alone, so a fix branch that
+  # gains commits after being merged is missing from the release and nothing
+  # else says so. Two docs fixes and a pathless-layout fix went unnoticed that
+  # way. Ancestry cannot answer the question: several branches were squashed
+  # after being composed, and later phases rewrote the same code, so their tips
+  # are not ancestors although their content is present. The manifest records
+  # the tip that was composed, and this job reports the ones that moved.
+  #
+  # It carries no `needs` on purpose. A branch moving changes neither SHA the
+  # check job compares, so a guard inside the build would stay silent for
+  # exactly the drift it exists to catch.
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: unpunnyfuns/storybook
+          ref: conformance-build
+
+      - name: Compare every composed branch with the tip recorded for it
+        run: |
+          node -e '
+            const { readFileSync } = require("node:fs");
+            const { execSync } = require("node:child_process");
+            const { branches } = JSON.parse(readFileSync("conformance-branches.json", "utf8"));
+            const moved = [];
+            for (const entry of branches) {
+              const ref = execSync("git ls-remote origin refs/heads/" + entry.branch).toString();
+              moved.push({ ...entry, live: ref.split(/\s/)[0] || "" });
+            }
+            const drift = moved.filter((e) => e.live !== e.sha);
+            for (const e of drift) {
+              const state = e.live ? "now " + e.live.slice(0, 12) : "deleted from the fork";
+              console.log("::error::" + e.branch + " moved since it was composed (recorded " +
+                e.sha.slice(0, 12) + ", " + state + "). Merge it into conformance-build and " +
+                "update its sha in conformance-branches.json, in that one commit.");
+            }
+            console.log(`${moved.length - drift.length}/${moved.length} composed branches unchanged.`);
+            process.exit(drift.length ? 1 : 0);
+          '
+
   build:
     needs: check
     if: needs.check.outputs.rebuild == 'true'
