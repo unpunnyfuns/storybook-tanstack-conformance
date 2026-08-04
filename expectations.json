@@ -102,14 +102,11 @@
       }
     },
     "patched": {
-      "version": "10.6.0-alpha.4-fixes.174",
+      "version": "10.6.0-alpha.4-fixes.180",
       "apps": {
         "router": {
           "total": 41,
-          "failing": [
-            "src/navigation.stories.tsx > By Component",
-            "src/navigation.stories.tsx > By Link"
-          ]
+          "failing": []
         },
         "router-code": {
           "total": 4,
@@ -129,7 +126,7 @@
         },
         "start": {
           "total": 47,
-          "failing": ["src/routes/redirector.stories.tsx > Redirect Navigates"]
+          "failing": []
         },
         "start-virtual": {
           "total": 3,

@@ -61,8 +61,19 @@ jobs:
       # This runs after the suites on purpose: typecheck needs the
       # `routeTree.gen.ts` files, and the report is what generates them.
       # `always()` so a drift failure above still leaves this signal visible.
+      #
+      # It gates `patched` and only reports on the stock channels. The stories
+      # target the API the pending fixes add, so a parameter like
+      # `parameters.tanstack.router.navigate` does not exist in `RouterParameters`
+      # on a published framework and fails TS2353 there. Runtime ignores an
+      # unknown parameter, which is why those channels show no behavioral drift,
+      # but the compiler does not. Making stock channels blocking would mean
+      # either never adopting a new option in a story or writing the stories
+      # around the type system, and these stories are the migration documentation
+      # users read.
       - name: Typecheck the apps against this channel
         if: always()
+        continue-on-error: ${{ matrix.ref != 'patched' }}
         run: npm run typecheck --workspaces
 
       - uses: actions/upload-artifact@v4

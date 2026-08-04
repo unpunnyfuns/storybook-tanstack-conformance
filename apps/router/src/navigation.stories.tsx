@@ -11,12 +11,17 @@ import { routeTree } from "./routeTree.gen";
  * replaces the selected leaf's component with the story's, so a placeholder
  * here would blank the very triggers these gauges click.
  * Real-app proof lives in e2e/router.spec.ts.
+ *
+ * `navigate: true` because these gauges assert the real app's navigation: each
+ * one clicks a trigger and looks for the target page. The framework's default
+ * records the attempt and stays put, which is the right default for a story
+ * about one screen, so gauges like these opt in.
  */
 const meta = {
   component: NavProbePage,
   parameters: {
     layout: "fullscreen",
-    tanstack: { router: { route: routeTree, path: "/nav-probe" } },
+    tanstack: { router: { route: routeTree, path: "/nav-probe", navigate: true } },
   },
   tags: ["ai-generated"],
 } satisfies Meta<typeof NavProbePage>;

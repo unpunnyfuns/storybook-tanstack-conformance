@@ -33,8 +33,14 @@ export const FilteredByNews: Story = {
  * Programmatic navigation: the Next button calls `useNavigate`, which the
  * framework backs with a spy around the real hook (importable from
  * `@storybook/tanstack-react/react-router` for assertions).
+ *
+ * This story asserts on the page changing, which needs real navigation, so it
+ * opts in; the other stories in this file stay on the safe default.
  */
 export const Pagination: Story = {
+  parameters: {
+    tanstack: { router: { route: Route, navigate: true } },
+  },
   play: async ({ canvas, userEvent }) => {
     await expect(await canvas.findByText(/Page 1 \//u)).toBeVisible();
 
