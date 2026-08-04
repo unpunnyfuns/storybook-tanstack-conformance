@@ -1,15 +1,34 @@
 /**
- * Runs both apps' story suites and writes results.json with the pass/fail
+ * Runs every app's story suite and writes results.json with the pass/fail
  * counts and the framework version. Comparison against previous runs
  * happens in the status job (scripts/update-status.mjs).
  */
 import { spawnSync } from "node:child_process";
-import { appendFileSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  appendFileSync,
+  existsSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { createRequire } from "node:module";
 import { relative, resolve } from "node:path";
 
 const apps = readdirSync("apps").toSorted();
 const results = {};
+
+// Clear last run's reports before anything else. A suite that dies before
+// vitest writes its report (a preset that fails to load, say) leaves the
+// previous run's file untouched, and every reader downstream treats it as this
+// run's result: the report prints stale counts and `verify.mjs --update`
+// records them into expectations.json as though they were measured. That has
+// happened, and it is undetectable afterwards, because stale numbers are real
+// numbers. Deleting first makes a missing file mean exactly one thing.
+rmSync("results.json", { force: true });
+for (const app of apps) {
+  rmSync(`results-${app}.json`, { force: true });
+}
 
 // Resolve the framework from inside an app, not from a hardcoded root path:
 // depending on the channel spec npm may nest the package under an app instead
@@ -21,11 +40,25 @@ const frameworkVersion = JSON.parse(
 ).version;
 
 for (const app of apps) {
-  spawnSync("npx", ["vitest", "run", "--reporter=json", `--outputFile=../../results-${app}.json`], {
-    cwd: `apps/${app}`,
-    encoding: "utf8",
-    stdio: ["ignore", "inherit", "inherit"],
-  });
+  const run = spawnSync(
+    "npx",
+    ["vitest", "run", "--reporter=json", `--outputFile=../../results-${app}.json`],
+    {
+      cwd: `apps/${app}`,
+      encoding: "utf8",
+      stdio: ["ignore", "inherit", "inherit"],
+    },
+  );
+  // A non-zero exit is normal and expected: gauges are meant to fail on
+  // channels that lack the fix. What is not survivable is the report never
+  // being written, which is how a crashed suite differs from a failing one.
+  if (!existsSync(`results-${app}.json`)) {
+    const cause = run.error ? `: ${run.error.message}` : "";
+    throw new Error(
+      `apps/${app} produced no test report${cause}. The suite did not run, so its results ` +
+        `cannot be measured. Fix the run before recording anything from it.`,
+    );
+  }
   const report = JSON.parse(readFileSync(`results-${app}.json`, "utf8"));
   // Failing test identities, not just counts: the expected state of the suite
   // lives in expectations.json, and drift is only diagnosable by name.

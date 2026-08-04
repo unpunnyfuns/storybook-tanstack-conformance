@@ -17,7 +17,7 @@
  *
  * Run after scripts/conformance-report.mjs, which writes results.json.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const channel = process.argv[2];
 const update = process.argv.includes("--update");
@@ -26,8 +26,27 @@ if (!channel) {
   process.exit(1);
 }
 
+if (!existsSync("results.json")) {
+  console.error(
+    "No results.json. Run `node scripts/conformance-report.mjs` first; it deletes the previous " +
+      "results before it starts, so a missing file means the last run did not finish.",
+  );
+  process.exit(1);
+}
+
 const results = JSON.parse(readFileSync("results.json", "utf8"));
 const expectations = JSON.parse(readFileSync("expectations.json", "utf8"));
+
+// Recording a channel from a run that skipped an app would silently drop that
+// app's expectations, and the gate would then pass on a suite nobody measured.
+const unmeasured = readdirSync("apps", { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && !(entry.name in results.apps))
+  .map((entry) => entry.name);
+if (unmeasured.length > 0) {
+  console.error(`results.json has no results for: ${unmeasured.join(", ")}`);
+  console.error("Re-run the report; a partial run must not become the recorded expectation.");
+  process.exit(1);
+}
 
 if (update) {
   expectations.channels[channel] = {
