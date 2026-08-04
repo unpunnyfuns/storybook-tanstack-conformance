@@ -22,15 +22,14 @@ async function expectTheDocsIndex(canvas: Parameters<NonNullable<Story["play"]>>
   await expect(canvas.getByText(/no pathless layout involved/u)).toBeVisible();
 }
 
-// `as never` because the `path` parameter is keyed by `FileRoutesByFullPath`,
-// where a nested index is registered under its trailing-slash form only. The
-// no-slash form is the `to` form, which is what TanStack asks for everywhere
-// else (`<Link to="/docs">`), and which the e2e twin proves this app serves. So
-// the URL is real and the app answers it; only the story parameter's type
-// disagrees. The sibling settings story needs no cast, because its pathless
-// layout contributes `/settings` as a full path in its own right.
+// `/docs` needed an `as never` cast until the framework accepted the `to` form
+// of a route path. A nested index registers its full path with the trailing
+// slash, so only `/docs/` was spelled out in the type, while `/docs` is the
+// form `<Link to>` takes and the form this app serves. It typechecks on
+// `patched` now and still fails on the released channels, which is what the
+// CI typecheck step reports per channel.
 export const AtTheAncestorUrl: Story = {
-  parameters: { tanstack: { router: { route: Route, path: "/docs" as never } } },
+  parameters: { tanstack: { router: { route: Route, path: "/docs" } } },
   play: async ({ canvas }) => {
     await expectTheDocsIndex(canvas);
   },

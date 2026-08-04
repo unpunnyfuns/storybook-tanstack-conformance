@@ -6,7 +6,9 @@ Ground truth versions: `@tanstack/router-core@1.171.15`, `@tanstack/react-router
 
 Status legend, as in the audit: **[verified]** = reproduced by execution. **[needs-probe]** = code-read evidence only.
 
-## 1. The story `path` parameter rejects the `to` form of a nested index [verified]
+## 1. The story `path` parameter rejects the `to` form of a nested index [verified, fixed on `patched`]
+
+Fixed by `fix/tanstack-to-form-story-path`, which unions `RouteToPath` into the accepted paths, so a route is accepted under whichever spellings it answers to. The gauge below dropped its cast once the tarball carried the fix. The finding is kept as written, because it still describes every released channel.
 
 `routing/types.ts:8` types the parameter as `RegisteredFullPath = keyof Register['router']['routesByPath']`, and `routesByPath` is keyed by full paths only. For an index route the full path keeps its trailing slash, so `docs/index.tsx` registers as `/docs/` and nothing registers `/docs`.
 
