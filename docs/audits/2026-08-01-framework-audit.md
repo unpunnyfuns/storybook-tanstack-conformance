@@ -2,6 +2,8 @@
 
 Full-framework audit of `upstream/next` (~4,400 lines) against the real TanStack implementation installed in the conformance repo. Four parallel read-only audits: routing core, Start export mocks, Vite plugins, integration layer.
 
+Who this is for, and what it is not: it is written for whoever decides what to fix next, and for anyone who wants to challenge a claim made here about real TanStack behavior. It records what was measured on 2026-08-01 and is not updated afterwards, so a finding below may since have been fixed. Where each one stands belongs to [the roadmap](../plans/README.md), which is the single place that tracks status.
+
 Ground truth versions: `@tanstack/router-core@1.171.15`, `@tanstack/react-router@1.170.18`, `@tanstack/react-start@1.168.28`, `@tanstack/start-plugin-core@1.171.20`, `@tanstack/start-client-core@1.170.14`.
 
 Status legend: **[verified]** = reproduced by executing the framework's code against the real packages during the audit. **[needs-probe]** = code-read evidence only, reproduce before filing anything upstream.
