@@ -53,17 +53,19 @@ const table = (header, rows) => {
   ].join("\n");
 };
 
+// Apps are rows, channels are columns, and not the other way round. The
+// channel list is fixed at three; the app list grows every time the suite
+// covers another configuration. Putting apps on the column axis made each row
+// roughly 200 characters wider per app, so the table got harder to read every
+// time the suite got better. This way the growth is vertical.
 function storyBadgeTable(family) {
-  const columns = apps.filter((app) => app.family === family);
   return table(
-    ["stories passing", ...columns.map((app) => app.label)],
-    CHANNELS.map(([ref, label]) => {
-      const row = [label];
-      for (const app of columns) {
-        row.push(badge(`badge-${ref}-${app.name}`, app.name));
-      }
-      return row;
-    }),
+    ["stories passing", ...CHANNELS.map(([, label]) => label)],
+    apps
+      .filter((app) => app.family === family)
+      .map((app) =>
+        [app.label].concat(CHANNELS.map(([ref]) => badge(`badge-${ref}-${app.name}`, app.name))),
+      ),
   );
 }
 
@@ -71,15 +73,15 @@ function e2eBadgeTable() {
   const labels = [...new Set(apps.map((app) => app.label))];
   const families = [...new Set(apps.map((app) => app.family))];
   return table(
-    ["app e2e", ...labels],
-    families.map((family) => {
-      const row = [`**${family}**`];
-      for (const label of labels) {
-        const app = apps.find((a) => a.family === family && a.label === label);
-        row.push(app ? badge(`badge-e2e-${app.name}`, `${app.name} e2e`) : "n/a");
-      }
-      return row;
-    }),
+    ["app e2e", ...families.map((family) => `**${family}**`)],
+    labels.map((label) =>
+      [label].concat(
+        families.map((family) => {
+          const app = apps.find((a) => a.family === family && a.label === label);
+          return app ? badge(`badge-e2e-${app.name}`, `${app.name} e2e`) : "n/a";
+        }),
+      ),
+    ),
   );
 }
 
