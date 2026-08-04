@@ -1,6 +1,6 @@
 # storybook-tanstack-conformance
 
-Conformance suite measuring `@storybook/tanstack-react` against real TanStack Router/Start behavior. Seven apps, three channels, story suites plus Playwright twins.
+Conformance suite measuring `@storybook/tanstack-react` against real TanStack Router/Start behavior. Eight apps, three channels, story suites plus Playwright twins.
 
 ## Hard rules
 
@@ -22,7 +22,7 @@ Conformance suite measuring `@storybook/tanstack-react` against real TanStack Ro
 
 - Fresh clone: run `npm install` then `npm test` BEFORE `npm run check` (typecheck needs the generated `routeTree.gen.ts` files).
 - Channels: `node scripts/channel.mjs <main|next|patched>` then `npm install --prefer-online` (a stale packument cache can silently pin an old dist-tag). Restore with `git checkout -- apps package-lock.json && npm install`.
-- Measure: `node scripts/conformance-report.mjs` (runs all 7 app suites, 6-10 minutes; if backgrounding it, verify the process actually exists). Then `node scripts/verify.mjs <channel>` to gate, `--update` to accept intended drift.
+- Measure: `node scripts/conformance-report.mjs` (runs all 8 app suites, 6-10 minutes; if backgrounding it, verify the process actually exists). Then `node scripts/verify.mjs <channel>` to gate, `--update` to accept intended drift.
 - Single app: `npm run test --workspace=apps/<name>`. e2e: `npx playwright test e2e/<name>.spec.ts`.
 - Before any commit: `npm run check`.
 
