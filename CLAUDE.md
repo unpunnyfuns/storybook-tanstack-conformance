@@ -8,6 +8,7 @@ Conformance suite measuring `@storybook/tanstack-react` against real TanStack Ro
 - `expectations.json` is machine-written: change it only via `node scripts/verify.mjs <channel> --update`, never by hand.
 - README generated sections (between `<!-- generated:... -->` markers) only via `node scripts/docs.mjs`. Manual edits outside markers are fine.
 - The `status` branch is CI-owned; never commit to it.
+- `conformance-branches.json` (on the fork's `conformance-build`) records the tip last reconciled for every composed fix branch. Update a sha only in the commit that merges the new work, never on its own: a stale sha disarms the build guard for that branch, and the tarball is built from `conformance-build` alone, so anything left unmerged is absent from the `patched` channel with nothing to report it.
 - Gauge stories assert what the REAL app does (proven by an e2e twin asserting the identical strings). Expected-failing gauges are instruments, not bugs; do not "fix" them by weakening assertions.
 
 ## Conventions
