@@ -4,6 +4,22 @@
 
 **Source:** [the framework audit](../audits/2026-08-01-framework-audit.md), Tier 2 finding 7 and the remaining half of finding 10, plus cross-cutting theme 5.
 
+## Contents
+
+- [The problem](#the-problem)
+- [Why the current behavior exists](#why-the-current-behavior-exists)
+- [What the instrument already shows](#what-the-instrument-already-shows)
+- [The contract](#the-contract)
+- [The spy no story can reach](#the-spy-no-story-can-reach)
+- [Where the switch lives](#where-the-switch-lives)
+- [How the flag reaches the mocks](#how-the-flag-reaches-the-mocks)
+- [Scope boundary on `useRouter`](#scope-boundary-on-userouter)
+- [Mock surface cleanup](#mock-surface-cleanup)
+- [What this phase does not cover](#what-this-phase-does-not-cover)
+- [Breaking changes](#breaking-changes)
+- [Verification](#verification)
+- [Risks](#risks)
+
 ## The problem
 
 The framework has four ways to navigate and they disagree with each other.

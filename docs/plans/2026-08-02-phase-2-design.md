@@ -5,6 +5,18 @@
 **Scope:** audit work package B (server-function mock fidelity) plus finding 8 (`useServerFn` drops redirect handling).
 Work package A (the navigation seam) is deliberately excluded and is discussed under [Out of scope](#out-of-scope).
 
+## Contents
+
+- [The problem](#the-problem)
+- [The insight](#the-insight)
+- [Architecture](#architecture)
+- [Backward compatibility](#backward-compatibility)
+- [Documentation](#documentation)
+- [Verification](#verification)
+- [Risks](#risks)
+- [How faithful the transport is](#how-faithful-the-transport-is)
+- [Out of scope](#out-of-scope)
+
 ## The problem
 
 The `createServerFn` mock in `export-mocks/start.ts` hand-writes its own builder chain.

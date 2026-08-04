@@ -8,6 +8,21 @@
 
 **Tech Stack:** Storybook monorepo (`/Users/palnes/src/sbfork`), Vitest, Babel (via `storybook/internal/babel`), TypeScript.
 
+## Contents
+
+- [Global Constraints](#global-constraints)
+  - [Task 1: Widen the elimination plugin's file filter (finding 3, id part)](#task-1-widen-the-elimination-plugins-file-filter-finding-3-id-part)
+  - [Task 2: Strip `.validator()` from client bundles (findings 19 and part of 3)](#task-2-strip-validator-from-client-bundles-findings-19-and-part-of-3)
+  - [Task 3: Make createIsomorphicFn order-independent (finding 6)](#task-3-make-createisomorphicfn-order-independent-finding-6)
+  - [Task 4: Navigate must not use Storybook preview hooks (finding 10)](#task-4-navigate-must-not-use-storybook-preview-hooks-finding-10)
+  - [Task 5: createStart returns a start instance (finding 1)](#task-5-createstart-returns-a-start-instance-finding-1)
+  - [Task 6: Remove the dead optimizeDeps export (finding 25)](#task-6-remove-the-dead-optimizedeps-export-finding-25)
+  - [Task 7: Export the override types and allow `__root__` (findings 26 part, 5 of the integration audit)](#task-7-export-the-override-types-and-allow-__root__-findings-26-part-5-of-the-integration-audit)
+  - [Task 8: Warn when path params are missing (finding 14)](#task-8-warn-when-path-params-are-missing-finding-14)
+  - [Task 9: Connect the app's generated route tree (added 2026-08-04)](#task-9-connect-the-apps-generated-route-tree-added-2026-08-04)
+- [After all tasks](#after-all-tasks)
+- [Self-review notes](#self-review-notes)
+
 ## Global Constraints
 
 - Repo: `/Users/palnes/src/sbfork`. Before each task: `git fetch upstream && git checkout -b <branch> upstream/next`.

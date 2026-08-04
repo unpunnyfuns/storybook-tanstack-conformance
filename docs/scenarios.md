@@ -2,6 +2,13 @@
 
 What the suite actually asserts, and why each scenario is where it is. The [README](../README.md) covers what the project is and how to run it; this file covers what it measures.
 
+## Contents
+
+- [Why there is no code-based Start app](#why-there-is-no-code-based-start-app)
+- [Scenario matrix](#scenario-matrix)
+- [TanStack Query](#tanstack-query)
+- [Server functions (Start)](#server-functions-start)
+
 ## Why there is no code-based Start app
 
 TanStack Start cannot produce a production build from a purely code-based

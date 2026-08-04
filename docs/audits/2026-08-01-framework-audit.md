@@ -10,6 +10,18 @@ Status legend: **[verified]** = reproduced by executing the framework's code aga
 
 Known findings excluded (already established): `isPathlessFileRouteId` trailing-slash defect (#35660 territory), route-tree auto-connect gap, nested standalone index 404, CSF4 previewAnnotations drop in builder-vite.
 
+## Contents
+
+- [Tier 1: story renders wrong thing or crashes](#tier-1-story-renders-wrong-thing-or-crashes)
+- [Tier 2: navigation seam inconsistencies](#tier-2-navigation-seam-inconsistencies)
+- [Tier 3: leaf resolution and router construction drift](#tier-3-leaf-resolution-and-router-construction-drift)
+- [Tier 4: interception and stubbing holes](#tier-4-interception-and-stubbing-holes)
+- [Tier 5: request/response mock fidelity](#tier-5-requestresponse-mock-fidelity)
+- [Tier 6: integration layer](#tier-6-integration-layer)
+- [Cross-cutting themes](#cross-cutting-themes)
+- [Candidate work packages](#candidate-work-packages)
+- [Probe status](#probe-status)
+
 ## Tier 1: story renders wrong thing or crashes
 
 1. **`createStart()` returns `{}`** [needs-probe, high confidence] `export-mocks/start.ts:645`. Real returns `{ getOptions, createMiddleware }`. Any app declaring global middleware via the current documented API crashes at module eval with `startInstance.createMiddleware is not a function`, taking down every story that imports the app's `start.ts`.
