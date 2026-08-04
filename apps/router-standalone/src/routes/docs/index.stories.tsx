@@ -22,8 +22,15 @@ async function expectTheDocsIndex(canvas: Parameters<NonNullable<Story["play"]>>
   await expect(canvas.getByText(/no pathless layout involved/u)).toBeVisible();
 }
 
+// `as never` because the `path` parameter is keyed by `FileRoutesByFullPath`,
+// where a nested index is registered under its trailing-slash form only. The
+// no-slash form is the `to` form, which is what TanStack asks for everywhere
+// else (`<Link to="/docs">`), and which the e2e twin proves this app serves. So
+// the URL is real and the app answers it; only the story parameter's type
+// disagrees. The sibling settings story needs no cast, because its pathless
+// layout contributes `/settings` as a full path in its own right.
 export const AtTheAncestorUrl: Story = {
-  parameters: { tanstack: { router: { route: Route, path: "/docs" } } },
+  parameters: { tanstack: { router: { route: Route, path: "/docs" as never } } },
   play: async ({ canvas }) => {
     await expectTheDocsIndex(canvas);
   },
