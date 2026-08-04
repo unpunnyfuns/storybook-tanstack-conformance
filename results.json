@@ -149,7 +149,7 @@
     }
   },
   "patched": {
-    "version": "10.6.0-alpha.4-fixes.187",
+    "version": "10.6.0-alpha.4-fixes.188",
     "apps": {
       "router": {
         "passed": 41,
