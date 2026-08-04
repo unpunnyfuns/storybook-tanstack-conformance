@@ -43,6 +43,15 @@
         "total": 4,
         "failing": []
       },
+      "router-standalone": {
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "failing": [
+          "src/routes/settings/_tabs/index.stories.tsx > At The Ancestor Url",
+          "src/routes/settings/_tabs/index.stories.tsx > At The Trailing Slash Url"
+        ]
+      },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
@@ -118,6 +127,15 @@
         "total": 4,
         "failing": []
       },
+      "router-standalone": {
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "failing": [
+          "src/routes/settings/_tabs/index.stories.tsx > At The Ancestor Url",
+          "src/routes/settings/_tabs/index.stories.tsx > At The Trailing Slash Url"
+        ]
+      },
       "router-virtual": {
         "passed": 3,
         "failed": 0,
@@ -139,59 +157,6 @@
           "src/start-instance.stories.tsx > Global Middleware Setup",
           "src/start-instance.stories.tsx > Instance Shape"
         ]
-      },
-      "start-virtual": {
-        "passed": 3,
-        "failed": 0,
-        "total": 3,
-        "failing": []
-      }
-    }
-  },
-  "patched": {
-    "version": "10.6.0-alpha.4-fixes.191",
-    "apps": {
-      "router": {
-        "passed": 41,
-        "failed": 0,
-        "total": 41,
-        "failing": []
-      },
-      "router-autoload": {
-        "passed": 1,
-        "failed": 0,
-        "total": 1,
-        "failing": []
-      },
-      "router-code": {
-        "passed": 4,
-        "failed": 0,
-        "total": 4,
-        "failing": []
-      },
-      "router-csf4": {
-        "passed": 5,
-        "failed": 0,
-        "total": 5,
-        "failing": []
-      },
-      "router-shell": {
-        "passed": 4,
-        "failed": 0,
-        "total": 4,
-        "failing": []
-      },
-      "router-virtual": {
-        "passed": 3,
-        "failed": 0,
-        "total": 3,
-        "failing": []
-      },
-      "start": {
-        "passed": 47,
-        "failed": 0,
-        "total": 47,
-        "failing": []
       },
       "start-virtual": {
         "passed": 3,
