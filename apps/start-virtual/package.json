@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
-    "typecheck": "tsc --noEmit",
+    "build": "vite build && tsc --noEmit -p tsconfig.app.json",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "storybook": "storybook dev -p 6010",
     "build-storybook": "storybook build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck:stories": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.17",

@@ -71,10 +71,18 @@ jobs:
       # either never adopting a new option in a story or writing the stories
       # around the type system, and these stories are the migration documentation
       # users read.
-      - name: Typecheck the apps against this channel
+      #
+      # `typecheck:stories` rather than `typecheck` because the two answer
+      # different questions. `typecheck` covers app code through
+      # `tsconfig.app.json`, which excludes stories and therefore passes on any
+      # channel; that is what `npm run check` and each app's `build` run, so a
+      # contributor's gate is not held hostage to which framework happens to be
+      # installed. Stories are typed against a specific channel and only make
+      # sense to check per channel, which is here.
+      - name: Typecheck the stories against this channel
         if: always()
         continue-on-error: ${{ matrix.ref != 'patched' }}
-        run: npm run typecheck --workspaces
+        run: npm run typecheck:stories --workspaces
 
       - uses: actions/upload-artifact@v4
         with:
