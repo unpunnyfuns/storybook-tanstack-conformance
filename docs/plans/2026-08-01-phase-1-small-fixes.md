@@ -596,6 +596,12 @@ if (interpolated.isMissingParams) {
 let resolvedPath = interpolated.interpolatedPath;
 ```
 
+**Deviation recorded on 2026-08-05.** As shipped, the branch warns through `once.warn` from `storybook/internal/client-logger` rather than `console.warn`, so a story that remounts does not repeat the message, and it gates on `interpolated.interpolatedPath.includes("undefined")` rather than on `isMissingParams`.
+
+The gate had to change because `isMissingParams` is a false positive for splat routes: `/docs/$` mounted without `_splat` reports it true but interpolates to `/docs`, which contains no literal `undefined`, so the warning's own text would have been untrue.
+
+The substring scan it replaces has false positives of its own that a path-template-aware check would avoid: a static path containing `undefined` literally, a param whose value is the string `undefined`, and a param value that merely contains the substring. It is kept anyway because it is the only one of the three candidates that also gets splat routes right, and because every one of its false positives requires a path or a param value that already contains the word.
+
 - [ ] **Step 4: Full suite, revert check, commit, push**
 
 ```bash
